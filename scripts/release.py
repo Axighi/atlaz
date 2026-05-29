@@ -1382,6 +1382,7 @@ AUTHOR_MAP = {
     "peter.yuqin@gmail.com": "WuKongAI-CMU",  # PR #10082 (reject symlinked audio inputs)
     "sunil.nitie@gmail.com": "Sunil123135",  # PR #31031 (Windows Docker Desktop compose)
     "weichangyuwcy@gmail.com": "ChyuWei",  # PR #30987 (TUI TTS env var on voice off)
+    "azriel.liang@gmail.com": "Axighi",  # fork owner (ATLAZ branding)
 }
 
 
