@@ -509,7 +509,8 @@ def compress_context(
 
                 set_current_session_id(agent.session_id)
             except Exception:
-                os.environ["HERMES_SESSION_ID"] = agent.session_id
+                os.environ["ATLAZ_SESSION_ID"] = agent.session_id
+                os.environ["HERMES_SESSION_ID"] = agent.session_id  # backward compat
             agent._session_db_created = False
             agent._session_db.create_session(
                 session_id=agent.session_id,

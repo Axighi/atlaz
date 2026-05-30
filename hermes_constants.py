@@ -1,10 +1,47 @@
-# Backward-compat shim: hermes_constants → atlaz_constants
-# Deprecated — will be removed in v1.0
-import warnings
-warnings.warn(
-    "Import from 'hermes_constants' is deprecated. Use 'atlaz_constants' instead.",
-    DeprecationWarning, stacklevel=2
+"""Shared constants for Atlaz Agent (rebranded from Hermes Agent).
+
+Import-safe module with no dependencies — can be imported from anywhere
+without risk of circular imports.
+
+Env var backward compatibility:
+All HERMES_* environment variables are renamed to ATLAZ_*. Code should
+read ATLAZ_* vars; HERMES_* vars are read as fallback for backward
+compatibility. Use :func:`get_atlaz_env` instead of raw ``os.getenv``
+when reading env vars that were formerly ``HERMES_*``.
+"""
+
+import os
+import sysconfig
+from contextvars import ContextVar, Token
+from pathlib import Path
+
+
+_profile_fallback_warned: bool = False
+_UNSET = object()
+_HERMES_HOME_OVERRIDE: ContextVar[str | object] = ContextVar(
+    "_HERMES_HOME_OVERRIDE", default=_UNSET
 )
+
+
+def get_atlaz_env(name: str, default: str | None = None) -> str | None:
+    """Read an ATLAZ_* env var with backward-compatible HERMES_* fallback.
+
+    Usage::
+
+        val = get_atlaz_env("HOME")       # reads ATLAZ_HOME, then HERMES_HOME
+        val = get_atlaz_env("PROFILE")     # reads ATLAZ_PROFILE, then HERMES_PROFILE
+
+    The HERMES_* fallback is checked only when the ATLAZ_* var is unset
+    or empty.  This lets users migrate incrementally — the old vars
+    keep working until they update their environment.
+    """
+    val = os.environ.get(f"ATLAZ_{name}", "").strip()
+    if val:
+        return val
+    return os.environ.get(f"HERMES_{name}", default)
+
+
+
 def set_hermes_home_override(path: str | Path | None) -> Token:
     """Set a context-local Hermes home override and return its reset token.
     This is for in-process, per-task scoping.  It deliberately does not mutate
@@ -22,22 +59,26 @@ def get_hermes_home_override() -> str | None:
         return None
     return str(override)
 def get_hermes_home() -> Path:
-    """Return the Hermes home directory (default: ~/.hermes).
-    Reads HERMES_HOME env var, falls back to ~/.hermes.
+    """Return the Hermes/Atlaz home directory (default: ~/.hermes).
+
+    Reads ATLAZ_HOME first, then HERMES_HOME env var, falls back to ~/.hermes.
     This is the single source of truth — all other copies should import this.
-    When ``HERMES_HOME`` is unset but an ``active_profile`` file indicates
-    a non-default profile is active, logs a loud one-shot warning to
-    ``errors.log`` so cross-profile data corruption is diagnosable instead
-    of silent.  Behavior is unchanged otherwise — we still return
-    ``~/.hermes`` — because raising here would brick 30+ module-level
+
+    When neither ``ATLAZ_HOME`` nor ``HERMES_HOME`` is set but an
+    ``active_profile`` file indicates a non-default profile is active, logs a
+    loud one-shot warning to ``errors.log`` so cross-profile data corruption is
+    diagnosable instead of silent.  Behavior is unchanged otherwise — we still
+    return ``~/.hermes`` — because raising here would brick 30+ module-level
     callers that import this at load time.  Subprocess spawners are
-    expected to propagate ``HERMES_HOME`` explicitly (see the systemd
-    template in ``atlaz_cli/gateway.py`` and the kanban dispatcher in
-    ``atlaz_cli/kanban_db.py``).  See https://github.com/NousResearch/hermes-agent/issues/18594.
+    expected to propagate the env var explicitly (see the systemd
+    template in ``hermes_cli/gateway.py`` and the kanban dispatcher in
+    ``hermes_cli/kanban_db.py``).  See https://github.com/NousResearch/hermes-agent/issues/18594.
+    """
     override = get_hermes_home_override()
     if override:
         return Path(override)
-    val = os.environ.get("HERMES_HOME", "").strip()
+
+    val = get_atlaz_env("HOME", "").strip()
     if val:
         return Path(val)
     # Guard: if a non-default profile is sticky-active, warn once that
@@ -61,11 +102,11 @@ def get_hermes_home() -> Path:
             # on consoles where a StreamHandler is already attached.
             import sys
             msg = (
-                f"[HERMES_HOME fallback] HERMES_HOME is unset but active "
+                f"[HERMES_HOME fallback] ATLAZ_HOME/HERMES_HOME is unset but active "
                 f"profile is {active!r}. Falling back to ~/.hermes, which "
                 f"is the DEFAULT profile — not {active!r}. Any data this "
                 f"process writes will land in the wrong profile. The "
-                f"subprocess spawner should pass HERMES_HOME explicitly "
+                f"subprocess spawner should pass ATLAZ_HOME explicitly "
                 f"(see issue #18594)."
             )
                 sys.stderr.write(msg + "\n")
@@ -85,7 +126,7 @@ def get_default_hermes_root() -> Path:
     (``/opt/data/profiles/coder``) layouts.
     Import-safe — no dependencies beyond stdlib.
     native_home = Path.home() / ".hermes"
-    env_home = os.environ.get("HERMES_HOME", "")
+    env_home = get_atlaz_env("HOME", "")
     if not env_home:
         return native_home
     env_path = Path(env_home)
@@ -116,7 +157,10 @@ def get_optional_skills_dir(default: Path | None = None) -> Path:
     """Return the optional-skills directory, honoring package-manager wrappers.
     Packaged installs may ship ``optional-skills`` outside the Python package
     tree and expose it via ``HERMES_OPTIONAL_SKILLS``.
-    override = os.getenv("HERMES_OPTIONAL_SKILLS", "").strip()
+    """
+    override = get_atlaz_env("OPTIONAL_SKILLS", "").strip()
+    if override:
+        return Path(override)
     packaged = _get_packaged_data_dir("optional-skills")
     if packaged is not None:
         return packaged
@@ -129,7 +173,10 @@ def get_optional_mcps_dir(default: Path | None = None) -> Path:
     Model Context Protocol servers shipped with the repo but disabled by
     default). Packaged installs may ship ``optional-mcps`` outside the Python
     package tree and expose it via ``HERMES_OPTIONAL_MCPS``.
-    override = os.getenv("HERMES_OPTIONAL_MCPS", "").strip()
+    """
+    override = get_atlaz_env("OPTIONAL_MCPS", "").strip()
+    if override:
+        return Path(override)
     packaged = _get_packaged_data_dir("optional-mcps")
     return get_hermes_home() / "optional-mcps"
 def get_bundled_skills_dir(default: Path | None = None) -> Path:
@@ -139,7 +186,10 @@ def get_bundled_skills_dir(default: Path | None = None) -> Path:
         2. Wheel-installed ``<sysconfig data>/skills`` (pip install path)
         3. Caller-supplied ``default`` (typically the source-checkout path)
         4. ``<HERMES_HOME>/skills`` last-resort
-    override = os.getenv("HERMES_BUNDLED_SKILLS", "").strip()
+    """
+    override = get_atlaz_env("BUNDLED_SKILLS", "").strip()
+    if override:
+        return Path(override)
     packaged = _get_packaged_data_dir("skills")
     return get_hermes_home() / "skills"
 def get_hermes_dir(new_subpath: str, old_name: str) -> Path:
@@ -194,7 +244,8 @@ def get_subprocess_home() -> str | None:
     **never** modified — only subprocess environments should inject this value.
     Activation is directory-based: if the ``home/`` subdirectory doesn't
     exist, returns ``None`` and behavior is unchanged.
-    hermes_home = get_hermes_home_override() or os.getenv("HERMES_HOME")
+    """
+    hermes_home = get_hermes_home_override() or get_atlaz_env("HOME")
     if not hermes_home:
     profile_home = os.path.join(hermes_home, "home")
     if os.path.isdir(profile_home):

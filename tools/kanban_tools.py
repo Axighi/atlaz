@@ -121,7 +121,7 @@ def _stamp_worker_session_metadata(
     """Add trusted worker session id metadata for this worker's own task."""
     if os.environ.get("HERMES_KANBAN_TASK") != task_id:
         return metadata
-    session_id = os.environ.get("HERMES_SESSION_ID")
+    session_id = os.environ.get("ATLAZ_SESSION_ID") or os.environ.get("HERMES_SESSION_ID")
     if not session_id:
         return metadata
     stamped = dict(metadata or {})
