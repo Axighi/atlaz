@@ -10,7 +10,7 @@ from unittest.mock import MagicMock, patch
 
 from acp_adapter import session as acp_session
 from acp_adapter.session import SessionManager, SessionState
-from hermes_state import SessionDB
+from atlaz_state import SessionDB
 
 
 def _mock_agent():
@@ -51,7 +51,7 @@ class TestCreateSession:
             captured["task_id"] = task_id
             captured["overrides"] = overrides
 
-        monkeypatch.setattr("hermes_constants._wsl_detected", True)
+        monkeypatch.setattr("atlaz_constants._wsl_detected", True)
         monkeypatch.setattr(
             "tools.terminal_tool.register_task_env_overrides",
             fake_register_task_env_overrides,
@@ -87,34 +87,34 @@ class TestCreateSession:
 
 class TestWslCwdTranslation:
     def test_translate_acp_cwd_converts_windows_drive_path_when_wsl(self, monkeypatch):
-        monkeypatch.setattr("hermes_constants._wsl_detected", True)
+        monkeypatch.setattr("atlaz_constants._wsl_detected", True)
 
         assert acp_session._translate_acp_cwd(r"E:\Projects\AI\paperclip") == "/mnt/e/Projects/AI/paperclip"
 
     def test_translate_acp_cwd_handles_forward_slashes_when_wsl(self, monkeypatch):
-        monkeypatch.setattr("hermes_constants._wsl_detected", True)
+        monkeypatch.setattr("atlaz_constants._wsl_detected", True)
 
         assert acp_session._translate_acp_cwd("D:/work/project") == "/mnt/d/work/project"
 
     def test_translate_acp_cwd_leaves_windows_drive_path_unchanged_off_wsl(self, monkeypatch):
-        monkeypatch.setattr("hermes_constants._wsl_detected", False)
+        monkeypatch.setattr("atlaz_constants._wsl_detected", False)
 
         assert acp_session._translate_acp_cwd(r"E:\Projects\AI\paperclip") == r"E:\Projects\AI\paperclip"
 
     def test_translate_acp_cwd_leaves_posix_path_unchanged_on_wsl(self, monkeypatch):
-        monkeypatch.setattr("hermes_constants._wsl_detected", True)
+        monkeypatch.setattr("atlaz_constants._wsl_detected", True)
 
         assert acp_session._translate_acp_cwd("/mnt/e/Projects/AI/paperclip") == "/mnt/e/Projects/AI/paperclip"
 
     def test_create_session_stores_translated_cwd_on_wsl(self, manager, monkeypatch):
-        monkeypatch.setattr("hermes_constants._wsl_detected", True)
+        monkeypatch.setattr("atlaz_constants._wsl_detected", True)
 
         state = manager.create_session(cwd=r"E:\Projects\AI\paperclip")
 
         assert state.cwd == "/mnt/e/Projects/AI/paperclip"
 
     def test_fork_session_stores_translated_cwd_on_wsl(self, manager, monkeypatch):
-        monkeypatch.setattr("hermes_constants._wsl_detected", True)
+        monkeypatch.setattr("atlaz_constants._wsl_detected", True)
         original = manager.create_session(cwd="/tmp/base")
 
         forked = manager.fork_session(original.session_id, cwd=r"D:\work\project")
@@ -123,7 +123,7 @@ class TestWslCwdTranslation:
         assert forked.cwd == "/mnt/d/work/project"
 
     def test_update_cwd_stores_translated_cwd_on_wsl(self, manager, monkeypatch):
-        monkeypatch.setattr("hermes_constants._wsl_detected", True)
+        monkeypatch.setattr("atlaz_constants._wsl_detected", True)
         state = manager.create_session(cwd="/tmp/old")
 
         updated = manager.update_cwd(state.session_id, cwd=r"C:\Users\foo\project")

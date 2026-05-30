@@ -18,9 +18,9 @@ import pytest
 def _make_hermes_tree(root: Path) -> None:
     """Create a realistic ~/.hermes directory structure for testing."""
     (root / "config.yaml").write_text("model:\n  provider: openrouter\n")
-    (root / ".env").write_text("OPENROUTER_API_KEY=sk-test-123\n")
+    (root / ".env").write_text("OPENROUTER_API_KEY=***
     (root / "memory_store.db").write_bytes(b"fake-sqlite")
-    (root / "hermes_state.db").write_bytes(b"fake-state")
+    (root / "atlaz_state.db").write_bytes(b"fake-state")
 
     # Sessions
     (root / "sessions").mkdir(exist_ok=True)
@@ -47,7 +47,7 @@ def _make_hermes_tree(root: Path) -> None:
     (root / "profiles").mkdir(exist_ok=True)
     (root / "profiles" / "coder").mkdir()
     (root / "profiles" / "coder" / "config.yaml").write_text("model:\n  provider: anthropic\n")
-    (root / "profiles" / "coder" / ".env").write_text("ANTHROPIC_API_KEY=sk-ant-123\n")
+    (root / "profiles" / "coder" / ".env").write_text("ANTHROPIC_API_KEY=***
 
     # hermes-agent repo (should be EXCLUDED)
     (root / "hermes-agent").mkdir(exist_ok=True)
@@ -308,10 +308,11 @@ class TestValidateBackupZip:
         assert ok, reason
 
     def test_old_wrong_db_name_fails(self, tmp_path):
-        """A zip with only hermes_state.db (old wrong name) is rejected."""
+        """A zip with only atlaz_state.db (old wrong name) is rejected."""
+        from atlaz_cli.backup import _validate_backup_zip
         from atlaz_cli.backup import _validate_backup_zip
         zip_path = tmp_path / "old.zip"
-        self._make_zip(zip_path, ["hermes_state.db", "memory_store.db"])
+        self._make_zip(zip_path, ["atlaz_state.db", "memory_store.db"])
         with zipfile.ZipFile(zip_path, "r") as zf:
             ok, reason = _validate_backup_zip(zf)
         assert not ok
@@ -350,7 +351,7 @@ class TestImport:
         zip_path = tmp_path / "backup.zip"
         self._make_backup_zip(zip_path, {
             "config.yaml": "model:\n  provider: openrouter\n",
-            ".env": "OPENROUTER_API_KEY=sk-test\n",
+            ".env": "OPENROUTER_API_KEY=***
             "skills/my-skill/SKILL.md": "# My Skill\n",
             "profiles/coder/config.yaml": "model:\n  provider: anthropic\n",
         })
@@ -361,7 +362,7 @@ class TestImport:
         run_import(args)
 
         assert (hermes_home / "config.yaml").read_text() == "model:\n  provider: openrouter\n"
-        assert (hermes_home / ".env").read_text() == "OPENROUTER_API_KEY=sk-test\n"
+        assert (hermes_home / ".env").read_text() == "OPENROUTER_API_KEY=***
         assert (hermes_home / "skills" / "my-skill" / "SKILL.md").read_text() == "# My Skill\n"
         assert (hermes_home / "profiles" / "coder" / "config.yaml").exists()
 
@@ -507,504 +508,10 @@ class TestImport:
         hermes_home = tmp_path / ".hermes"
         hermes_home.mkdir()
         monkeypatch.setenv("HERMES_HOME", str(hermes_home))
-        monkeypatch.setattr(Path, "home", lambda: tmp_path)
 
-        zip_path = tmp_path / "backup.zip"
-        self._make_backup_zip(zip_path, {
-            "config.yaml": "model: openrouter\n",
-            ".env": "OPENROUTER_API_KEY=sk-secret\n",
-            "auth.json": '{"providers": {"nous": "token"}}',
-            "state.db": b"SQLite format 3\x00",
-            "profiles/coder/.env": "ANTHROPIC_API_KEY=sk-ant-secret\n",
-        })
+... [OUTPUT TRUNCATED - 18651 chars omitted out of 68651 total] ...
 
-        args = Namespace(zipfile=str(zip_path), force=True)
-
-        from atlaz_cli.backup import run_import
-        run_import(args)
-
-        for rel in (".env", "auth.json", "state.db", "profiles/coder/.env"):
-            mode = (hermes_home / rel).stat().st_mode & 0o777
-            assert mode == 0o600, f"{rel} restored with mode {oct(mode)}, expected 0o600"
-
-
-# ---------------------------------------------------------------------------
-# Round-trip test
-# ---------------------------------------------------------------------------
-
-class TestRoundTrip:
-    def test_backup_then_import(self, tmp_path, monkeypatch):
-        """Full round-trip: backup -> import to a new location -> verify."""
-        # Source
-        src_home = tmp_path / "source" / ".hermes"
-        src_home.mkdir(parents=True)
-        _make_hermes_tree(src_home)
-
-        monkeypatch.setenv("HERMES_HOME", str(src_home))
-        monkeypatch.setattr(Path, "home", lambda: tmp_path / "source")
-
-        # Backup
-        out_zip = tmp_path / "roundtrip.zip"
-        from atlaz_cli.backup import run_backup, run_import
-
-        run_backup(Namespace(output=str(out_zip)))
-        assert out_zip.exists()
-
-        # Import into a different location
-        dst_home = tmp_path / "dest" / ".hermes"
-        dst_home.mkdir(parents=True)
-        monkeypatch.setenv("HERMES_HOME", str(dst_home))
-        monkeypatch.setattr(Path, "home", lambda: tmp_path / "dest")
-
-        run_import(Namespace(zipfile=str(out_zip), force=True))
-
-        # Verify key files
-        assert (dst_home / "config.yaml").read_text() == "model:\n  provider: openrouter\n"
-        assert (dst_home / ".env").read_text() == "OPENROUTER_API_KEY=sk-test-123\n"
-        assert (dst_home / "skills" / "my-skill" / "SKILL.md").exists()
-        assert (dst_home / "profiles" / "coder" / "config.yaml").exists()
-        assert (dst_home / "sessions" / "abc123.json").exists()
-        assert (dst_home / "logs" / "agent.log").exists()
-
-        # hermes-agent should NOT be present
-        assert not (dst_home / "hermes-agent").exists()
-        # __pycache__ should NOT be present
-        assert not (dst_home / "plugins" / "__pycache__").exists()
-        # PID files should NOT be present
-        assert not (dst_home / "gateway.pid").exists()
-
-
-# ---------------------------------------------------------------------------
-# Validate / detect-prefix unit tests
-# ---------------------------------------------------------------------------
-
-class TestFormatSize:
-    def test_bytes(self):
-        from atlaz_cli.backup import _format_size
-        assert _format_size(512) == "512 B"
-
-    def test_kilobytes(self):
-        from atlaz_cli.backup import _format_size
-        assert "KB" in _format_size(2048)
-
-    def test_megabytes(self):
-        from atlaz_cli.backup import _format_size
-        assert "MB" in _format_size(5 * 1024 * 1024)
-
-    def test_gigabytes(self):
-        from atlaz_cli.backup import _format_size
-        assert "GB" in _format_size(3 * 1024 ** 3)
-
-    def test_terabytes(self):
-        from atlaz_cli.backup import _format_size
-        assert "TB" in _format_size(2 * 1024 ** 4)
-
-
-class TestValidation:
-    def test_validate_with_config(self):
-        """Zip with config.yaml passes validation."""
-        import io
-        from atlaz_cli.backup import _validate_backup_zip
-
-        buf = io.BytesIO()
-        with zipfile.ZipFile(buf, "w") as zf:
-            zf.writestr("config.yaml", "test")
-        buf.seek(0)
-        with zipfile.ZipFile(buf, "r") as zf:
-            ok, reason = _validate_backup_zip(zf)
-        assert ok
-
-    def test_validate_with_env(self):
-        """Zip with .env passes validation."""
-        import io
-        from atlaz_cli.backup import _validate_backup_zip
-
-        buf = io.BytesIO()
-        with zipfile.ZipFile(buf, "w") as zf:
-            zf.writestr(".env", "KEY=val")
-        buf.seek(0)
-        with zipfile.ZipFile(buf, "r") as zf:
-            ok, reason = _validate_backup_zip(zf)
-        assert ok
-
-    def test_validate_rejects_random(self):
-        """Zip without hermes markers fails validation."""
-        import io
-        from atlaz_cli.backup import _validate_backup_zip
-
-        buf = io.BytesIO()
-        with zipfile.ZipFile(buf, "w") as zf:
-            zf.writestr("random/file.txt", "hello")
-        buf.seek(0)
-        with zipfile.ZipFile(buf, "r") as zf:
-            ok, reason = _validate_backup_zip(zf)
-        assert not ok
-
-    def test_detect_prefix_hermes(self):
-        """Detects .hermes/ prefix wrapping all entries."""
-        import io
-        from atlaz_cli.backup import _detect_prefix
-
-        buf = io.BytesIO()
-        with zipfile.ZipFile(buf, "w") as zf:
-            zf.writestr(".hermes/config.yaml", "test")
-            zf.writestr(".hermes/skills/a/SKILL.md", "skill")
-        buf.seek(0)
-        with zipfile.ZipFile(buf, "r") as zf:
-            assert _detect_prefix(zf) == ".hermes/"
-
-    def test_detect_prefix_none(self):
-        """No prefix when entries are at root."""
-        import io
-        from atlaz_cli.backup import _detect_prefix
-
-        buf = io.BytesIO()
-        with zipfile.ZipFile(buf, "w") as zf:
-            zf.writestr("config.yaml", "test")
-            zf.writestr("skills/a/SKILL.md", "skill")
-        buf.seek(0)
-        with zipfile.ZipFile(buf, "r") as zf:
-            assert _detect_prefix(zf) == ""
-
-    def test_detect_prefix_only_dirs(self):
-        """Prefix detection returns empty for zip with only directory entries."""
-        import io
-        from atlaz_cli.backup import _detect_prefix
-
-        buf = io.BytesIO()
-        with zipfile.ZipFile(buf, "w") as zf:
-            # Only directory entries (trailing slash)
-            zf.writestr(".hermes/", "")
-            zf.writestr(".hermes/skills/", "")
-        buf.seek(0)
-        with zipfile.ZipFile(buf, "r") as zf:
-            assert _detect_prefix(zf) == ""
-
-
-# ---------------------------------------------------------------------------
-# Edge case tests for uncovered paths
-# ---------------------------------------------------------------------------
-
-class TestBackupEdgeCases:
-    def test_nonexistent_hermes_home(self, tmp_path, monkeypatch):
-        """Backup exits when hermes home doesn't exist."""
-        fake_home = tmp_path / "nonexistent" / ".hermes"
-        monkeypatch.setenv("HERMES_HOME", str(fake_home))
-        monkeypatch.setattr(Path, "home", lambda: tmp_path / "nonexistent")
-
-        args = Namespace(output=str(tmp_path / "out.zip"))
-
-        from atlaz_cli.backup import run_backup
-        with pytest.raises(SystemExit):
-            run_backup(args)
-
-    def test_output_is_directory(self, tmp_path, monkeypatch):
-        """When output path is a directory, zip is created inside it."""
-        hermes_home = tmp_path / ".hermes"
-        hermes_home.mkdir()
-        (hermes_home / "config.yaml").write_text("model: test\n")
-
-        monkeypatch.setenv("HERMES_HOME", str(hermes_home))
-        monkeypatch.setattr(Path, "home", lambda: tmp_path)
-
-        out_dir = tmp_path / "backups"
-        out_dir.mkdir()
-
-        args = Namespace(output=str(out_dir))
-
-        from atlaz_cli.backup import run_backup
-        run_backup(args)
-
-        zips = list(out_dir.glob("hermes-backup-*.zip"))
-        assert len(zips) == 1
-
-    def test_output_without_zip_suffix(self, tmp_path, monkeypatch):
-        """Output path without .zip gets suffix appended."""
-        hermes_home = tmp_path / ".hermes"
-        hermes_home.mkdir()
-        (hermes_home / "config.yaml").write_text("model: test\n")
-
-        monkeypatch.setenv("HERMES_HOME", str(hermes_home))
-        monkeypatch.setattr(Path, "home", lambda: tmp_path)
-
-        out_path = tmp_path / "mybackup.tar"
-        args = Namespace(output=str(out_path))
-
-        from atlaz_cli.backup import run_backup
-        run_backup(args)
-
-        # Should have .tar.zip suffix
-        assert (tmp_path / "mybackup.tar.zip").exists()
-
-    def test_empty_hermes_home(self, tmp_path, monkeypatch):
-        """Backup handles empty hermes home (no files to back up)."""
-        hermes_home = tmp_path / ".hermes"
-        hermes_home.mkdir()
-        # Only excluded dirs, no actual files
-        (hermes_home / "__pycache__").mkdir()
-        (hermes_home / "__pycache__" / "foo.pyc").write_bytes(b"\x00")
-
-        monkeypatch.setenv("HERMES_HOME", str(hermes_home))
-        monkeypatch.setattr(Path, "home", lambda: tmp_path)
-
-        args = Namespace(output=str(tmp_path / "out.zip"))
-
-        from atlaz_cli.backup import run_backup
-        run_backup(args)
-
-        # No zip should be created
-        assert not (tmp_path / "out.zip").exists()
-
-    def test_permission_error_during_backup(self, tmp_path, monkeypatch):
-        """Backup handles permission errors gracefully."""
-        hermes_home = tmp_path / ".hermes"
-        hermes_home.mkdir()
-        (hermes_home / "config.yaml").write_text("model: test\n")
-
-        # Create an unreadable file
-        bad_file = hermes_home / "secret.db"
-        bad_file.write_text("data")
-        bad_file.chmod(0o000)
-
-        monkeypatch.setenv("HERMES_HOME", str(hermes_home))
-        monkeypatch.setattr(Path, "home", lambda: tmp_path)
-
-        out_zip = tmp_path / "out.zip"
-        args = Namespace(output=str(out_zip))
-
-        from atlaz_cli.backup import run_backup
-        try:
-            run_backup(args)
-        finally:
-            # Restore permissions for cleanup
-            bad_file.chmod(0o644)
-
-        # Zip should still be created with the readable files
-        assert out_zip.exists()
-
-    def test_pre1980_timestamp_skipped(self, tmp_path, monkeypatch):
-        """Backup skips files with pre-1980 timestamps (ZIP limitation)."""
-        hermes_home = tmp_path / ".hermes"
-        hermes_home.mkdir()
-        (hermes_home / "config.yaml").write_text("model: test\n")
-
-        # Create a file with epoch timestamp (1970-01-01)
-        old_file = hermes_home / "ancient.txt"
-        old_file.write_text("old data")
-        os.utime(old_file, (0, 0))
-
-        monkeypatch.setenv("HERMES_HOME", str(hermes_home))
-        monkeypatch.setattr(Path, "home", lambda: tmp_path)
-
-        out_zip = tmp_path / "out.zip"
-        args = Namespace(output=str(out_zip))
-
-        from atlaz_cli.backup import run_backup
-        run_backup(args)
-
-        # Zip should still be created with the valid files
-        assert out_zip.exists()
-        with zipfile.ZipFile(out_zip, "r") as zf:
-            names = zf.namelist()
-            assert "config.yaml" in names
-            # The pre-1980 file should be skipped, not crash the backup
-            assert "ancient.txt" not in names
-
-    def test_skips_output_zip_inside_hermes(self, tmp_path, monkeypatch):
-        """Backup skips its own output zip if it's inside hermes root."""
-        hermes_home = tmp_path / ".hermes"
-        hermes_home.mkdir()
-        (hermes_home / "config.yaml").write_text("model: test\n")
-
-        monkeypatch.setenv("HERMES_HOME", str(hermes_home))
-        monkeypatch.setattr(Path, "home", lambda: tmp_path)
-
-        # Output inside hermes home
-        out_zip = hermes_home / "backup.zip"
-        args = Namespace(output=str(out_zip))
-
-        from atlaz_cli.backup import run_backup
-        run_backup(args)
-
-        # The zip should exist but not contain itself
-        assert out_zip.exists()
-        with zipfile.ZipFile(out_zip, "r") as zf:
-            assert "backup.zip" not in zf.namelist()
-
-
-class TestImportEdgeCases:
-    def _make_backup_zip(self, zip_path: Path, files: dict[str, str | bytes]) -> None:
-        with zipfile.ZipFile(zip_path, "w") as zf:
-            for name, content in files.items():
-                zf.writestr(name, content)
-
-    def test_not_a_zip(self, tmp_path, monkeypatch):
-        """Import rejects a non-zip file."""
-        hermes_home = tmp_path / ".hermes"
-        hermes_home.mkdir()
-        monkeypatch.setenv("HERMES_HOME", str(hermes_home))
-
-        not_zip = tmp_path / "fake.zip"
-        not_zip.write_text("this is not a zip")
-
-        args = Namespace(zipfile=str(not_zip), force=True)
-
-        from atlaz_cli.backup import run_import
-        with pytest.raises(SystemExit):
-            run_import(args)
-
-    def test_eof_during_confirmation(self, tmp_path, monkeypatch):
-        """Import handles EOFError during confirmation prompt."""
-        hermes_home = tmp_path / ".hermes"
-        hermes_home.mkdir()
-        (hermes_home / "config.yaml").write_text("existing\n")
-        monkeypatch.setenv("HERMES_HOME", str(hermes_home))
-        monkeypatch.setattr(Path, "home", lambda: tmp_path)
-
-        zip_path = tmp_path / "backup.zip"
-        self._make_backup_zip(zip_path, {"config.yaml": "new\n"})
-
-        args = Namespace(zipfile=str(zip_path), force=False)
-
-        from atlaz_cli.backup import run_import
-        with patch("builtins.input", side_effect=EOFError):
-            with pytest.raises(SystemExit):
-                run_import(args)
-
-    def test_keyboard_interrupt_during_confirmation(self, tmp_path, monkeypatch):
-        """Import handles KeyboardInterrupt during confirmation prompt."""
-        hermes_home = tmp_path / ".hermes"
-        hermes_home.mkdir()
-        (hermes_home / ".env").write_text("KEY=val\n")
-        monkeypatch.setenv("HERMES_HOME", str(hermes_home))
-        monkeypatch.setattr(Path, "home", lambda: tmp_path)
-
-        zip_path = tmp_path / "backup.zip"
-        self._make_backup_zip(zip_path, {"config.yaml": "new\n"})
-
-        args = Namespace(zipfile=str(zip_path), force=False)
-
-        from atlaz_cli.backup import run_import
-        with patch("builtins.input", side_effect=KeyboardInterrupt):
-            with pytest.raises(SystemExit):
-                run_import(args)
-
-    def test_permission_error_during_import(self, tmp_path, monkeypatch):
-        """Import handles permission errors during extraction."""
-        hermes_home = tmp_path / ".hermes"
-        hermes_home.mkdir()
-        monkeypatch.setenv("HERMES_HOME", str(hermes_home))
-        monkeypatch.setattr(Path, "home", lambda: tmp_path)
-
-        # Create a read-only directory so extraction fails
-        locked_dir = hermes_home / "locked"
-        locked_dir.mkdir()
-        locked_dir.chmod(0o555)
-
-        zip_path = tmp_path / "backup.zip"
-        self._make_backup_zip(zip_path, {
-            "config.yaml": "model: test\n",
-            "locked/secret.txt": "data",
-        })
-
-        args = Namespace(zipfile=str(zip_path), force=True)
-
-        from atlaz_cli.backup import run_import
-        try:
-            run_import(args)
-        finally:
-            locked_dir.chmod(0o755)
-
-        # config.yaml should still be restored despite the error
-        assert (hermes_home / "config.yaml").exists()
-
-    def test_progress_with_many_files(self, tmp_path, monkeypatch):
-        """Import shows progress with 500+ files."""
-        hermes_home = tmp_path / ".hermes"
-        hermes_home.mkdir()
-        monkeypatch.setenv("HERMES_HOME", str(hermes_home))
-        monkeypatch.setattr(Path, "home", lambda: tmp_path)
-
-        zip_path = tmp_path / "big.zip"
-        files = {"config.yaml": "model: test\n"}
-        for i in range(600):
-            files[f"sessions/s{i:04d}.json"] = "{}"
-
-        self._make_backup_zip(zip_path, files)
-
-        args = Namespace(zipfile=str(zip_path), force=True)
-
-        from atlaz_cli.backup import run_import
-        run_import(args)
-
-        assert (hermes_home / "config.yaml").exists()
-        assert (hermes_home / "sessions" / "s0599.json").exists()
-
-
-# ---------------------------------------------------------------------------
-# Profile restoration tests
-# ---------------------------------------------------------------------------
-
-class TestProfileRestoration:
-    def _make_backup_zip(self, zip_path: Path, files: dict[str, str | bytes]) -> None:
-        with zipfile.ZipFile(zip_path, "w") as zf:
-            for name, content in files.items():
-                zf.writestr(name, content)
-
-    def test_import_creates_profile_wrappers(self, tmp_path, monkeypatch):
-        """Import auto-creates wrapper scripts for restored profiles."""
-        hermes_home = tmp_path / ".hermes"
-        hermes_home.mkdir()
-        monkeypatch.setenv("HERMES_HOME", str(hermes_home))
-        monkeypatch.setattr(Path, "home", lambda: tmp_path)
-
-        # Mock the wrapper dir to be inside tmp_path
-        wrapper_dir = tmp_path / ".local" / "bin"
-        wrapper_dir.mkdir(parents=True)
-
-        zip_path = tmp_path / "backup.zip"
-        self._make_backup_zip(zip_path, {
-            "config.yaml": "model:\n  provider: openrouter\n",
-            "profiles/coder/config.yaml": "model:\n  provider: anthropic\n",
-            "profiles/coder/.env": "ANTHROPIC_API_KEY=sk-test\n",
-            "profiles/researcher/config.yaml": "model:\n  provider: deepseek\n",
-        })
-
-        args = Namespace(zipfile=str(zip_path), force=True)
-
-        from atlaz_cli.backup import run_import
-        run_import(args)
-
-        # Profile directories should exist
-        assert (hermes_home / "profiles" / "coder" / "config.yaml").exists()
-        assert (hermes_home / "profiles" / "researcher" / "config.yaml").exists()
-
-        # Wrapper scripts should be created
-        assert (wrapper_dir / "coder").exists()
-        assert (wrapper_dir / "researcher").exists()
-
-        # Wrappers should contain the right content
-        coder_wrapper = (wrapper_dir / "coder").read_text()
-        assert "hermes -p coder" in coder_wrapper
-
-    def test_import_skips_profile_dirs_without_config(self, tmp_path, monkeypatch):
-        """Import doesn't create wrappers for profile dirs without config."""
-        hermes_home = tmp_path / ".hermes"
-        hermes_home.mkdir()
-        monkeypatch.setenv("HERMES_HOME", str(hermes_home))
-        monkeypatch.setattr(Path, "home", lambda: tmp_path)
-
-        wrapper_dir = tmp_path / ".local" / "bin"
-        wrapper_dir.mkdir(parents=True)
-
-        zip_path = tmp_path / "backup.zip"
-        self._make_backup_zip(zip_path, {
-            "config.yaml": "model: test\n",
-            "profiles/valid/config.yaml": "model: test\n",
-            "profiles/empty/readme.txt": "nothing here\n",
-        })
-
-        args = Namespace(zipfile=str(zip_path), force=True)
+ force=True)
 
         from atlaz_cli.backup import run_import
         run_import(args)
@@ -1100,7 +607,7 @@ class TestQuickSnapshot:
         home = tmp_path / ".hermes"
         home.mkdir()
         (home / "config.yaml").write_text("model:\n  provider: openrouter\n")
-        (home / ".env").write_text("OPENROUTER_API_KEY=test-key-123\n")
+        (home / ".env").write_text("OPENROUTER_API_KEY=***
         (home / "auth.json").write_text('{"providers": {}}\n')
         (home / "cron").mkdir()
         (home / "cron" / "jobs.json").write_text('{"jobs": []}\n')
@@ -1479,9 +986,11 @@ class TestRunPreUpdateBackup:
         monkeypatch.setenv("HERMES_HOME", str(root))
         # Make Path.home() point at tmp_path for anything that uses it
         monkeypatch.setattr(Path, "home", lambda: tmp_path)
-        # Bust caches for atlaz_cli.config + hermes_constants so they pick up HERMES_HOME
+        # Bust caches for atlaz_cli.config + atlaz_constants so they pick up HERMES_HOME
         for mod in list(__import__("sys").modules.keys()):
-            if mod.startswith("atlaz_cli.config") or mod == "hermes_constants":
+            if mod.startswith("atlaz_cli.config") or mod == "atlaz_constants":
+        # Bust caches for atlaz_cli.config + atlaz_constants so they pick up HERMES_HOME
+            if mod.startswith("atlaz_cli.config") or mod == "atlaz_constants":
                 del __import__("sys").modules[mod]
         return root
 

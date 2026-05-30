@@ -13,12 +13,12 @@ Usage::
     hermes-acp
 """
 
-# IMPORTANT: hermes_bootstrap must be the very first import — UTF-8 stdio
-# on Windows.  No-op on POSIX.  See hermes_bootstrap.py for full rationale.
+# IMPORTANT: atlaz_bootstrap must be the very first import — UTF-8 stdio
+# on Windows.  No-op on POSIX.  See atlaz_bootstrap.py for full rationale.
 try:
-    import hermes_bootstrap  # noqa: F401
+    import atlaz_bootstrap  # noqa: F401
 except ModuleNotFoundError:
-    # Graceful fallback when hermes_bootstrap isn't registered in the venv
+    # Graceful fallback when atlaz_bootstrap isn't registered in the venv
     # yet — happens during partial ``hermes update`` where git-reset landed
     # new code but ``uv pip install -e .`` didn't finish.  Missing bootstrap
     # means UTF-8 stdio setup is skipped on Windows; POSIX is unaffected.
@@ -29,7 +29,7 @@ import asyncio
 import logging
 import sys
 from pathlib import Path
-from hermes_constants import get_hermes_home
+from atlaz_constants import get_hermes_home
 
 
 # Methods clients send as periodic liveness probes. They are not part of the

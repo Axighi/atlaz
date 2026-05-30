@@ -21,7 +21,7 @@ def isolated_kanban_home(monkeypatch):
     monkeypatch.setenv("HERMES_HOME", test_home)
     # Force-reimport so the fresh HERMES_HOME is picked up.
     for mod in list(sys.modules.keys()):
-        if mod.startswith("atlaz_cli") or mod.startswith("hermes_state") or mod == "hermes_constants":
+        if mod.startswith("atlaz_cli") or mod.startswith("atlaz_state") or mod == "atlaz_constants":
             del sys.modules[mod]
     from atlaz_cli import kanban_db
     yield kanban_db, test_home

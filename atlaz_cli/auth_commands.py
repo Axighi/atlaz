@@ -28,12 +28,16 @@ from agent.credential_pool import (
 )
 import atlaz_cli.auth as auth_mod
 from atlaz_cli.auth import PROVIDER_REGISTRY
-from hermes_constants import OPENROUTER_BASE_URL
+from atlaz_constants import OPENROUTER_BASE_URL
+from atlaz_cli.secret_prompt import masked_secret_prompt
+import atlaz_cli.auth as auth_mod
+from atlaz_cli.auth import PROVIDER_REGISTRY
+from atlaz_constants import OPENROUTER_BASE_URL
 from atlaz_cli.secret_prompt import masked_secret_prompt
 
 
 # Providers that support OAuth login in addition to API keys.
-_OAUTH_CAPABLE_PROVIDERS = {"anthropic", "nous", "openai-codex", "xai-oauth", "qwen-oauth", "google-gemini-cli", "minimax-oauth"}
+_OAUTH_CAPABLE_PROVIDERS=*** "nous", "openai-codex", "xai-oauth", "qwen-oauth", "google-gemini-cli", "minimax-oauth"}
 
 
 def _get_custom_provider_names() -> list:

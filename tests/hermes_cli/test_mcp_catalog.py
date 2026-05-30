@@ -59,9 +59,9 @@ def _isolate_hermes_home(tmp_path, monkeypatch):
     monkeypatch.setattr(
         "atlaz_cli.config.get_env_path", lambda: hh / ".env"
     )
-    # mcp_catalog grabs get_hermes_home() lazily through hermes_constants
+    # mcp_catalog grabs get_hermes_home() lazily through atlaz_constants
     monkeypatch.setattr(
-        "hermes_constants.get_hermes_home", lambda: hh
+        "atlaz_constants.get_hermes_home", lambda: hh
     )
     return hh
 

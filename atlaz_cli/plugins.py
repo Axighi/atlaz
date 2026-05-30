@@ -46,7 +46,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Set, Union
 
-from hermes_constants import get_hermes_home
+from atlaz_constants import get_hermes_home
 from utils import env_var_enabled
 from atlaz_cli.config import cfg_get
 

@@ -19,7 +19,10 @@ from pathlib import Path
 from typing import Optional
 
 from atlaz_cli.config import get_hermes_home, get_config_path, load_config, save_config
-from hermes_constants import get_optional_skills_dir
+from atlaz_constants import get_optional_skills_dir
+from atlaz_cli.setup import (
+from atlaz_cli.config import get_hermes_home, get_config_path, load_config, save_config
+from atlaz_constants import get_optional_skills_dir
 from atlaz_cli.setup import (
     Colors,
     color,

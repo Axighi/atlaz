@@ -12,7 +12,7 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
-from hermes_constants import display_hermes_home
+from atlaz_constants import display_hermes_home
 
 logger = logging.getLogger(__name__)
 
@@ -350,7 +350,7 @@ def _validate_cron_script_path(script: Optional[str]) -> Optional[str]:
     if not script or not script.strip():
         return None  # empty/None = clearing the field, always OK
 
-    from hermes_constants import get_hermes_home
+    from atlaz_constants import get_hermes_home
 
     raw = script.strip()
 

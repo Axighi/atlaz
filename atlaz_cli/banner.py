@@ -11,7 +11,7 @@ import subprocess
 import threading
 import time
 from pathlib import Path
-from hermes_constants import get_hermes_home
+from atlaz_constants import get_hermes_home
 from typing import Dict, List, Optional
 
 from rich.console import Console

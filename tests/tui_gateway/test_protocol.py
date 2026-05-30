@@ -22,10 +22,10 @@ def _restore_stdout():
 @pytest.fixture()
 def server():
     with patch.dict("sys.modules", {
-        "hermes_constants": MagicMock(get_hermes_home=MagicMock(return_value="/tmp/hermes_test")),
+        "atlaz_constants": MagicMock(get_hermes_home=MagicMock(return_value="/tmp/hermes_test")),
         "atlaz_cli.env_loader": MagicMock(),
         "atlaz_cli.banner": MagicMock(),
-        "hermes_state": MagicMock(),
+        "atlaz_state": MagicMock(),
     }):
         import importlib
         mod = importlib.import_module("tui_gateway.server")

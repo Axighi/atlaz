@@ -879,7 +879,7 @@ class TestRunJobSessionPersistence:
         with patch("cron.scheduler._hermes_home", tmp_path), \
              patch("cron.scheduler._resolve_origin", return_value=None), \
              patch("dotenv.load_dotenv"), \
-             patch("hermes_state.SessionDB", return_value=fake_db), \
+             patch("atlaz_state.SessionDB", return_value=fake_db), \
              patch(
                  "atlaz_cli.runtime_provider.resolve_runtime_provider",
                  return_value={
@@ -926,7 +926,7 @@ class TestRunJobSessionPersistence:
         with patch("cron.scheduler._hermes_home", tmp_path), \
              patch("cron.scheduler._resolve_origin", return_value=None), \
              patch("dotenv.load_dotenv"), \
-             patch("hermes_state.SessionDB", return_value=fake_db), \
+             patch("atlaz_state.SessionDB", return_value=fake_db), \
              patch(
                  "atlaz_cli.runtime_provider.resolve_runtime_provider",
                  return_value={
@@ -963,7 +963,7 @@ class TestRunJobSessionPersistence:
         with patch("cron.scheduler._hermes_home", tmp_path), \
              patch("cron.scheduler._resolve_origin", return_value=None), \
              patch("dotenv.load_dotenv"), \
-             patch("hermes_state.SessionDB", return_value=fake_db), \
+             patch("atlaz_state.SessionDB", return_value=fake_db), \
              patch(
                  "atlaz_cli.runtime_provider.resolve_runtime_provider",
                  return_value={
@@ -991,7 +991,7 @@ class TestRunJobSessionPersistence:
             patch("cron.scheduler._hermes_home", tmp_path),
             patch("cron.scheduler._resolve_origin", return_value=None),
             patch("dotenv.load_dotenv"),
-            patch("hermes_state.SessionDB", return_value=fake_db),
+            patch("atlaz_state.SessionDB", return_value=fake_db),
             patch(
                 "atlaz_cli.runtime_provider.resolve_runtime_provider",
                 return_value={
@@ -1130,7 +1130,7 @@ class TestRunJobSessionPersistence:
         with patch("cron.scheduler._hermes_home", tmp_path), \
              patch("cron.scheduler._resolve_origin", return_value=None), \
              patch("dotenv.load_dotenv"), \
-             patch("hermes_state.SessionDB", return_value=fake_db), \
+             patch("atlaz_state.SessionDB", return_value=fake_db), \
              patch(
                  "atlaz_cli.runtime_provider.resolve_runtime_provider",
                  return_value={
@@ -1206,7 +1206,7 @@ class TestRunJobSessionPersistence:
         with patch("cron.scheduler._hermes_home", tmp_path), \
              patch("cron.scheduler._resolve_origin", return_value=None), \
              patch("dotenv.load_dotenv"), \
-             patch("hermes_state.SessionDB", return_value=fake_db), \
+             patch("atlaz_state.SessionDB", return_value=fake_db), \
              patch(
                  "atlaz_cli.runtime_provider.resolve_runtime_provider",
                  return_value={
@@ -1245,7 +1245,7 @@ class TestRunJobSessionPersistence:
         with patch("cron.scheduler._hermes_home", tmp_path), \
              patch("cron.scheduler._resolve_origin", return_value=None), \
              patch("dotenv.load_dotenv"), \
-             patch("hermes_state.SessionDB", return_value=fake_db), \
+             patch("atlaz_state.SessionDB", return_value=fake_db), \
              patch(
                  "atlaz_cli.runtime_provider.resolve_runtime_provider",
                  return_value={
@@ -1333,7 +1333,7 @@ class TestRunJobSessionPersistence:
                 return {"final_response": "ok"}
 
         with patch("cron.scheduler._hermes_home", tmp_path), \
-             patch("hermes_state.SessionDB", return_value=fake_db), \
+             patch("atlaz_state.SessionDB", return_value=fake_db), \
              patch(
                  "atlaz_cli.runtime_provider.resolve_runtime_provider",
                  return_value={
@@ -1399,7 +1399,7 @@ class TestRunJobSessionPersistence:
                 return {"final_response": "ok"}
 
         with patch("cron.scheduler._hermes_home", tmp_path), \
-             patch("hermes_state.SessionDB", return_value=fake_db), \
+             patch("atlaz_state.SessionDB", return_value=fake_db), \
              patch(
                  "atlaz_cli.runtime_provider.resolve_runtime_provider",
                  return_value={
@@ -1529,8 +1529,13 @@ class TestRunJobConfigEnvVarExpansion:
         with patch("cron.scheduler._hermes_home", tmp_path), \
              patch("cron.scheduler._resolve_origin", return_value=None), \
              patch("dotenv.load_dotenv"), \
+<<<<<<< HEAD
              patch("hermes_state.SessionDB", return_value=fake_db), \
              patch("atlaz_cli.runtime_provider.resolve_runtime_provider",
+=======
+             patch("atlaz_state.SessionDB", return_value=fake_db), \
+             patch("hermes_cli.runtime_provider.resolve_runtime_provider",
+>>>>>>> origin/main
                    return_value=self._RUNTIME), \
              patch("run_agent.AIAgent") as mock_agent_cls:
             mock_agent = MagicMock()
@@ -1561,8 +1566,13 @@ class TestRunJobConfigEnvVarExpansion:
         with patch("cron.scheduler._hermes_home", tmp_path), \
              patch("cron.scheduler._resolve_origin", return_value=None), \
              patch("dotenv.load_dotenv"), \
+<<<<<<< HEAD
              patch("hermes_state.SessionDB", return_value=fake_db), \
              patch("atlaz_cli.runtime_provider.resolve_runtime_provider",
+=======
+             patch("atlaz_state.SessionDB", return_value=fake_db), \
+             patch("hermes_cli.runtime_provider.resolve_runtime_provider",
+>>>>>>> origin/main
                    return_value=self._RUNTIME), \
              patch("run_agent.AIAgent") as mock_agent_cls:
             mock_agent = MagicMock()
@@ -1590,8 +1600,13 @@ class TestRunJobConfigEnvVarExpansion:
         with patch("cron.scheduler._hermes_home", tmp_path), \
              patch("cron.scheduler._resolve_origin", return_value=None), \
              patch("dotenv.load_dotenv"), \
+<<<<<<< HEAD
              patch("hermes_state.SessionDB", return_value=fake_db), \
              patch("atlaz_cli.runtime_provider.resolve_runtime_provider",
+=======
+             patch("atlaz_state.SessionDB", return_value=fake_db), \
+             patch("hermes_cli.runtime_provider.resolve_runtime_provider",
+>>>>>>> origin/main
                    return_value=self._RUNTIME), \
              patch("run_agent.AIAgent") as mock_agent_cls:
             mock_agent = MagicMock()
@@ -1632,7 +1647,7 @@ class TestRunJobSkillBacked:
         with patch("cron.scheduler._hermes_home", tmp_path), \
              patch("cron.scheduler._resolve_origin", return_value=None), \
              patch("dotenv.load_dotenv"), \
-             patch("hermes_state.SessionDB", return_value=fake_db), \
+             patch("atlaz_state.SessionDB", return_value=fake_db), \
              patch(
                  "atlaz_cli.runtime_provider.resolve_runtime_provider",
                  return_value={
@@ -1692,7 +1707,7 @@ class TestRunJobSkillBacked:
              patch("cron.scheduler._resolve_origin", return_value=None), \
              patch("tools.credential_files._resolve_hermes_home", return_value=tmp_path), \
              patch("dotenv.load_dotenv"), \
-             patch("hermes_state.SessionDB", return_value=fake_db), \
+             patch("atlaz_state.SessionDB", return_value=fake_db), \
              patch(
                  "atlaz_cli.runtime_provider.resolve_runtime_provider",
                  return_value={
@@ -1730,7 +1745,7 @@ class TestRunJobSkillBacked:
         with patch("cron.scheduler._hermes_home", tmp_path), \
              patch("cron.scheduler._resolve_origin", return_value=None), \
              patch("dotenv.load_dotenv"), \
-             patch("hermes_state.SessionDB", return_value=fake_db), \
+             patch("atlaz_state.SessionDB", return_value=fake_db), \
              patch(
                  "atlaz_cli.runtime_provider.resolve_runtime_provider",
                  return_value={
@@ -1776,7 +1791,7 @@ class TestRunJobSkillBacked:
         with patch("cron.scheduler._hermes_home", tmp_path), \
              patch("cron.scheduler._resolve_origin", return_value=None), \
              patch("dotenv.load_dotenv"), \
-             patch("hermes_state.SessionDB", return_value=fake_db), \
+             patch("atlaz_state.SessionDB", return_value=fake_db), \
              patch(
                  "atlaz_cli.runtime_provider.resolve_runtime_provider",
                  return_value={

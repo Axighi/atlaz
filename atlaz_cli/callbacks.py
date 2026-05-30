@@ -12,7 +12,11 @@ import time as _time
 from atlaz_cli.banner import cprint, _DIM, _RST
 from atlaz_cli.config import save_env_value_secure
 from atlaz_cli.secret_prompt import masked_secret_prompt
-from hermes_constants import display_hermes_home
+from atlaz_constants import display_hermes_home
+from atlaz_cli.banner import cprint, _DIM, _RST
+from atlaz_cli.config import save_env_value_secure
+from atlaz_cli.secret_prompt import masked_secret_prompt
+from atlaz_constants import display_hermes_home
 
 
 def clarify_callback(cli, question, choices):

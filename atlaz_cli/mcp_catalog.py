@@ -32,7 +32,10 @@ from typing import Any, Dict, List, Optional
 
 import yaml
 
-from hermes_constants import get_hermes_home, get_optional_mcps_dir
+from atlaz_constants import get_hermes_home, get_optional_mcps_dir
+from atlaz_cli.colors import Colors, color
+from atlaz_cli.config import (
+from atlaz_constants import get_hermes_home, get_optional_mcps_dir
 from atlaz_cli.colors import Colors, color
 from atlaz_cli.config import (
     load_config,

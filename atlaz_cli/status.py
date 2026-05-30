@@ -21,7 +21,10 @@ from atlaz_cli.nous_account import (
 )
 from atlaz_cli.nous_subscription import get_nous_subscription_features
 from atlaz_cli.runtime_provider import resolve_requested_provider
-from hermes_constants import OPENROUTER_MODELS_URL
+from atlaz_constants import OPENROUTER_MODELS_URL
+from atlaz_cli.nous_subscription import get_nous_subscription_features
+from atlaz_cli.runtime_provider import resolve_requested_provider
+from atlaz_constants import OPENROUTER_MODELS_URL
 from tools.tool_backend_helpers import managed_nous_tools_enabled
 
 def check_mark(ok: bool) -> str:
@@ -86,7 +89,7 @@ def _effective_provider_label() -> str:
     return provider_label(effective)
 
 
-from hermes_constants import is_termux as _is_termux
+from atlaz_constants import is_termux as _is_termux
 
 
 def show_status(args):
