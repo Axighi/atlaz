@@ -1,12 +1,12 @@
-"""Tests for hermes_constants module."""
+"""Tests for atlaz_constants module."""
 
 import os
 from pathlib import Path
 
 import pytest
 
-import hermes_constants
-from hermes_constants import (
+import atlaz_constants
+from atlaz_constants import (
     VALID_REASONING_EFFORTS,
     get_default_hermes_root,
     is_container,
@@ -74,7 +74,7 @@ class TestIsContainer:
 
     def _reset_cache(self, monkeypatch):
         """Reset the cached detection result before each test."""
-        monkeypatch.setattr(hermes_constants, "_container_detected", None)
+        monkeypatch.setattr(atlaz_constants, "_container_detected", None)
 
     def test_detects_dockerenv(self, monkeypatch, tmp_path):
         """/.dockerenv triggers container detection."""
@@ -112,7 +112,7 @@ class TestIsContainer:
 
     def test_caches_result(self, monkeypatch):
         """Second call uses cached value without re-probing."""
-        monkeypatch.setattr(hermes_constants, "_container_detected", True)
+        monkeypatch.setattr(atlaz_constants, "_container_detected", True)
         assert is_container() is True
         # Even if we make os.path.exists return False, cached value wins
         monkeypatch.setattr(os.path, "exists", lambda p: False)

@@ -43,21 +43,21 @@ Usage:
     hermes claw migrate --dry-run  # Preview migration without changes
 """
 
-# IMPORTANT: hermes_bootstrap must be the very first import — it sets up
+# IMPORTANT: atlaz_bootstrap must be the very first import — it sets up
 # UTF-8 stdio on Windows so print()/subprocess children don't hit
 # UnicodeEncodeError with non-ASCII characters.  No-op on POSIX.
 #
-# Guarded against ModuleNotFoundError because ``hermes_bootstrap`` is a
+# Guarded against ModuleNotFoundError because ``atlaz_bootstrap`` is a
 # top-level module registered via pyproject.toml's ``py-modules`` list.
 # When the user upgrades code via ``git pull`` (or ``hermes update``
 # crashes between ``git reset --hard`` and ``uv pip install -e .``), the
-# new code references ``hermes_bootstrap`` but the editable install's
+# new code references ``atlaz_bootstrap`` but the editable install's
 # ``.pth`` file still points at the old set of top-level modules.  Without
 # this guard, hermes crashes on import and the user can't run
 # ``hermes update`` to recover.  Missing the bootstrap means UTF-8 stdio
 # setup is skipped on Windows — degraded, not broken.  POSIX is unaffected.
 try:
-    import hermes_bootstrap  # noqa: F401
+    import atlaz_bootstrap  # noqa: F401
 except ModuleNotFoundError:
     pass
 
@@ -258,7 +258,7 @@ def _apply_profile_override() -> None:
     # 2. If no flag, check active_profile in the hermes root
     if profile_name is None:
         try:
-            from hermes_constants import get_default_hermes_root
+            from atlaz_constants import get_default_hermes_root
 
             active_path = get_default_hermes_root() / "active_profile"
             if active_path.exists():
@@ -309,7 +309,7 @@ from hermes_cli.env_loader import load_hermes_dotenv
 load_hermes_dotenv(project_env=PROJECT_ROOT / ".env")
 
 # Bridge security.redact_secrets from config.yaml → HERMES_REDACT_SECRETS env
-# var BEFORE hermes_logging imports agent.redact (which snapshots the flag at
+# var BEFORE atlaz_logging imports agent.redact (which snapshots the flag at
 # module-import time). Without this, config.yaml's toggle is ignored because
 # the setup_logging() call below imports agent.redact, which reads the env var
 # exactly once. Env var in .env still wins — this is config.yaml fallback only.
@@ -342,7 +342,7 @@ except Exception:
 # Initialize centralized file logging early — all `hermes` subcommands
 # (chat, setup, gateway, config, etc.) write to agent.log + errors.log.
 try:
-    from hermes_logging import setup_logging as _setup_logging
+    from atlaz_logging import setup_logging as _setup_logging
 
     _setup_logging(mode="cli")
 except Exception:
@@ -353,11 +353,11 @@ except Exception:
 # this just calls the toggle without a redundant load_config() round trip.
 if _FORCE_IPV4_EARLY:
     try:
-        from hermes_constants import apply_ipv4_preference as _apply_ipv4
+        from atlaz_constants import apply_ipv4_preference as _apply_ipv4
 
         _apply_ipv4(force=True)
     except Exception:
-        pass  # best-effort — don't crash if hermes_constants not importable yet
+        pass  # best-effort — don't crash if atlaz_constants not importable yet
 
 import logging
 import threading
@@ -883,7 +883,7 @@ def _resolve_last_session(source: str = "cli") -> Optional[str]:
     """Look up the most recently-used session ID for a source."""
     db = None
     try:
-        from hermes_state import SessionDB
+        from atlaz_state import SessionDB
 
         db = SessionDB()
         sessions = db.search_sessions(source=source, limit=1)
@@ -1022,7 +1022,7 @@ def _resolve_session_by_name_or_id(name_or_id: str) -> Optional[str]:
       resumed at the live tip instead of a stale parent with no messages.
     """
     try:
-        from hermes_state import SessionDB
+        from atlaz_state import SessionDB
 
         db = SessionDB()
 
@@ -1075,7 +1075,7 @@ def _print_tui_exit_summary(
 
     db = None
     try:
-        from hermes_state import SessionDB
+        from atlaz_state import SessionDB
 
         db = SessionDB()
         session = db.get_session(target)
@@ -2941,7 +2941,7 @@ def _prompt_provider_choice(choices, *, default=0):
 
 def _model_flow_openrouter(config, current_model=""):
     """OpenRouter provider: ensure API key, then pick model."""
-    from hermes_constants import OPENROUTER_BASE_URL
+    from atlaz_constants import OPENROUTER_BASE_URL
     from hermes_cli.auth import (
         ProviderConfig,
         _prompt_model_selection,
@@ -5894,7 +5894,7 @@ def _run_anthropic_oauth_flow(save_env_value):
         ):
             use_anthropic_claude_code_credentials(save_fn=save_env_value)
             print("  ✓ Claude Code credentials linked.")
-            from hermes_constants import display_hermes_home as _dhh_fn
+            from atlaz_constants import display_hermes_home as _dhh_fn
 
             print(
                 f"    Hermes will use Claude's credential store directly instead of copying a setup-token into {_dhh_fn()}/.env."
@@ -6372,7 +6372,7 @@ _UPDATE_CRITICAL_FILES = (
     "run_agent.py",
     "model_tools.py",
     "toolsets.py",
-    "hermes_constants.py",
+    "atlaz_constants.py",
 )
 
 
@@ -6445,7 +6445,7 @@ def _gateway_prompt(prompt_text: str, default: str = "", timeout: float = 300.0)
     """
     import json as _json
     import uuid as _uuid
-    from hermes_constants import get_hermes_home
+    from atlaz_constants import get_hermes_home
 
     home = get_hermes_home()
     prompt_path = home / ".update_prompt.json"
@@ -7552,7 +7552,7 @@ def _count_commits_between(git_cmd: list[str], cwd: Path, base: str, head: str) 
 
 def _should_skip_upstream_prompt() -> bool:
     """Check if user previously declined to add upstream."""
-    from hermes_constants import get_hermes_home
+    from atlaz_constants import get_hermes_home
 
     return (get_hermes_home() / SKIP_UPSTREAM_PROMPT_FILE).exists()
 
@@ -7560,7 +7560,7 @@ def _should_skip_upstream_prompt() -> bool:
 def _mark_skip_upstream_prompt():
     """Create marker file to skip future upstream prompts."""
     try:
-        from hermes_constants import get_hermes_home
+        from atlaz_constants import get_hermes_home
 
         (get_hermes_home() / SKIP_UPSTREAM_PROMPT_FILE).touch()
     except Exception:
@@ -7707,7 +7707,7 @@ def _invalidate_update_cache():
     """
     homes = []
     # Default profile home (Docker-aware — uses /opt/data in Docker)
-    from hermes_constants import get_default_hermes_root
+    from atlaz_constants import get_default_hermes_root
 
     default_home = get_default_hermes_root()
     homes.append(default_home)
@@ -8821,7 +8821,7 @@ def _run_pre_update_backup(args) -> None:
 
     # Render path using display_hermes_home so the user sees ~/.hermes/...
     try:
-        from hermes_constants import get_hermes_home, display_hermes_home
+        from atlaz_constants import get_hermes_home, display_hermes_home
 
         home = get_hermes_home()
         try:
@@ -9249,7 +9249,7 @@ def _cmd_update_impl(args, gateway_mode: bool):
 
         # Clear stale .pyc bytecode cache — prevents ImportError on gateway
         # restart when updated source references names that didn't exist in
-        # the old bytecode (e.g. get_hermes_home added to hermes_constants).
+        # the old bytecode (e.g. get_hermes_home added to atlaz_constants).
         removed = _clear_bytecode_cache(PROJECT_ROOT)
         if removed:
             print(
@@ -9321,12 +9321,12 @@ def _cmd_update_impl(args, gateway_mode: bool):
         print("✓ Code updated!")
 
         # After git pull, source files on disk are newer than cached Python
-        # modules in this process.  Reload hermes_constants so that any lazy
+        # modules in this process.  Reload atlaz_constants so that any lazy
         # import executed below (skills sync, gateway restart) sees new
         # attributes like display_hermes_home() added since the last release.
         try:
             import importlib
-            import hermes_constants as _hc
+            import atlaz_constants as _hc
 
             importlib.reload(_hc)
         except Exception:
@@ -9652,7 +9652,7 @@ def _cmd_update_impl(args, gateway_mode: bool):
             # systemd units without SIGUSR1 wiring this wait just times out
             # and we fall back to ``systemctl restart`` (the old behaviour).
             try:
-                from hermes_constants import (
+                from atlaz_constants import (
                     DEFAULT_GATEWAY_RESTART_DRAIN_TIMEOUT as _DEFAULT_DRAIN,
                 )
             except Exception:
@@ -10213,7 +10213,7 @@ def cmd_profile(args):
         _is_wrapper_dir_in_path,
         _get_wrapper_dir,
     )
-    from hermes_constants import display_hermes_home
+    from atlaz_constants import display_hermes_home
 
     action = getattr(args, "profile_action", None)
 
@@ -10444,7 +10444,7 @@ def cmd_profile(args):
         if name and not text_value and not auto_flag:
             try:
                 if _profiles_mod.normalize_profile_name(name) == "default":
-                    from hermes_constants import get_hermes_home as _hh
+                    from atlaz_constants import get_hermes_home as _hh
                     profile_dir = Path(_hh())
                 else:
                     profile_dir = _profiles_mod.get_profile_dir(name)
@@ -10467,7 +10467,7 @@ def cmd_profile(args):
         if text_value:
             try:
                 if _profiles_mod.normalize_profile_name(name) == "default":
-                    from hermes_constants import get_hermes_home as _hh
+                    from atlaz_constants import get_hermes_home as _hh
                     profile_dir = Path(_hh())
                 else:
                     profile_dir = _profiles_mod.get_profile_dir(name)
@@ -13058,7 +13058,7 @@ Examples:
             print("\n  ✓ Memory provider: built-in only")
             print("  Saved to config.yaml\n")
         elif sub == "reset":
-            from hermes_constants import get_hermes_home, display_hermes_home
+            from atlaz_constants import get_hermes_home, display_hermes_home
 
             mem_dir = get_hermes_home() / "memories"
             target = getattr(args, "target", "all")
@@ -13438,7 +13438,7 @@ Examples:
         import json as _json
 
         try:
-            from hermes_state import SessionDB
+            from atlaz_state import SessionDB
 
             db = SessionDB()
         except Exception as e:
@@ -13646,7 +13646,7 @@ Examples:
 
     def cmd_insights(args):
         try:
-            from hermes_state import SessionDB
+            from atlaz_state import SessionDB
             from agent.insights import InsightsEngine
 
             db = SessionDB()

@@ -165,7 +165,7 @@ class TestRunJobProfileContext:
 
         class FakeAgent:
             def __init__(self, **kwargs):
-                from hermes_constants import get_hermes_home
+                from atlaz_constants import get_hermes_home
 
                 observed["env_home_during_init"] = os.environ.get("HERMES_HOME")
                 observed["profile_env_only_during_init"] = os.environ.get(
@@ -179,7 +179,7 @@ class TestRunJobProfileContext:
                 observed["skip_context_files"] = kwargs.get("skip_context_files")
 
             def run_conversation(self, *_a, **_kw):
-                from hermes_constants import get_hermes_home
+                from atlaz_constants import get_hermes_home
 
                 observed["env_home_during_run"] = os.environ.get("HERMES_HOME")
                 observed["profile_env_only_during_run"] = os.environ.get(

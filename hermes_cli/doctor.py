@@ -12,7 +12,7 @@ from pathlib import Path
 
 from hermes_cli.config import get_project_root, get_hermes_home, get_env_path
 from hermes_cli.env_loader import load_hermes_dotenv
-from hermes_constants import display_hermes_home
+from atlaz_constants import display_hermes_home
 
 PROJECT_ROOT = get_project_root()
 HERMES_HOME = get_hermes_home()
@@ -24,7 +24,7 @@ load_hermes_dotenv(hermes_home=_env_path.parent, project_env=PROJECT_ROOT / ".en
 
 from hermes_cli.colors import Colors, color
 from hermes_cli.models import _HERMES_USER_AGENT
-from hermes_constants import OPENROUTER_MODELS_URL
+from atlaz_constants import OPENROUTER_MODELS_URL
 from utils import base_url_host_matches
 
 
@@ -54,7 +54,7 @@ _PROVIDER_ENV_HINTS = (
 )
 
 
-from hermes_constants import is_termux as _is_termux
+from atlaz_constants import is_termux as _is_termux
 
 
 def _python_install_cmd() -> str:
@@ -1152,7 +1152,7 @@ def run_doctor(args):
     # Docker (optional)
     terminal_env = os.getenv("TERMINAL_ENV", "local")
     try:
-        from hermes_constants import is_container as _is_container
+        from atlaz_constants import is_container as _is_container
         running_in_container = _is_container()
     except Exception:
         running_in_container = False
