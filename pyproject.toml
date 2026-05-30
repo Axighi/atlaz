@@ -128,8 +128,8 @@ acp = ["agent-client-protocol==0.9.0"]
 #   2. Add back: mistral = ["mistralai==<verified-version>"]
 #   3. Re-enable Mistral in:
 #        - tools/lazy_deps.py (LAZY_DEPS["tts.mistral"], LAZY_DEPS["stt.mistral"])
-#        - hermes_cli/tools_config.py (un-hide from provider picker)
-#        - hermes_cli/web_server.py (re-add to dashboard STT options)
+#        - atlaz_cli/tools_config.py (un-hide from provider picker)
+#        - atlaz_cli/web_server.py (re-add to dashboard STT options)
 #        - tools/transcription_tools.py / tools/tts_tool.py (drop disabled stubs)
 #   4. Run `uv lock` to regenerate transitives.
 #   5. Optionally re-add to [all] only after a few days of clean operation.
@@ -213,26 +213,26 @@ all = [
 
 [project.scripts]
 # Primary entry points
-atlaz = "hermes_cli.main:main"
+atlaz = "atlaz_cli.main:main"
 atlaz-agent = "run_agent:main"
 atlaz-acp = "acp_adapter.entry:main"
 
 # Deprecated hermes aliases — print warning and delegate to atlaz
-hermes = "hermes_cli.deprecated_shim:hermes"
-hermes-agent = "hermes_cli.deprecated_shim:hermes_agent"
-hermes-acp = "hermes_cli.deprecated_shim:hermes_acp"
+hermes = "atlaz_cli.deprecated_shim:hermes"
+hermes-agent = "atlaz_cli.deprecated_shim:hermes_agent"
+hermes-acp = "atlaz_cli.deprecated_shim:hermes_acp"
 
 [tool.setuptools]
-py-modules = ["run_agent", "model_tools", "toolsets", "batch_runner", "trajectory_compressor", "toolset_distributions", "cli", "atlaz_bootstrap", "atlaz_constants", "atlaz_state", "atlaz_time", "atlaz_logging", "utils"]
+py-modules = ["run_agent", "model_tools", "toolsets", "batch_runner", "trajectory_compressor", "toolset_distributions", "cli", "hermes_bootstrap", "hermes_constants", "hermes_state", "hermes_time", "hermes_logging", "utils"]
 
 [tool.setuptools.package-data]
-hermes_cli = ["web_dist/**/*", "tui_dist/**/*", "scripts/install.sh", "scripts/install.ps1"]
+atlaz_cli = ["web_dist/**/*", "tui_dist/**/*", "scripts/install.sh", "scripts/install.ps1"]
 gateway = ["assets/**/*"]
 plugins = [
   "*/dashboard/manifest.json",
   "*/dashboard/dist/*",
   "*/dashboard/dist/**/*",
-  # Plugin discovery (hermes_cli/plugins.py) reads a plugin.yaml/plugin.yml
+  # Plugin discovery (atlaz_cli/plugins.py) reads a plugin.yaml/plugin.yml
   # manifest from each bundled plugin directory to register it. Wheels only
   # carry files declared here, so without this glob the wheel ships every
   # plugin's Python code but none of its manifests — the scan finds zero
@@ -243,7 +243,7 @@ plugins = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["agent", "agent.*", "tools", "tools.*", "hermes_cli", "gateway", "gateway.*", "tui_gateway", "tui_gateway.*", "cron", "acp_adapter", "plugins", "plugins.*", "providers", "providers.*"]
+include = ["agent", "agent.*", "tools", "tools.*", "atlaz_cli", "gateway", "gateway.*", "tui_gateway", "tui_gateway.*", "cron", "acp_adapter", "plugins", "plugins.*", "providers", "providers.*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

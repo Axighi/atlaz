@@ -144,7 +144,7 @@
 - **Discord — scope `DISCORD_ALLOWED_ROLES` to originating guild** (#12136, CVSS 8.1) ([#21241](https://github.com/NousResearch/hermes-agent/pull/21241))
 - **WhatsApp — reject strangers by default, never respond in self-chat** (#8389) ([#21291](https://github.com/NousResearch/hermes-agent/pull/21291))
 - **MCP OAuth — close TOCTOU window when saving credentials** ([#21176](https://github.com/NousResearch/hermes-agent/pull/21176))
-- **`hermes_cli/auth.py` — close TOCTOU window in credential writers** ([#21194](https://github.com/NousResearch/hermes-agent/pull/21194))
+- **`atlaz_cli/auth.py` — close TOCTOU window in credential writers** ([#21194](https://github.com/NousResearch/hermes-agent/pull/21194))
 - **Browser — enforce cloud-metadata SSRF floor in hybrid routing** (#16234) ([#21228](https://github.com/NousResearch/hermes-agent/pull/21228))
 - **`hermes debug share` — redact log content at upload time** (@GodsBoy) ([#19318](https://github.com/NousResearch/hermes-agent/pull/19318))
 - **Cron — scan assembled prompt including skill content for prompt injection** (#3968) ([#21350](https://github.com/NousResearch/hermes-agent/pull/21350))

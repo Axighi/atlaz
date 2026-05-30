@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from hermes_cli.main import _resolve_last_session
+from atlaz_cli.main import _resolve_last_session
 
 
 class _FakeDB:

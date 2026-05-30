@@ -21,9 +21,9 @@ def isolated_kanban_home(monkeypatch):
     monkeypatch.setenv("HERMES_HOME", test_home)
     # Force-reimport so the fresh HERMES_HOME is picked up.
     for mod in list(sys.modules.keys()):
-        if mod.startswith("hermes_cli") or mod.startswith("atlaz_state") or mod == "atlaz_constants":
+        if mod.startswith("atlaz_cli") or mod.startswith("atlaz_state") or mod == "atlaz_constants":
             del sys.modules[mod]
-    from hermes_cli import kanban_db
+    from atlaz_cli import kanban_db
     yield kanban_db, test_home
     # Cleanup is best-effort; tempfile dir survives but pytest isolation
     # gives each test its own monkeypatched HERMES_HOME so no cross-test
@@ -148,7 +148,7 @@ def test_dispatch_result_has_auto_assigned_default_field():
     """Schema-level invariant: DispatchResult exposes the
     auto_assigned_default field so CLI / dashboard / gateway can surface
     the new routing decisions."""
-    from hermes_cli.kanban_db import DispatchResult
+    from atlaz_cli.kanban_db import DispatchResult
     r = DispatchResult()
     assert hasattr(r, "auto_assigned_default")
     assert r.auto_assigned_default == []

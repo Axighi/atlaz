@@ -327,7 +327,7 @@ class TestAdapterInit:
             staticmethod(lambda: {"enabled": True, "effort": "xhigh"}),
         )
         monkeypatch.setattr("gateway.run.GatewayRunner._load_fallback_model", staticmethod(lambda: None))
-        monkeypatch.setattr("hermes_cli.tools_config._get_platform_tools", lambda *_: set())
+        monkeypatch.setattr("atlaz_cli.tools_config._get_platform_tools", lambda *_: set())
 
         adapter = APIServerAdapter(PlatformConfig(enabled=True))
         monkeypatch.setattr(adapter, "_ensure_session_db", lambda: None)
@@ -605,12 +605,12 @@ class TestModelsEndpoint:
 
     def test_resolve_model_name_default_profile(self):
         """Default profile falls back to 'hermes-agent'."""
-        with patch("hermes_cli.profiles.get_active_profile_name", return_value="default"):
+        with patch("atlaz_cli.profiles.get_active_profile_name", return_value="default"):
             assert APIServerAdapter._resolve_model_name("") == "hermes-agent"
 
     def test_resolve_model_name_named_profile(self):
         """Named profile uses the profile name as model name."""
-        with patch("hermes_cli.profiles.get_active_profile_name", return_value="lucas"):
+        with patch("atlaz_cli.profiles.get_active_profile_name", return_value="lucas"):
             assert APIServerAdapter._resolve_model_name("") == "lucas"
 
     @pytest.mark.asyncio
@@ -740,13 +740,13 @@ class TestToolsetsEndpoint:
             ("web", "Web Tools", "Search and extract"),
         ]
         with patch(
-            "hermes_cli.tools_config._get_effective_configurable_toolsets",
+            "atlaz_cli.tools_config._get_effective_configurable_toolsets",
             return_value=fake_toolsets,
         ), patch(
-            "hermes_cli.tools_config._get_platform_tools",
+            "atlaz_cli.tools_config._get_platform_tools",
             return_value={"default"},
         ), patch(
-            "hermes_cli.tools_config._toolset_has_keys",
+            "atlaz_cli.tools_config._toolset_has_keys",
             return_value=True,
         ), patch(
             "toolsets.resolve_toolset",
@@ -783,13 +783,13 @@ class TestToolsetsEndpoint:
             return ["some_tool"]
 
         with patch(
-            "hermes_cli.tools_config._get_effective_configurable_toolsets",
+            "atlaz_cli.tools_config._get_effective_configurable_toolsets",
             return_value=fake_toolsets,
         ), patch(
-            "hermes_cli.tools_config._get_platform_tools",
+            "atlaz_cli.tools_config._get_platform_tools",
             return_value=set(),
         ), patch(
-            "hermes_cli.tools_config._toolset_has_keys",
+            "atlaz_cli.tools_config._toolset_has_keys",
             return_value=False,
         ), patch(
             "toolsets.resolve_toolset",
@@ -807,10 +807,10 @@ class TestToolsetsEndpoint:
     @pytest.mark.asyncio
     async def test_toolsets_requires_auth_when_key_configured(self, auth_adapter):
         with patch(
-            "hermes_cli.tools_config._get_effective_configurable_toolsets",
+            "atlaz_cli.tools_config._get_effective_configurable_toolsets",
             return_value=[],
         ), patch(
-            "hermes_cli.tools_config._get_platform_tools",
+            "atlaz_cli.tools_config._get_platform_tools",
             return_value=set(),
         ):
             app = _create_app(auth_adapter)

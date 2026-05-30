@@ -112,8 +112,8 @@ class TestGatewayRunnerRegistration:
         # Stub out heavy dependencies if not already present
         stubs = [
             "dotenv",
-            "hermes_cli.env_loader",
-            "hermes_cli.config",
+            "atlaz_cli.env_loader",
+            "atlaz_cli.config",
             "atlaz_constants",
         ]
         _orig = {}

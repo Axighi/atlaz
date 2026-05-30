@@ -31,7 +31,7 @@ def curator_env(tmp_path, monkeypatch, capsys):
     importlib.reload(atlaz_constants)
     from agent import curator
     importlib.reload(curator)
-    from hermes_cli import main as hermes_main
+    from atlaz_cli import main as hermes_main
     importlib.reload(hermes_main)
 
     yield {

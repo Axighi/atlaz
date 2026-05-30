@@ -900,7 +900,7 @@ def start_oauth_flow(
             import webbrowser
 
             try:
-                from hermes_cli.auth import (
+                from atlaz_cli.auth import (
                     _can_open_graphical_browser as _can_open_gui,
                 )
             except Exception:

@@ -14,8 +14,8 @@ from pathlib import Path
 
 import pytest
 
-from hermes_cli import kanban as kb_cli
-from hermes_cli import kanban_db as kb
+from atlaz_cli import kanban as kb_cli
+from atlaz_cli import kanban_db as kb
 
 
 @pytest.fixture

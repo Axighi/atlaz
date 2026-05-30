@@ -9,7 +9,7 @@ from __future__ import annotations
 
 def test_setup_ollama_cloud_passes_force_refresh(monkeypatch):
     """The provider-setup model-fetch for ollama-cloud must pass ``force_refresh=True``."""
-    import hermes_cli.main as main_mod
+    import atlaz_cli.main as main_mod
     import inspect
 
     src = inspect.getsource(main_mod)

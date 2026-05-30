@@ -6,7 +6,7 @@
 > for the architecture and the resolved design questions. The phase-by-phase
 > TDD walkthrough (≈2,800 lines) and the v2/v3 re-validation preambles have
 > been removed — the canonical implementation history is the PR commit log
-> (`git log --oneline a957ef083..a6f7171a5 -- 'docker/*' 'hermes_cli/service_manager.py' …`).
+> (`git log --oneline a957ef083..a6f7171a5 -- 'docker/*' 'atlaz_cli/service_manager.py' …`).
 > Open Questions are collapsed into a single Decision Log table; full
 > deliberations live in PR review comments.
 
@@ -36,8 +36,8 @@ service registration that only s6 implements.
 - [hadolint](https://github.com/hadolint/hadolint) for the Dockerfile +
   [shellcheck](https://github.com/koalaman/shellcheck) for entrypoint scripts.
 - Python subprocess wrappers for `s6-svc`, `s6-svstat`, `s6-svscanctl`.
-- Existing systemd/launchd/windows surface in `hermes_cli/gateway.py` and
-  `hermes_cli/gateway_windows.py`.
+- Existing systemd/launchd/windows surface in `atlaz_cli/gateway.py` and
+  `atlaz_cli/gateway_windows.py`.
 
 **Scope:**
 
@@ -95,9 +95,9 @@ Adding per-profile gateway supervision changed that.
 
 ### ServiceManager surface (what we wrapped, not refactored)
 
-All init-system logic lives in **`hermes_cli/gateway.py`** (~5,400 LOC at
+All init-system logic lives in **`atlaz_cli/gateway.py`** (~5,400 LOC at
 re-validation). The systemd/launchd code is ~1,500 lines of that, plus a
-separate **`hermes_cli/gateway_windows.py`** (~690 LOC) for Windows
+separate **`atlaz_cli/gateway_windows.py`** (~690 LOC) for Windows
 Scheduled Tasks.
 
 | Layer | Systemd functions | Launchd functions | Windows functions |
@@ -111,13 +111,13 @@ Scheduled Tasks.
 
 Container-relevant callers outside `gateway.py`:
 
-- `hermes_cli/status.py` — gained an `s6` branch for in-container runs.
-- `hermes_cli/profiles.py` — `create_profile` / `delete_profile` register and
+- `atlaz_cli/status.py` — gained an `s6` branch for in-container runs.
+- `atlaz_cli/profiles.py` — `create_profile` / `delete_profile` register and
   unregister with s6 inside the container (no-op on host).
-- `hermes_cli/doctor.py` — `_check_gateway_service_linger` skips on s6, and a
+- `atlaz_cli/doctor.py` — `_check_gateway_service_linger` skips on s6, and a
   new "Service Supervisor" section reports main-hermes / dashboard /
   profile-gateway counts via the ServiceManager.
-- `hermes_cli/gateway.py::gateway_command` — the
+- `atlaz_cli/gateway.py::gateway_command` — the
   `elif is_container():` rejection arms that refused gateway lifecycle
   operations were removed; the `_dispatch_via_service_manager_if_s6` helper
   intercepts start/stop/restart and routes them through s6.
@@ -139,7 +139,7 @@ directories at `/opt/data/profiles/<name>/` live on the persistent VOLUME,
 and each one records its gateway's last state in `gateway_state.json`.
 `/etc/cont-init.d/02-reconcile-profiles` walks the persistent profiles on
 every container boot, recreates the s6 service slots via
-`hermes_cli/container_boot.py`, and auto-starts those whose last recorded
+`atlaz_cli/container_boot.py`, and auto-starts those whose last recorded
 state was `running`. Profiles whose last state was `stopped`,
 `startup_failed`, `starting`, or absent get their slot recreated in the
 `down` state and wait for explicit user action. `docker restart` is therefore
@@ -275,9 +275,9 @@ review.
 
 `SystemdServiceManager` / `LaunchdServiceManager` / `WindowsServiceManager`
 are thin adapters over the existing `systemd_*` / `launchd_*` module-level
-functions in `hermes_cli/gateway.py` and the
+functions in `atlaz_cli/gateway.py` and the
 `gateway_windows.install/uninstall/start/stop/restart/is_installed`
-functions in `hermes_cli/gateway_windows.py`. We get the abstraction
+functions in `atlaz_cli/gateway_windows.py`. We get the abstraction
 without rewriting ~2,200 LOC of working code.
 
 ### D8. Profile create/delete hooks register/unregister the s6 service

@@ -1,4 +1,4 @@
-"""Tests for the Kanban DB layer (hermes_cli.kanban_db)."""
+"""Tests for the Kanban DB layer (atlaz_cli.kanban_db)."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ from pathlib import Path
 
 import pytest
 
-from hermes_cli import kanban_db as kb
+from atlaz_cli import kanban_db as kb
 
 
 @pytest.fixture
@@ -408,7 +408,7 @@ def test_unblock_scheduled_rechecks_parent_gate(kanban_home):
 
 def test_stale_claim_reclaimed(kanban_home, monkeypatch):
     import signal
-    import hermes_cli.kanban_db as _kb
+    import atlaz_cli.kanban_db as _kb
 
     with kb.connect() as conn:
         t = kb.create_task(conn, title="x", assignee="a")
@@ -442,7 +442,7 @@ def test_stale_claim_with_live_pid_extends_instead_of_reclaiming(
     ``DEFAULT_CLAIM_TTL_SECONDS`` inside a single tool-free LLM call;
     killing those healthy workers produces a respawn loop with zero
     progress."""
-    import hermes_cli.kanban_db as _kb
+    import atlaz_cli.kanban_db as _kb
 
     with kb.connect() as conn:
         t = kb.create_task(conn, title="x", assignee="a")
@@ -480,7 +480,7 @@ def test_stale_claim_with_live_pid_extends_instead_of_reclaiming(
 def test_stale_claim_with_live_pid_uses_env_ttl_override(
     kanban_home, monkeypatch,
 ):
-    import hermes_cli.kanban_db as _kb
+    import atlaz_cli.kanban_db as _kb
 
     monkeypatch.setenv("HERMES_KANBAN_CLAIM_TTL_SECONDS", "3600")
 
@@ -512,7 +512,7 @@ def test_stale_claim_reclaim_event_records_diagnostic_payload(
     (#23025: previous payload only had ``stale_lock`` which gives no
     timing context)."""
     import json
-    import hermes_cli.kanban_db as _kb
+    import atlaz_cli.kanban_db as _kb
 
     with kb.connect() as conn:
         t = kb.create_task(conn, title="x", assignee="a")
@@ -546,7 +546,7 @@ def test_detect_crashed_workers_systemic_failure_fast_block(
     kanban_home, monkeypatch,
 ):
     """When many tasks crash with the same error, trip the breaker faster."""
-    import hermes_cli.kanban_db as _kb
+    import atlaz_cli.kanban_db as _kb
 
     monkeypatch.setattr(_kb, "_pid_alive", lambda _pid: False)
 
@@ -577,7 +577,7 @@ def test_detect_crashed_workers_isolated_failure_normal_retry(
     kanban_home, monkeypatch,
 ):
     """Below the systemic threshold, tasks retain normal retry budget."""
-    import hermes_cli.kanban_db as _kb
+    import atlaz_cli.kanban_db as _kb
 
     monkeypatch.setattr(_kb, "_pid_alive", lambda _pid: False)
 
@@ -608,7 +608,7 @@ def test_detect_crashed_workers_skips_freshly_claimed_tasks(
     kanban_home, monkeypatch,
 ):
     """Grace period prevents reclaim of freshly-started tasks."""
-    import hermes_cli.kanban_db as _kb
+    import atlaz_cli.kanban_db as _kb
 
     monkeypatch.setattr(_kb, "_pid_alive", lambda _pid: False)
     monkeypatch.delenv("HERMES_KANBAN_CRASH_GRACE_SECONDS", raising=False)
@@ -640,7 +640,7 @@ def test_detect_crashed_workers_grace_period_env_override(
     kanban_home, monkeypatch,
 ):
     """HERMES_KANBAN_CRASH_GRACE_SECONDS env var adjusts the window."""
-    import hermes_cli.kanban_db as _kb
+    import atlaz_cli.kanban_db as _kb
 
     monkeypatch.setattr(_kb, "_pid_alive", lambda _pid: False)
     monkeypatch.setenv("HERMES_KANBAN_CRASH_GRACE_SECONDS", "5")
@@ -668,7 +668,7 @@ def test_detect_crashed_workers_grace_period_env_override(
 
 def test_resolve_crash_grace_seconds_handles_bad_env(monkeypatch):
     """Bad env values fall back to DEFAULT_CRASH_GRACE_SECONDS."""
-    import hermes_cli.kanban_db as _kb
+    import atlaz_cli.kanban_db as _kb
 
     for bad_val in ("notanumber", "-5", ""):
         monkeypatch.setenv("HERMES_KANBAN_CRASH_GRACE_SECONDS", bad_val)
@@ -1139,7 +1139,7 @@ def test_dispatch_skips_nonspawnable_into_separate_bucket(kanban_home, monkeypat
     ``skipped_unassigned`` (which is operator-actionable) — they go in
     the dedicated ``skipped_nonspawnable`` bucket so health telemetry
     can suppress false-positive "stuck" warnings."""
-    from hermes_cli import profiles
+    from atlaz_cli import profiles
     monkeypatch.setattr(profiles, "profile_exists", lambda name: False)
     with kb.connect() as conn:
         t = kb.create_task(conn, title="for-terminal", assignee="orion-cc")
@@ -1153,7 +1153,7 @@ def test_has_spawnable_ready_false_when_only_terminal_lanes(kanban_home, monkeyp
     """``has_spawnable_ready`` returns False when every ready task is
     assigned to a control-plane lane — used by gateway/CLI dispatchers
     to silence the stuck-warn while terminals still have queued work."""
-    from hermes_cli import profiles
+    from atlaz_cli import profiles
     monkeypatch.setattr(profiles, "profile_exists", lambda name: False)
     with kb.connect() as conn:
         kb.create_task(conn, title="t1", assignee="orion-cc")
@@ -1165,7 +1165,7 @@ def test_has_spawnable_ready_true_when_real_profile_present(kanban_home, monkeyp
     """``has_spawnable_ready`` returns True as soon as ANY ready task
     has an assignee that maps to a real Hermes profile — preserves the
     real "stuck" signal when a daily/agent task is queued."""
-    from hermes_cli import profiles
+    from atlaz_cli import profiles
     monkeypatch.setattr(
         profiles, "profile_exists", lambda name: name == "daily"
     )
@@ -2252,8 +2252,13 @@ def test_connect_falls_back_to_delete_on_locking_protocol(tmp_path, monkeypatch,
             *args, factory=_WalBlockingConnection, **kwargs
         )
 
+<<<<<<< HEAD
+    with _patch("atlaz_cli.kanban_db.sqlite3.connect", side_effect=wal_blocking_connect):
+        with caplog.at_level("WARNING", logger="hermes_state"):
+=======
     with _patch("hermes_cli.kanban_db.sqlite3.connect", side_effect=wal_blocking_connect):
         with caplog.at_level("WARNING", logger="atlaz_state"):
+>>>>>>> origin/main
             conn = kb.connect()
 
     # One fallback warning, naming kanban.db
@@ -2429,7 +2434,7 @@ def test_migrate_add_optional_columns_tolerates_concurrent_migration(kanban_home
 def test_resolve_hermes_argv_prefers_path_shim(monkeypatch):
     """When `hermes` is on PATH, use the shim — preserves familiar ps output."""
     import shutil
-    import hermes_cli.kanban_db as kb
+    import atlaz_cli.kanban_db as kb
 
     monkeypatch.delenv("HERMES_BIN", raising=False)
     monkeypatch.setattr(shutil, "which", lambda name: "/usr/local/bin/hermes")
@@ -2439,7 +2444,7 @@ def test_resolve_hermes_argv_prefers_path_shim(monkeypatch):
 
 def test_resolve_hermes_argv_absolutizes_relative_exe_shim(monkeypatch, tmp_path):
     """A relative executable override must not remain workspace-cwd-dependent."""
-    import hermes_cli.kanban_db as kb
+    import atlaz_cli.kanban_db as kb
 
     monkeypatch.chdir(tmp_path)
     monkeypatch.setenv("HERMES_BIN", ".\\hermes.exe")
@@ -2451,7 +2456,7 @@ def test_resolve_hermes_argv_absolutizes_relative_exe_shim(monkeypatch, tmp_path
 def test_resolve_hermes_argv_avoids_implicit_windows_batch_shim(monkeypatch, tmp_path):
     """Implicit .cmd/.bat shims use the module fallback, not batch argv[0]."""
     import sys
-    import hermes_cli.kanban_db as kb
+    import atlaz_cli.kanban_db as kb
 
     bin_dir = tmp_path / "bin"
     bin_dir.mkdir()
@@ -2461,13 +2466,13 @@ def test_resolve_hermes_argv_avoids_implicit_windows_batch_shim(monkeypatch, tmp
     monkeypatch.setenv("PATHEXT", ".CMD")
     monkeypatch.setattr(kb, "_IS_WINDOWS", True)
 
-    assert kb._resolve_hermes_argv() == [sys.executable, "-m", "hermes_cli.main"]
+    assert kb._resolve_hermes_argv() == [sys.executable, "-m", "atlaz_cli.main"]
 
 
 def test_resolve_hermes_argv_honors_hermes_bin_path_override(monkeypatch, tmp_path):
     """An explicit path-like HERMES_BIN lets service managers pin the executable."""
     import shutil
-    import hermes_cli.kanban_db as kb
+    import atlaz_cli.kanban_db as kb
 
     shim = tmp_path / "bin" / "hermes"
     shim.parent.mkdir()
@@ -2481,7 +2486,7 @@ def test_resolve_hermes_argv_honors_hermes_bin_path_override(monkeypatch, tmp_pa
 def test_resolve_hermes_argv_hermes_bin_bare_name_uses_path(monkeypatch, tmp_path):
     """Bare HERMES_BIN values keep PATH semantics instead of cwd shadowing."""
     import stat
-    import hermes_cli.kanban_db as kb
+    import atlaz_cli.kanban_db as kb
 
     cwd_hermes = tmp_path / "hermes"
     cwd_hermes.write_text("wrong\n", encoding="utf-8")
@@ -2500,7 +2505,7 @@ def test_resolve_hermes_argv_hermes_bin_bare_name_uses_path(monkeypatch, tmp_pat
 def test_resolve_hermes_argv_hermes_bin_bare_name_ignores_cwd(monkeypatch, tmp_path):
     """Bare HERMES_BIN does not accept current-directory shadow executables."""
     import sys
-    import hermes_cli.kanban_db as kb
+    import atlaz_cli.kanban_db as kb
 
     (tmp_path / "hermes.exe").write_text("wrong\n", encoding="utf-8")
     monkeypatch.chdir(tmp_path)
@@ -2508,13 +2513,13 @@ def test_resolve_hermes_argv_hermes_bin_bare_name_ignores_cwd(monkeypatch, tmp_p
     monkeypatch.setenv("HERMES_BIN", "hermes")
     monkeypatch.setattr(kb, "_IS_WINDOWS", True)
 
-    assert kb._resolve_hermes_argv() == [sys.executable, "-m", "hermes_cli.main"]
+    assert kb._resolve_hermes_argv() == [sys.executable, "-m", "atlaz_cli.main"]
 
 
 def test_resolve_hermes_argv_hermes_bin_bare_cmd_uses_module_fallback(monkeypatch, tmp_path):
     """A PATH-resolved HERMES_BIN batch shim is not used as worker argv[0]."""
     import sys
-    import hermes_cli.kanban_db as kb
+    import atlaz_cli.kanban_db as kb
 
     bin_dir = tmp_path / "bin"
     bin_dir.mkdir()
@@ -2524,22 +2529,22 @@ def test_resolve_hermes_argv_hermes_bin_bare_cmd_uses_module_fallback(monkeypatc
     monkeypatch.setenv("HERMES_BIN", "hermes")
     monkeypatch.setattr(kb, "_IS_WINDOWS", True)
 
-    assert kb._resolve_hermes_argv() == [sys.executable, "-m", "hermes_cli.main"]
+    assert kb._resolve_hermes_argv() == [sys.executable, "-m", "atlaz_cli.main"]
 
 
 def test_resolve_hermes_argv_hermes_bin_unresolved_bare_name_falls_back(monkeypatch):
     """Unresolved HERMES_BIN command names do not delegate cwd search to Popen."""
     import sys
-    import hermes_cli.kanban_db as kb
+    import atlaz_cli.kanban_db as kb
 
     monkeypatch.setenv("PATH", "")
     monkeypatch.setenv("HERMES_BIN", "hermes")
 
-    assert kb._resolve_hermes_argv() == [sys.executable, "-m", "hermes_cli.main"]
+    assert kb._resolve_hermes_argv() == [sys.executable, "-m", "atlaz_cli.main"]
 
 
 def test_resolve_hermes_argv_falls_back_to_module_form_when_no_path_shim(monkeypatch):
-    """When the shim is not on PATH, fall back to `python -m hermes_cli.main`.
+    """When the shim is not on PATH, fall back to `python -m atlaz_cli.main`.
 
     Pins the correct module name (NOT `hermes` — there is no top-level
     `hermes` package). Regression for #23198: the original PR shipped
@@ -2548,25 +2553,25 @@ def test_resolve_hermes_argv_falls_back_to_module_form_when_no_path_shim(monkeyp
     """
     import shutil
     import sys
-    import hermes_cli.kanban_db as kb
+    import atlaz_cli.kanban_db as kb
 
     monkeypatch.delenv("HERMES_BIN", raising=False)
     monkeypatch.setattr(shutil, "which", lambda name: None)
     argv = kb._resolve_hermes_argv()
-    assert argv == [sys.executable, "-m", "hermes_cli.main"]
+    assert argv == [sys.executable, "-m", "atlaz_cli.main"]
 
 
 def test_resolve_hermes_argv_module_actually_runs():
     """The fallback module name must be importable + runnable.
 
     A unit test that pins the literal string is necessary but not
-    sufficient — if `hermes_cli.main` ever loses `if __name__ == "__main__"`
-    handling or its argparse setup, `python -m hermes_cli.main --version`
+    sufficient — if `atlaz_cli.main` ever loses `if __name__ == "__main__"`
+    handling or its argparse setup, `python -m atlaz_cli.main --version`
     would fail and so would every dispatcher spawn that hits the fallback.
     Run it as a real subprocess to catch that regression.
     """
     import subprocess
-    import hermes_cli.kanban_db as kb
+    import atlaz_cli.kanban_db as kb
     import shutil
     import unittest.mock as mock
 
@@ -2979,7 +2984,7 @@ def test_has_spawnable_review_false_when_only_terminal_lanes(
     kanban_home, monkeypatch,
 ):
     """has_spawnable_review returns False when review tasks are terminal lanes."""
-    from hermes_cli import profiles
+    from atlaz_cli import profiles
     monkeypatch.setattr(profiles, "profile_exists", lambda name: False)
     with kb.connect() as conn:
         t = kb.create_task(conn, title="review", assignee="orion-cc")
@@ -2989,7 +2994,7 @@ def test_has_spawnable_review_false_when_only_terminal_lanes(
 
 def test_dispatch_review_skips_nonspawnable(kanban_home, monkeypatch):
     """Review tasks with non-existent profiles go to skipped_nonspawnable."""
-    from hermes_cli import profiles
+    from atlaz_cli import profiles
     monkeypatch.setattr(profiles, "profile_exists", lambda name: False)
     with kb.connect() as conn:
         t = kb.create_task(conn, title="review", assignee="orion-cc")
@@ -3019,7 +3024,7 @@ def test_dispatch_review_does_not_claim_ready_tasks(
 
 def test_detect_stale_returns_running_task_with_no_heartbeat(kanban_home, monkeypatch):
     """A task running > timeout with zero heartbeats gets reclaimed as stale."""
-    import hermes_cli.kanban_db as _kb
+    import atlaz_cli.kanban_db as _kb
 
     with kb.connect() as conn:
         t = kb.create_task(conn, title="stale-no-hb", assignee="worker")
@@ -3051,7 +3056,7 @@ def test_detect_stale_returns_running_task_with_no_heartbeat(kanban_home, monkey
 
 def test_detect_stale_returns_task_with_stale_heartbeat(kanban_home, monkeypatch):
     """A task running > timeout with a heartbeat older than 1h gets reclaimed."""
-    import hermes_cli.kanban_db as _kb
+    import atlaz_cli.kanban_db as _kb
 
     with kb.connect() as conn:
         t = kb.create_task(conn, title="stale-hb", assignee="worker")
@@ -3084,7 +3089,7 @@ def test_detect_stale_returns_task_with_stale_heartbeat(kanban_home, monkeypatch
 
 def test_detect_stale_skips_task_with_recent_heartbeat(kanban_home, monkeypatch):
     """A task running > timeout but with a recent heartbeat is NOT reclaimed."""
-    import hermes_cli.kanban_db as _kb
+    import atlaz_cli.kanban_db as _kb
 
     with kb.connect() as conn:
         t = kb.create_task(conn, title="alive-hb", assignee="worker")
@@ -3115,7 +3120,7 @@ def test_detect_stale_skips_task_with_recent_heartbeat(kanban_home, monkeypatch)
 
 def test_detect_stale_skips_recently_started_task(kanban_home, monkeypatch):
     """A task started < timeout ago is NOT reclaimed even with no heartbeat."""
-    import hermes_cli.kanban_db as _kb
+    import atlaz_cli.kanban_db as _kb
 
     with kb.connect() as conn:
         t = kb.create_task(conn, title="fresh", assignee="worker")
@@ -3170,7 +3175,7 @@ def test_detect_stale_skips_when_timeout_zero(kanban_home, monkeypatch):
 
 def test_detect_stale_skips_blocked_tasks(kanban_home, monkeypatch):
     """Blocked tasks are NOT reclaimed by stale detection."""
-    import hermes_cli.kanban_db as _kb
+    import atlaz_cli.kanban_db as _kb
 
     with kb.connect() as conn:
         t = kb.create_task(conn, title="blocked-task", assignee="worker")
@@ -3209,7 +3214,7 @@ def test_detect_stale_does_not_tick_failure_counter(kanban_home, monkeypatch):
     task_events is the right audit surface; the consecutive_failures
     counter is reserved for spawn_failed / timed_out / crashed.
     """
-    import hermes_cli.kanban_db as _kb
+    import atlaz_cli.kanban_db as _kb
 
     with kb.connect() as conn:
         t = kb.create_task(conn, title="stale-no-counter-tick", assignee="worker")
@@ -3418,7 +3423,7 @@ def test_maybe_emit_scratch_tip_fires_once_per_install(kanban_home, caplog):
     # Sentinel must not exist yet on a fresh install.
     assert not kb._scratch_tip_shown()
 
-    with caplog.at_level(logging.WARNING, logger="hermes_cli.kanban_db"):
+    with caplog.at_level(logging.WARNING, logger="atlaz_cli.kanban_db"):
         with kb.connect() as conn:
             kb._maybe_emit_scratch_tip(conn, t1, "scratch")
 
@@ -3450,7 +3455,7 @@ def test_maybe_emit_scratch_tip_fires_once_per_install(kanban_home, caplog):
 
     # Second scratch materialization on the same install stays silent.
     caplog.clear()
-    with caplog.at_level(logging.WARNING, logger="hermes_cli.kanban_db"):
+    with caplog.at_level(logging.WARNING, logger="atlaz_cli.kanban_db"):
         with kb.connect() as conn:
             kb._maybe_emit_scratch_tip(conn, t2, "scratch")
     tip_records2 = [
@@ -3482,7 +3487,7 @@ def test_maybe_emit_scratch_tip_skips_non_scratch_workspaces(kanban_home, caplog
 
     assert not kb._scratch_tip_shown()
 
-    with caplog.at_level(logging.WARNING, logger="hermes_cli.kanban_db"):
+    with caplog.at_level(logging.WARNING, logger="atlaz_cli.kanban_db"):
         with kb.connect() as conn:
             kb._maybe_emit_scratch_tip(conn, t_wt, "worktree")
             kb._maybe_emit_scratch_tip(conn, t_dir, "dir")
@@ -3626,7 +3631,7 @@ def test_write_txn_preserves_original_exception_when_rollback_fails(kanban_home)
     )
 def test_write_txn_healthy_commit_no_exception(tmp_path):
     """Normal commit does not trigger the torn-extend check."""
-    from hermes_cli.kanban_db import connect, write_txn
+    from atlaz_cli.kanban_db import connect, write_txn
     db = tmp_path / "test.db"
     conn = connect(db_path=db)
     # Should not raise
@@ -3642,7 +3647,7 @@ def test_write_txn_healthy_commit_no_exception(tmp_path):
 
 def test_write_txn_raises_on_truncated_file(tmp_path):
     """A mocked smaller file size triggers the torn-extend check."""
-    from hermes_cli.kanban_db import connect, write_txn
+    from atlaz_cli.kanban_db import connect, write_txn
     db = tmp_path / "test.db"
     conn = connect(db_path=db)
     # Get actual page size so we can fake a smaller file
@@ -3655,7 +3660,7 @@ def test_write_txn_raises_on_truncated_file(tmp_path):
         return max(0, real_size - page_size)
 
     with pytest.raises(sqlite3.DatabaseError, match="torn-extend|page count mismatch"):
-        with unittest.mock.patch("hermes_cli.kanban_db.os.path.getsize", side_effect=fake_getsize):
+        with unittest.mock.patch("atlaz_cli.kanban_db.os.path.getsize", side_effect=fake_getsize):
             with write_txn(conn) as c:
                 c.execute(
                     "INSERT INTO tasks (id, title, assignee, status, priority, created_at) "
@@ -3666,8 +3671,8 @@ def test_write_txn_raises_on_truncated_file(tmp_path):
 
 def test_write_txn_post_commit_check_fires_every_call(tmp_path):
     """The invariant check runs on every write_txn call."""
-    from hermes_cli.kanban_db import connect, write_txn
-    import hermes_cli.kanban_db as kanban_db_module
+    from atlaz_cli.kanban_db import connect, write_txn
+    import atlaz_cli.kanban_db as kanban_db_module
     db = tmp_path / "test.db"
     conn = connect(db_path=db)
     call_count = 0
@@ -3691,7 +3696,7 @@ def test_write_txn_post_commit_check_fires_every_call(tmp_path):
 
 def test_connect_sets_wal_autocheckpoint_100(tmp_path):
     """connect() sets wal_autocheckpoint to 100."""
-    from hermes_cli.kanban_db import connect
+    from atlaz_cli.kanban_db import connect
     db = tmp_path / "test.db"
     conn = connect(db_path=db)
     val = conn.execute("PRAGMA wal_autocheckpoint").fetchone()[0]
@@ -3702,7 +3707,7 @@ def test_connect_sets_wal_autocheckpoint_100(tmp_path):
 def test_write_txn_check_reads_correct_header_fields(tmp_path):
     """Synthetic DB file with mismatched header page_count triggers the check."""
     import struct
-    from hermes_cli.kanban_db import connect, _check_file_length_invariant
+    from atlaz_cli.kanban_db import connect, _check_file_length_invariant
     db = tmp_path / "synthetic.db"
     conn = connect(db_path=db)
     page_size = conn.execute("PRAGMA page_size").fetchone()[0]
@@ -3746,8 +3751,8 @@ def test_reap_worker_zombies_returns_count():
             return p, 0
         return 0, 0
 
-    with patch("hermes_cli.kanban_db.os.waitpid", side_effect=fake_waitpid):
-        with patch("hermes_cli.kanban_db._record_worker_exit"):
+    with patch("atlaz_cli.kanban_db.os.waitpid", side_effect=fake_waitpid):
+        with patch("atlaz_cli.kanban_db._record_worker_exit"):
             pids = kb.reap_worker_zombies()
     assert pids == [12345, 67890, 11111]
 
@@ -3756,8 +3761,8 @@ def test_reap_worker_zombies_noop_on_windows(monkeypatch):
     """reap_worker_zombies() returns 0 and never calls os.waitpid on Windows."""
     from unittest.mock import patch
 
-    monkeypatch.setattr("hermes_cli.kanban_db.os.name", "nt")
-    with patch("hermes_cli.kanban_db.os.waitpid") as mock_waitpid:
+    monkeypatch.setattr("atlaz_cli.kanban_db.os.name", "nt")
+    with patch("atlaz_cli.kanban_db.os.waitpid") as mock_waitpid:
         result = kb.reap_worker_zombies()
     mock_waitpid.assert_not_called()
     assert result == []
@@ -3767,7 +3772,7 @@ def test_reap_worker_zombies_noop_no_children():
     """reap_worker_zombies() returns 0 without error when there are no children."""
     from unittest.mock import patch
 
-    with patch("hermes_cli.kanban_db.os.waitpid", side_effect=ChildProcessError):
+    with patch("atlaz_cli.kanban_db.os.waitpid", side_effect=ChildProcessError):
         result = kb.reap_worker_zombies()
     assert result == []
 
@@ -3785,9 +3790,9 @@ def test_reap_worker_zombies_records_exit_status():
             return 12345, 0
         return 0, 0
 
-    with patch("hermes_cli.kanban_db.os.waitpid", side_effect=fake_waitpid):
+    with patch("atlaz_cli.kanban_db.os.waitpid", side_effect=fake_waitpid):
         with patch(
-            "hermes_cli.kanban_db._record_worker_exit",
+            "atlaz_cli.kanban_db._record_worker_exit",
             side_effect=lambda p, s: calls.append((p, s)),
         ):
             kb.reap_worker_zombies()
@@ -3799,7 +3804,7 @@ def test_reap_worker_zombies_handles_waitpid_os_error():
     """reap_worker_zombies() does not propagate generic OSError from os.waitpid."""
     from unittest.mock import patch
 
-    with patch("hermes_cli.kanban_db.os.waitpid", side_effect=OSError("test error")):
+    with patch("atlaz_cli.kanban_db.os.waitpid", side_effect=OSError("test error")):
         result = kb.reap_worker_zombies()
     assert result == []
 
@@ -3816,8 +3821,8 @@ def test_zombie_reaper_runs_despite_board_connect_failure():
             return [12345, 67890][call_count[0] - 1], 0
         return 0, 0
 
-    with patch("hermes_cli.kanban_db.os.waitpid", side_effect=fake_waitpid):
-        with patch("hermes_cli.kanban_db._record_worker_exit"):
+    with patch("atlaz_cli.kanban_db.os.waitpid", side_effect=fake_waitpid):
+        with patch("atlaz_cli.kanban_db._record_worker_exit"):
             # Simulate a board tick failure before reaping
             try:
                 raise sqlite3.OperationalError("disk I/O error")
@@ -3852,9 +3857,9 @@ def test_zombie_reaper_survives_all_boards_failing():
     for tick in range(5):
         pids = [tick * 100 + 1, tick * 100 + 2]
         with patch(
-            "hermes_cli.kanban_db.os.waitpid", side_effect=make_fake_waitpid(pids)
+            "atlaz_cli.kanban_db.os.waitpid", side_effect=make_fake_waitpid(pids)
         ):
-            with patch("hermes_cli.kanban_db._record_worker_exit"):
+            with patch("atlaz_cli.kanban_db._record_worker_exit"):
                 pids = kb.reap_worker_zombies()
         total_reaped += len(pids)
 
@@ -3873,9 +3878,9 @@ def test_dispatch_once_still_reaps_via_extracted_fn(kanban_home):
             return 99999, 0
         return 0, 0
 
-    with patch("hermes_cli.kanban_db.os.waitpid", side_effect=fake_waitpid):
-        with patch("hermes_cli.kanban_db._record_worker_exit"):
-            with patch("hermes_cli.kanban_db.os.name", "posix"):
+    with patch("atlaz_cli.kanban_db.os.waitpid", side_effect=fake_waitpid):
+        with patch("atlaz_cli.kanban_db._record_worker_exit"):
+            with patch("atlaz_cli.kanban_db.os.name", "posix"):
                 pids = kb.reap_worker_zombies()
 
     assert pids == [99999]

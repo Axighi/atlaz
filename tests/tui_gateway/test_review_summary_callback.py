@@ -24,8 +24,8 @@ def server():
             "atlaz_constants": MagicMock(
                 get_hermes_home=MagicMock(return_value="/tmp/hermes_test_review_summary")
             ),
-            "hermes_cli.env_loader": MagicMock(),
-            "hermes_cli.banner": MagicMock(),
+            "atlaz_cli.env_loader": MagicMock(),
+            "atlaz_cli.banner": MagicMock(),
             "atlaz_state": MagicMock(),
         },
     ):

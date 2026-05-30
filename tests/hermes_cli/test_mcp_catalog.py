@@ -1,4 +1,4 @@
-"""Tests for hermes_cli.mcp_catalog and hermes_cli.mcp_picker.
+"""Tests for atlaz_cli.mcp_catalog and atlaz_cli.mcp_picker.
 
 Manifest parsing, install/uninstall config writes, and picker plumbing
 are exercised here. Anything that would actually clone a repo or
@@ -25,12 +25,12 @@ def _default_mock_probe(monkeypatch):
     try to talk to a real MCP server.
 
     Individual tests that exercise probe-success behaviour patch
-    ``hermes_cli.mcp_catalog._probe_tools`` themselves.
+    ``atlaz_cli.mcp_catalog._probe_tools`` themselves.
     """
     # Patch the catalog\'s probe wrapper, not the underlying
     # mcp_config._probe_single_server (so tests stay decoupled from that
     # module\'s plumbing).
-    import hermes_cli.mcp_catalog as mc
+    import atlaz_cli.mcp_catalog as mc
 
     monkeypatch.setattr(mc, "_probe_tools", lambda name: None)
 
@@ -51,13 +51,13 @@ def _isolate_hermes_home(tmp_path, monkeypatch):
     hh.mkdir()
     monkeypatch.setenv("HERMES_HOME", str(hh))
     monkeypatch.setattr(
-        "hermes_cli.config.get_hermes_home", lambda: hh
+        "atlaz_cli.config.get_hermes_home", lambda: hh
     )
     monkeypatch.setattr(
-        "hermes_cli.config.get_config_path", lambda: hh / "config.yaml"
+        "atlaz_cli.config.get_config_path", lambda: hh / "config.yaml"
     )
     monkeypatch.setattr(
-        "hermes_cli.config.get_env_path", lambda: hh / ".env"
+        "atlaz_cli.config.get_env_path", lambda: hh / ".env"
     )
     # mcp_catalog grabs get_hermes_home() lazily through atlaz_constants
     monkeypatch.setattr(
@@ -94,7 +94,7 @@ def _basic_manifest(name: str = "demo", **overrides) -> dict:
 
 def _entry(name: str):
     """Wrapper that asserts entry exists (satisfies type-checker + nicer failure msg)."""
-    from hermes_cli.mcp_catalog import get_entry
+    from atlaz_cli.mcp_catalog import get_entry
 
     e = get_entry(name)
     assert e is not None, f"catalog entry {name!r} missing"
@@ -110,7 +110,7 @@ def _entry(name: str):
 class TestManifestParsing:
     def test_minimal_valid(self, catalog_dir):
         _write_manifest(catalog_dir, "demo", _basic_manifest())
-        from hermes_cli.mcp_catalog import list_catalog
+        from atlaz_cli.mcp_catalog import list_catalog
 
         entries = list_catalog()
         assert len(entries) == 1
@@ -133,7 +133,7 @@ class TestManifestParsing:
             }
         )
         _write_manifest(catalog_dir, "demo", body)
-        from hermes_cli.mcp_catalog import list_catalog
+        from atlaz_cli.mcp_catalog import list_catalog
 
         e = list_catalog()[0]
         assert e.auth.type == "api_key"
@@ -158,7 +158,7 @@ class TestManifestParsing:
             },
         )
         _write_manifest(catalog_dir, "demo", body)
-        from hermes_cli.mcp_catalog import list_catalog
+        from atlaz_cli.mcp_catalog import list_catalog
 
         e = list_catalog()[0]
         assert e.install is not None
@@ -176,7 +176,7 @@ class TestManifestParsing:
         })
         # Good
         _write_manifest(catalog_dir, "demo", _basic_manifest())
-        from hermes_cli.mcp_catalog import list_catalog
+        from atlaz_cli.mcp_catalog import list_catalog
 
         entries = list_catalog()
         assert [e.name for e in entries] == ["demo"]
@@ -185,13 +185,13 @@ class TestManifestParsing:
         body = _basic_manifest()
         body["transport"] = {"type": "stdio"}  # no command
         _write_manifest(catalog_dir, "demo", body)
-        from hermes_cli.mcp_catalog import list_catalog
+        from atlaz_cli.mcp_catalog import list_catalog
 
         assert list_catalog() == []
 
     def test_get_entry_strips_official_prefix(self, catalog_dir):
         _write_manifest(catalog_dir, "demo", _basic_manifest())
-        from hermes_cli.mcp_catalog import get_entry
+        from atlaz_cli.mcp_catalog import get_entry
 
         assert get_entry("demo") is not None
         assert get_entry("official/demo") is not None
@@ -206,8 +206,8 @@ class TestManifestParsing:
 class TestInstall:
     def test_install_simple_stdio_writes_config(self, catalog_dir):
         _write_manifest(catalog_dir, "demo", _basic_manifest())
-        from hermes_cli.mcp_catalog import install_entry
-        from hermes_cli.config import load_config
+        from atlaz_cli.mcp_catalog import install_entry
+        from atlaz_cli.config import load_config
 
         install_entry(_entry("demo"), enable=True)
 
@@ -238,9 +238,9 @@ class TestInstall:
         fake_clone = tmp_path / "fake-clone"
         fake_clone.mkdir()
 
-        from hermes_cli import mcp_catalog
-        from hermes_cli.mcp_catalog import install_entry
-        from hermes_cli.config import load_config
+        from atlaz_cli import mcp_catalog
+        from atlaz_cli.mcp_catalog import install_entry
+        from atlaz_cli.config import load_config
 
         with patch.object(mcp_catalog, "_do_git_install", return_value=fake_clone):
             install_entry(_entry("demo"), enable=True)
@@ -258,12 +258,12 @@ class TestInstall:
         )
         _write_manifest(catalog_dir, "demo", body)
 
-        from hermes_cli import mcp_catalog
+        from atlaz_cli import mcp_catalog
 
         monkeypatch.setattr(mcp_catalog, "_prompt_input", lambda *a, **kw: "secret-val")
 
-        from hermes_cli.mcp_catalog import install_entry
-        from hermes_cli.config import get_env_value, load_config
+        from atlaz_cli.mcp_catalog import install_entry
+        from atlaz_cli.config import get_env_value, load_config
 
         install_entry(_entry("demo"), enable=True)
 
@@ -277,8 +277,8 @@ class TestInstall:
         )
         _write_manifest(catalog_dir, "demo", body)
 
-        from hermes_cli.mcp_catalog import install_entry
-        from hermes_cli.config import load_config
+        from atlaz_cli.mcp_catalog import install_entry
+        from atlaz_cli.config import load_config
 
         install_entry(_entry("demo"), enable=True)
 
@@ -295,8 +295,8 @@ class TestInstall:
         )
         _write_manifest(catalog_dir, "demo", body)
 
-        from hermes_cli import mcp_catalog
-        from hermes_cli.mcp_catalog import install_entry, CatalogError
+        from atlaz_cli import mcp_catalog
+        from atlaz_cli.mcp_catalog import install_entry, CatalogError
 
         # User hits enter — empty input, no default
         monkeypatch.setattr(mcp_catalog, "_prompt_input", lambda *a, **kw: "")
@@ -313,8 +313,8 @@ class TestInstall:
 class TestUninstall:
     def test_uninstall_removes_server_block(self, catalog_dir):
         _write_manifest(catalog_dir, "demo", _basic_manifest())
-        from hermes_cli.mcp_catalog import install_entry, uninstall_entry
-        from hermes_cli.config import load_config
+        from atlaz_cli.mcp_catalog import install_entry, uninstall_entry
+        from atlaz_cli.config import load_config
 
         install_entry(_entry("demo"), enable=True)
         assert "demo" in load_config().get("mcp_servers", {})
@@ -323,7 +323,7 @@ class TestUninstall:
         assert "demo" not in load_config().get("mcp_servers", {})
 
     def test_uninstall_missing_returns_false(self):
-        from hermes_cli.mcp_catalog import uninstall_entry
+        from atlaz_cli.mcp_catalog import uninstall_entry
 
         assert uninstall_entry("nonexistent") is False
 
@@ -335,7 +335,7 @@ class TestUninstall:
 
 class TestPicker:
     def test_show_catalog_empty(self, catalog_dir, capsys):
-        from hermes_cli.mcp_picker import show_catalog
+        from atlaz_cli.mcp_picker import show_catalog
 
         show_catalog()
         out = capsys.readouterr().out
@@ -343,7 +343,7 @@ class TestPicker:
 
     def test_show_catalog_lists_entry(self, catalog_dir, capsys):
         _write_manifest(catalog_dir, "demo", _basic_manifest())
-        from hermes_cli.mcp_picker import show_catalog
+        from atlaz_cli.mcp_picker import show_catalog
 
         show_catalog()
         out = capsys.readouterr().out
@@ -351,7 +351,7 @@ class TestPicker:
         assert "available" in out
 
     def test_install_by_name_unknown(self, catalog_dir, capsys):
-        from hermes_cli.mcp_picker import install_by_name
+        from atlaz_cli.mcp_picker import install_by_name
 
         rc = install_by_name("nope")
         assert rc == 1
@@ -359,8 +359,8 @@ class TestPicker:
 
     def test_install_by_name_success(self, catalog_dir):
         _write_manifest(catalog_dir, "demo", _basic_manifest())
-        from hermes_cli.mcp_picker import install_by_name
-        from hermes_cli.config import load_config
+        from atlaz_cli.mcp_picker import install_by_name
+        from atlaz_cli.config import load_config
 
         rc = install_by_name("demo")
         assert rc == 0
@@ -371,7 +371,7 @@ class TestPicker:
         # Force isatty false
         import sys as _sys
         monkeypatch.setattr(_sys.stdin, "isatty", lambda: False)
-        from hermes_cli.mcp_picker import run_picker
+        from atlaz_cli.mcp_picker import run_picker
 
         run_picker()
         out = capsys.readouterr().out
@@ -391,8 +391,8 @@ class TestToolSelection:
     def test_probe_fail_no_default_writes_no_filter(self, catalog_dir):
         body = _basic_manifest()
         _write_manifest(catalog_dir, "demo", body)
-        from hermes_cli.mcp_catalog import install_entry
-        from hermes_cli.config import load_config
+        from atlaz_cli.mcp_catalog import install_entry
+        from atlaz_cli.config import load_config
 
         install_entry(_entry("demo"), enable=True)
         server = load_config()["mcp_servers"]["demo"]
@@ -404,8 +404,8 @@ class TestToolSelection:
             tools={"default_enabled": ["a", "b", "c"]},
         )
         _write_manifest(catalog_dir, "demo", body)
-        from hermes_cli.mcp_catalog import install_entry
-        from hermes_cli.config import load_config
+        from atlaz_cli.mcp_catalog import install_entry
+        from atlaz_cli.config import load_config
 
         install_entry(_entry("demo"), enable=True)
         server = load_config()["mcp_servers"]["demo"]
@@ -418,15 +418,15 @@ class TestToolSelection:
             tools={"default_enabled": ["alpha", "gamma"]},
         )
         _write_manifest(catalog_dir, "demo", body)
-        import hermes_cli.mcp_catalog as mc
+        import atlaz_cli.mcp_catalog as mc
 
         probed = self._make_probed("alpha", "beta", "gamma", "delta")
         monkeypatch.setattr(mc, "_probe_tools", lambda name: probed)
         import sys as _sys
         monkeypatch.setattr(_sys.stdin, "isatty", lambda: False)
 
-        from hermes_cli.mcp_catalog import install_entry
-        from hermes_cli.config import load_config
+        from atlaz_cli.mcp_catalog import install_entry
+        from atlaz_cli.config import load_config
 
         install_entry(_entry("demo"), enable=True)
         server = load_config()["mcp_servers"]["demo"]
@@ -437,15 +437,15 @@ class TestToolSelection:
         self, catalog_dir, monkeypatch
     ):
         _write_manifest(catalog_dir, "demo", _basic_manifest())
-        import hermes_cli.mcp_catalog as mc
+        import atlaz_cli.mcp_catalog as mc
 
         probed = self._make_probed("x", "y")
         monkeypatch.setattr(mc, "_probe_tools", lambda name: probed)
         import sys as _sys
         monkeypatch.setattr(_sys.stdin, "isatty", lambda: False)
 
-        from hermes_cli.mcp_catalog import install_entry
-        from hermes_cli.config import load_config
+        from atlaz_cli.mcp_catalog import install_entry
+        from atlaz_cli.config import load_config
 
         install_entry(_entry("demo"), enable=True)
         server = load_config()["mcp_servers"]["demo"]
@@ -460,15 +460,15 @@ class TestToolSelection:
             tools={"default_enabled": ["real", "ghost"]},
         )
         _write_manifest(catalog_dir, "demo", body)
-        import hermes_cli.mcp_catalog as mc
+        import atlaz_cli.mcp_catalog as mc
 
         probed = self._make_probed("real", "other")
         monkeypatch.setattr(mc, "_probe_tools", lambda name: probed)
         import sys as _sys
         monkeypatch.setattr(_sys.stdin, "isatty", lambda: False)
 
-        from hermes_cli.mcp_catalog import install_entry
-        from hermes_cli.config import load_config
+        from atlaz_cli.mcp_catalog import install_entry
+        from atlaz_cli.config import load_config
 
         install_entry(_entry("demo"), enable=True)
         server = load_config()["mcp_servers"]["demo"]
@@ -484,14 +484,14 @@ class TestToolSelection:
         )
         _write_manifest(catalog_dir, "demo", body)
 
-        import hermes_cli.mcp_catalog as mc
+        import atlaz_cli.mcp_catalog as mc
         probed = self._make_probed("alpha", "beta", "gamma")
         monkeypatch.setattr(mc, "_probe_tools", lambda name: probed)
         import sys as _sys
         monkeypatch.setattr(_sys.stdin, "isatty", lambda: False)
 
-        from hermes_cli.mcp_catalog import install_entry
-        from hermes_cli.config import load_config, save_config
+        from atlaz_cli.mcp_catalog import install_entry
+        from atlaz_cli.config import load_config, save_config
 
         # First install
         install_entry(_entry("demo"), enable=True)
@@ -509,7 +509,7 @@ class TestToolSelection:
         body = _basic_manifest()
         body["tools"] = {"default_enabled": "not a list"}
         _write_manifest(catalog_dir, "demo", body)
-        from hermes_cli.mcp_catalog import list_catalog
+        from atlaz_cli.mcp_catalog import list_catalog
 
         # Invalid manifests are silently skipped at list_catalog level
         assert list_catalog() == []
@@ -532,7 +532,7 @@ class TestCatalogDiagnostics:
         # Plus one valid entry
         _write_manifest(catalog_dir, "demo", _basic_manifest())
 
-        from hermes_cli.mcp_catalog import list_catalog, catalog_diagnostics
+        from atlaz_cli.mcp_catalog import list_catalog, catalog_diagnostics
 
         entries = list_catalog()
         assert [e.name for e in entries] == ["demo"]
@@ -548,7 +548,7 @@ class TestCatalogDiagnostics:
         body["transport"] = {"type": "unsupported"}
         _write_manifest(catalog_dir, "broken", body)
 
-        from hermes_cli.mcp_catalog import list_catalog, catalog_diagnostics
+        from atlaz_cli.mcp_catalog import list_catalog, catalog_diagnostics
 
         entries = list_catalog()
         assert entries == []
@@ -566,7 +566,7 @@ class TestCatalogDiagnostics:
 
         import sys as _sys
         monkeypatch.setattr(_sys.stdin, "isatty", lambda: False)
-        from hermes_cli.mcp_picker import show_catalog
+        from atlaz_cli.mcp_picker import show_catalog
 
         show_catalog()
         out = capsys.readouterr().out
@@ -585,7 +585,7 @@ class TestCustomMcpRows:
         picker text dump with a 'custom' status."""
         _write_manifest(catalog_dir, "demo", _basic_manifest())
 
-        from hermes_cli.config import load_config, save_config
+        from atlaz_cli.config import load_config, save_config
         cfg = load_config()
         cfg.setdefault("mcp_servers", {})["my-custom"] = {
             "command": "npx",
@@ -594,7 +594,7 @@ class TestCustomMcpRows:
         }
         save_config(cfg)
 
-        from hermes_cli.mcp_picker import show_catalog
+        from atlaz_cli.mcp_picker import show_catalog
         show_catalog()
         out = capsys.readouterr().out
         assert "demo" in out
@@ -604,7 +604,7 @@ class TestCustomMcpRows:
     def test_custom_mcp_only_no_catalog(self, catalog_dir, capsys):
         """If the catalog is empty but the user has custom MCPs, they\'re
         still visible — the picker is the unified surface."""
-        from hermes_cli.config import load_config, save_config
+        from atlaz_cli.config import load_config, save_config
         cfg = load_config()
         cfg.setdefault("mcp_servers", {})["my-custom"] = {
             "url": "https://mcp.example.com",
@@ -612,7 +612,7 @@ class TestCustomMcpRows:
         }
         save_config(cfg)
 
-        from hermes_cli.mcp_picker import show_catalog
+        from atlaz_cli.mcp_picker import show_catalog
         show_catalog()
         out = capsys.readouterr().out
         assert "my-custom" in out
@@ -643,8 +643,8 @@ class TestGitInstallShaRef:
         )
         _write_manifest(catalog_dir, "demo", body)
 
-        from hermes_cli import mcp_catalog
-        from hermes_cli.mcp_catalog import _do_git_install
+        from atlaz_cli import mcp_catalog
+        from atlaz_cli.mcp_catalog import _do_git_install
 
         calls = []
 
@@ -660,7 +660,7 @@ class TestGitInstallShaRef:
         monkeypatch.setattr(mcp_catalog.subprocess, "run", fake_run)
         monkeypatch.setattr(mcp_catalog.shutil, "which", lambda x: "/usr/bin/git")
 
-        from hermes_cli.mcp_catalog import get_entry
+        from atlaz_cli.mcp_catalog import get_entry
         entry = get_entry("demo")
         assert entry is not None
         _do_git_install(entry)
@@ -695,8 +695,8 @@ class TestGitInstallShaRef:
         )
         _write_manifest(catalog_dir, "demo", body)
 
-        from hermes_cli import mcp_catalog
-        from hermes_cli.mcp_catalog import _do_git_install, get_entry
+        from atlaz_cli import mcp_catalog
+        from atlaz_cli.mcp_catalog import _do_git_install, get_entry
 
         calls = []
 
@@ -739,7 +739,7 @@ class TestToolsConfigIncludeMode:
             },
         }
 
-        import hermes_cli.tools_config as tc
+        import atlaz_cli.tools_config as tc
         # Mock the probe to return three tools
         monkeypatch.setattr(
             "tools.mcp_tool.probe_mcp_server_tools",
@@ -747,7 +747,7 @@ class TestToolsConfigIncludeMode:
         )
         # Mock the checklist to return just the first tool
         monkeypatch.setattr(
-            "hermes_cli.curses_ui.curses_checklist",
+            "atlaz_cli.curses_ui.curses_checklist",
             lambda title, labels, pre_selected, **kw: {0},
         )
         # Mock save_config so we can inspect the write
@@ -777,7 +777,7 @@ class TestShippedCatalog:
         # Use the actual repo's optional-mcps directory (no HERMES_OPTIONAL_MCPS
         # override) so this test catches real manifests.
         monkeypatch.delenv("HERMES_OPTIONAL_MCPS", raising=False)
-        from hermes_cli.mcp_catalog import _catalog_root, _parse_manifest
+        from atlaz_cli.mcp_catalog import _catalog_root, _parse_manifest
 
         root = _catalog_root()
         if not root.exists():

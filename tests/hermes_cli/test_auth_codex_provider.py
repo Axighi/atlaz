@@ -8,7 +8,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from hermes_cli.auth import (
+from atlaz_cli.auth import (
     AuthError,
     DEFAULT_CODEX_BASE_URL,
     PROVIDER_REGISTRY,
@@ -95,7 +95,7 @@ def test_resolve_codex_runtime_credentials_refreshes_expiring_token(tmp_path, mo
         called["count"] += 1
         return {"access_token": "access-new", "refresh_token": "refresh-new"}
 
-    monkeypatch.setattr("hermes_cli.auth._refresh_codex_auth_tokens", _fake_refresh)
+    monkeypatch.setattr("atlaz_cli.auth._refresh_codex_auth_tokens", _fake_refresh)
 
     resolved = resolve_codex_runtime_credentials()
 
@@ -114,7 +114,7 @@ def test_resolve_codex_runtime_credentials_force_refresh(tmp_path, monkeypatch):
         called["count"] += 1
         return {"access_token": "access-forced", "refresh_token": "refresh-new"}
 
-    monkeypatch.setattr("hermes_cli.auth._refresh_codex_auth_tokens", _fake_refresh)
+    monkeypatch.setattr("atlaz_cli.auth._refresh_codex_auth_tokens", _fake_refresh)
 
     resolved = resolve_codex_runtime_credentials(force_refresh=True, refresh_if_expiring=False)
 
@@ -464,7 +464,7 @@ def _patch_httpx(monkeypatch, response):
     def _factory(*args, **kwargs):
         return _StubHTTPClient(response)
 
-    monkeypatch.setattr("hermes_cli.auth.httpx.Client", _factory)
+    monkeypatch.setattr("atlaz_cli.auth.httpx.Client", _factory)
 
 
 def test_refresh_parses_openai_nested_error_shape_refresh_token_reused(monkeypatch):
@@ -561,7 +561,7 @@ def test_refresh_429_classified_as_quota_not_auth_failure(monkeypatch):
     dedicated rate-limit code so callers surface a "retry later" notice rather
     than a misleading "run hermes auth".
     """
-    from hermes_cli.auth import (
+    from atlaz_cli.auth import (
         CODEX_RATE_LIMITED_CODE,
         format_auth_error,
         is_rate_limited_auth_error,
@@ -590,7 +590,7 @@ def test_refresh_429_classified_as_quota_not_auth_failure(monkeypatch):
 
 def test_refresh_429_without_retry_after_header(monkeypatch):
     """429 without a Retry-After header still classifies as quota, no relogin."""
-    from hermes_cli.auth import CODEX_RATE_LIMITED_CODE
+    from atlaz_cli.auth import CODEX_RATE_LIMITED_CODE
 
     response = _StubHTTPResponse(429, {"error": "rate_limited"})
     _patch_httpx(monkeypatch, response)
@@ -606,7 +606,7 @@ def test_refresh_429_without_retry_after_header(monkeypatch):
 
 def test_is_rate_limited_auth_error_distinguishes_credential_errors():
     """Missing/expired credentials must NOT be treated as rate-limit errors."""
-    from hermes_cli.auth import CODEX_RATE_LIMITED_CODE, is_rate_limited_auth_error
+    from atlaz_cli.auth import CODEX_RATE_LIMITED_CODE, is_rate_limited_auth_error
 
     rate_limited = AuthError(
         "quota", provider="openai-codex", code=CODEX_RATE_LIMITED_CODE, relogin_required=False
@@ -626,15 +626,15 @@ def test_login_openai_codex_force_new_login_skips_existing_reuse_prompt(monkeypa
     called = {"device_login": 0}
 
     monkeypatch.setattr(
-        "hermes_cli.auth.resolve_codex_runtime_credentials",
+        "atlaz_cli.auth.resolve_codex_runtime_credentials",
         lambda: {"base_url": DEFAULT_CODEX_BASE_URL},
     )
     monkeypatch.setattr(
-        "hermes_cli.auth._import_codex_cli_tokens",
+        "atlaz_cli.auth._import_codex_cli_tokens",
         lambda: {"access_token": "cli-at", "refresh_token": "cli-rt"},
     )
     monkeypatch.setattr(
-        "hermes_cli.auth._codex_device_code_login",
+        "atlaz_cli.auth._codex_device_code_login",
         lambda: {
             "tokens": {"access_token": "fresh-at", "refresh_token": "fresh-rt"},
             "last_refresh": "2026-04-01T00:00:00Z",
@@ -647,8 +647,8 @@ def test_login_openai_codex_force_new_login_skips_existing_reuse_prompt(monkeypa
         called["tokens"] = dict(tokens)
         called["last_refresh"] = last_refresh
 
-    monkeypatch.setattr("hermes_cli.auth._save_codex_tokens", _fake_save)
-    monkeypatch.setattr("hermes_cli.auth._update_config_for_provider", lambda *args, **kwargs: "/tmp/config.yaml")
+    monkeypatch.setattr("atlaz_cli.auth._save_codex_tokens", _fake_save)
+    monkeypatch.setattr("atlaz_cli.auth._update_config_for_provider", lambda *args, **kwargs: "/tmp/config.yaml")
     monkeypatch.setattr(
         "builtins.input",
         lambda prompt="": (_ for _ in ()).throw(AssertionError("force_new_login should not prompt for reuse/import")),

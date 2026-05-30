@@ -16,9 +16,9 @@ Hermes has a shared provider runtime resolver used across:
 
 Primary implementation:
 
-- `hermes_cli/runtime_provider.py` — credential resolution, `_resolve_custom_runtime()`
-- `hermes_cli/auth.py` — provider registry, `resolve_provider()`
-- `hermes_cli/model_switch.py` — shared `/model` switch pipeline (CLI + gateway)
+- `atlaz_cli/runtime_provider.py` — credential resolution, `_resolve_custom_runtime()`
+- `atlaz_cli/auth.py` — provider registry, `resolve_provider()`
+- `atlaz_cli/model_switch.py` — shared `/model` switch pipeline (CLI + gateway)
 - `agent/auxiliary_client.py` — auxiliary model routing
 - `providers/` — ABC + registry entry points (`ProviderProfile`, `register_provider`, `get_provider_profile`, `list_providers`)
 - `plugins/model-providers/<name>/` — per-provider plugins (bundled) that declare `api_mode`, `base_url`, `env_vars`, `fallback_models` and register themselves into the registry on first access. User plugins at `$HERMES_HOME/plugins/model-providers/<name>/` override bundled ones of the same name.
@@ -196,7 +196,7 @@ Cron jobs **do** support fallback: `run_job()` reads `fallback_providers` (or le
 Fallback behavior is exercised across several suites:
 
 - `tests/run_agent/test_fallback_credential_isolation.py` — credential isolation between primary and fallback
-- `tests/hermes_cli/test_fallback_cmd.py` — the `/fallback` CLI command
+- `tests/atlaz_cli/test_fallback_cmd.py` — the `/fallback` CLI command
 - `tests/gateway/test_fallback_eviction.py` — gateway eviction of failed providers
 
 ## Related docs

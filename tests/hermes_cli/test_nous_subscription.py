@@ -1,7 +1,7 @@
 """Tests for Nous subscription feature detection."""
 
-from hermes_cli.nous_account import NousPortalAccountInfo
-from hermes_cli import nous_subscription as ns
+from atlaz_cli.nous_account import NousPortalAccountInfo
+from atlaz_cli import nous_subscription as ns
 
 
 def _account(*, logged_in: bool, paid: bool | None = None) -> NousPortalAccountInfo:

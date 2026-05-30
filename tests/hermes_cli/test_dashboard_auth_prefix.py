@@ -38,9 +38,9 @@ pytestmark = pytest.mark.xdist_group("dashboard_auth_app_state")
 
 from fastapi.testclient import TestClient
 
-from hermes_cli import web_server
-from hermes_cli.dashboard_auth import clear_providers, register_provider
-from tests.hermes_cli.conftest_dashboard_auth import StubAuthProvider
+from atlaz_cli import web_server
+from atlaz_cli.dashboard_auth import clear_providers, register_provider
+from tests.atlaz_cli.conftest_dashboard_auth import StubAuthProvider
 
 
 @pytest.fixture
@@ -234,7 +234,7 @@ class TestPublicUrlOverride:
 
     @pytest.fixture
     def patch_config(self, monkeypatch):
-        """Replace ``hermes_cli.config.load_config`` with a stub
+        """Replace ``atlaz_cli.config.load_config`` with a stub
         returning the given ``public_url``. Pass ``None`` to set no
         config-side value."""
 
@@ -243,7 +243,7 @@ class TestPublicUrlOverride:
             if public_url is not None:
                 cfg = {"dashboard": {"public_url": public_url}}
             monkeypatch.setattr(
-                "hermes_cli.config.load_config", lambda: cfg
+                "atlaz_cli.config.load_config", lambda: cfg
             )
 
         return _set
@@ -476,7 +476,7 @@ class TestCookiePathRespectsPrefix:
         spec-compatible without Secure."""
         from fastapi import FastAPI
         from fastapi.responses import Response
-        from hermes_cli.dashboard_auth.cookies import set_pkce_cookie
+        from atlaz_cli.dashboard_auth.cookies import set_pkce_cookie
 
         app = FastAPI()
 

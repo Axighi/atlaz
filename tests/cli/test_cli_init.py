@@ -557,7 +557,7 @@ class TestRootLevelProviderOverride:
 
     def test_normalize_root_model_keys_moves_to_model(self):
         """_normalize_root_model_keys migrates root keys into model section."""
-        from hermes_cli.config import _normalize_root_model_keys
+        from atlaz_cli.config import _normalize_root_model_keys
 
         config = {
             "provider": "opencode-go",
@@ -576,7 +576,7 @@ class TestRootLevelProviderOverride:
 
     def test_normalize_root_model_keys_does_not_override_existing(self):
         """Existing model.provider is never overridden by root-level key."""
-        from hermes_cli.config import _normalize_root_model_keys
+        from atlaz_cli.config import _normalize_root_model_keys
 
         config = {
             "provider": "stale-provider",
@@ -591,7 +591,7 @@ class TestRootLevelProviderOverride:
 
     def test_normalize_root_context_length_migrates_to_model(self):
         """Root-level context_length is migrated into the model section."""
-        from hermes_cli.config import _normalize_root_model_keys
+        from atlaz_cli.config import _normalize_root_model_keys
 
         config = {
             "context_length": 128000,
@@ -605,7 +605,7 @@ class TestRootLevelProviderOverride:
 
     def test_normalize_root_context_length_does_not_override_existing(self):
         """Existing model.context_length is not overridden by root-level key."""
-        from hermes_cli.config import _normalize_root_model_keys
+        from atlaz_cli.config import _normalize_root_model_keys
 
         config = {
             "context_length": 256000,
@@ -620,7 +620,7 @@ class TestRootLevelProviderOverride:
 
     def test_normalize_root_context_length_with_string_model(self):
         """Root-level context_length is migrated even when model is a string."""
-        from hermes_cli.config import _normalize_root_model_keys
+        from atlaz_cli.config import _normalize_root_model_keys
 
         config = {
             "context_length": 128000,

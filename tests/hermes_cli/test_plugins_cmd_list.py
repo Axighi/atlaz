@@ -1,7 +1,7 @@
 import argparse
 import json
 
-from hermes_cli import plugins_cmd
+from atlaz_cli import plugins_cmd
 
 
 def _args(**kwargs):
