@@ -25,14 +25,14 @@ import pytest
 pytestmark = pytest.mark.xdist_group("dashboard_auth_app_state")
 from fastapi.testclient import TestClient
 
-from hermes_cli import web_server
-from hermes_cli.dashboard_auth import clear_providers, register_provider
-from hermes_cli.dashboard_auth.ws_tickets import (
+from atlaz_cli import web_server
+from atlaz_cli.dashboard_auth import clear_providers, register_provider
+from atlaz_cli.dashboard_auth.ws_tickets import (
     _reset_for_tests,
     consume_ticket,
     mint_ticket,
 )
-from tests.hermes_cli.conftest_dashboard_auth import StubAuthProvider
+from tests.atlaz_cli.conftest_dashboard_auth import StubAuthProvider
 
 
 # ---------------------------------------------------------------------------
@@ -217,7 +217,7 @@ class TestWsAuthOkGated:
     def test_rejection_audit_logs(self, gated_app, tmp_path, monkeypatch):
         # Point the audit log at a tmp dir so we can read what got written.
         monkeypatch.setenv("HERMES_HOME", str(tmp_path))
-        from hermes_cli.dashboard_auth import audit as audit_mod
+        from atlaz_cli.dashboard_auth import audit as audit_mod
 
         # The log path is resolved lazily on the first audit_log() call;
         # bust any cached handler so it re-resolves.

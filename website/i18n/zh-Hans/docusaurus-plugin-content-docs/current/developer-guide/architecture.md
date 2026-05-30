@@ -75,7 +75,7 @@ hermes-agent/
 │   ├── memory_provider.py   # 记忆提供者 ABC
 │   └── trajectory.py         # 轨迹保存辅助函数
 │
-├── hermes_cli/               # CLI 子命令与设置
+├── atlaz_cli/               # CLI 子命令与设置
 │   ├── main.py               # 入口点——所有 `hermes` 子命令（大文件）
 │   ├── config.py             # DEFAULT_CONFIG、OPTIONAL_ENV_VARS、迁移
 │   ├── commands.py           # COMMAND_REGISTRY——斜杠命令中央定义

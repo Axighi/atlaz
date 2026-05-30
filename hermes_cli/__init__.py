@@ -1,47 +1,38 @@
 """
-Hermes CLI - Unified command-line interface for Hermes Agent.
+Backward-compatibility shim for the renamed ``atlaz_cli`` package.
 
-Provides subcommands for:
-- hermes chat          - Interactive chat (same as ./hermes)
-- hermes gateway       - Run gateway in foreground
-- hermes gateway start - Start gateway service
-- hermes gateway stop  - Stop gateway service
-- hermes setup         - Interactive setup wizard
-- hermes status        - Show status of all components
-- hermes cron          - Manage cron jobs
+``hermes_cli`` was renamed to ``atlaz_cli`` in the atlaz rebrand. This shim
+issues a deprecation warning and then redirects all imports to ``atlaz_cli``,
+so that existing code using ``import hermes_cli`` or ``from hermes_cli import
+...`` continues to work.
+
+New code should use ``atlaz_cli`` directly. This shim will be removed in a
+future release.
 """
 
+import warnings
 import os
-import sys
 
-__version__ = "0.15.1"
-__release_date__ = "2026.5.29"
+warnings.warn(
+    "Import from 'hermes_cli' is deprecated. Use 'atlaz_cli'.",
+    DeprecationWarning,
+    stacklevel=2,
+)
 
+# Redirect submodule lookups to atlaz_cli/ directory so that
+# ``from hermes_cli.commands import ...`` etc. still resolve.
+__path__ = [
+    os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, "atlaz_cli"))
+]
 
-def _ensure_utf8():
-    """Force UTF-8 stdout/stderr on Windows to prevent UnicodeEncodeError.
-
-    Windows services and terminals default to cp1252, which cannot encode
-    box-drawing characters used in CLI output. This causes unhandled
-    UnicodeEncodeError crashes on gateway startup.
-    """
-    if sys.platform != "win32":
-        return
-    os.environ.setdefault("PYTHONUTF8", "1")
-    os.environ.setdefault("PYTHONIOENCODING", "utf-8")
-    for stream_name in ("stdout", "stderr"):
-        stream = getattr(sys, stream_name, None)
-        if stream is None:
-            continue
-        try:
-            if getattr(stream, "encoding", "").lower().replace("-", "") != "utf8":
-                new_stream = open(
-                    stream.fileno(), "w", encoding="utf-8",
-                    buffering=1, closefd=False,
-                )
-                setattr(sys, stream_name, new_stream)
-        except (AttributeError, OSError):
-            pass
-
-
-_ensure_utf8()
+# Re-export everything from atlaz_cli for ``import hermes_cli`` → attribute access
+try:
+    import atlaz_cli as _atlaz_cli
+    import sys as _sys
+    _globals = globals()
+    for _attr in dir(_atlaz_cli):
+        if not _attr.startswith("_"):
+            _globals[_attr] = getattr(_atlaz_cli, _attr)
+    del _attr, _globals, _sys, _atlaz_cli
+except ImportError:
+    pass  # atlaz_cli not installed yet

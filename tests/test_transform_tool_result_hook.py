@@ -8,7 +8,7 @@ targets the generic tool-result seam that runs for every tool dispatch.
 import os
 from pathlib import Path
 
-import hermes_cli.plugins as plugins_mod
+import atlaz_cli.plugins as plugins_mod
 import model_tools
 
 
@@ -35,7 +35,7 @@ def _run_handle_function_call(
 
     if invoke_hook is not _UNSET:
         # Patch the symbol actually imported inside handle_function_call.
-        monkeypatch.setattr("hermes_cli.plugins.invoke_hook", invoke_hook)
+        monkeypatch.setattr("atlaz_cli.plugins.invoke_hook", invoke_hook)
 
     return model_tools.handle_function_call(
         tool_name,

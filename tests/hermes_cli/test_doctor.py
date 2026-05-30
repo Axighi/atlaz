@@ -1,4 +1,4 @@
-"""Tests for hermes_cli.doctor."""
+"""Tests for atlaz_cli.doctor."""
 
 import os
 import sys
@@ -10,10 +10,10 @@ from types import SimpleNamespace
 
 import pytest
 
-import hermes_cli.doctor as doctor
-import hermes_cli.gateway as gateway_cli
-from hermes_cli import doctor as doctor_mod
-from hermes_cli.doctor import _has_provider_env_config
+import atlaz_cli.doctor as doctor
+import atlaz_cli.gateway as gateway_cli
+from atlaz_cli import doctor as doctor_mod
+from atlaz_cli.doctor import _has_provider_env_config
 
 
 class TestDoctorPlatformHints:
@@ -285,7 +285,7 @@ class TestDoctorMemoryProviderSection:
 
         # Stub auth checks to avoid real API calls
         try:
-            from hermes_cli import auth as _auth_mod
+            from atlaz_cli import auth as _auth_mod
             monkeypatch.setattr(_auth_mod, "get_nous_auth_status", lambda: {})
             monkeypatch.setattr(_auth_mod, "get_codex_auth_status", lambda: {})
             monkeypatch.setattr(_auth_mod, "get_xai_oauth_auth_status", lambda: {})
@@ -392,7 +392,7 @@ def test_run_doctor_accepts_named_provider_from_providers_section(monkeypatch, t
     monkeypatch.setitem(sys.modules, "model_tools", fake_model_tools)
 
     try:
-        from hermes_cli import auth as _auth_mod
+        from atlaz_cli import auth as _auth_mod
         monkeypatch.setattr(_auth_mod, "get_nous_auth_status", lambda: {})
         monkeypatch.setattr(_auth_mod, "get_codex_auth_status", lambda: {})
         monkeypatch.setattr(_auth_mod, "get_xai_oauth_auth_status", lambda: {})
@@ -430,7 +430,7 @@ def test_run_doctor_accepts_bare_custom_provider(monkeypatch, tmp_path):
     monkeypatch.setitem(sys.modules, "model_tools", fake_model_tools)
 
     try:
-        from hermes_cli import auth as _auth_mod
+        from atlaz_cli import auth as _auth_mod
         monkeypatch.setattr(_auth_mod, "get_nous_auth_status", lambda: {})
         monkeypatch.setattr(_auth_mod, "get_codex_auth_status", lambda: {})
         monkeypatch.setattr(_auth_mod, "get_xai_oauth_auth_status", lambda: {})
@@ -469,7 +469,7 @@ def test_run_doctor_flags_missing_credentials_for_active_openrouter_provider(mon
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
 
     try:
-        from hermes_cli import auth as _auth_mod
+        from atlaz_cli import auth as _auth_mod
 
         monkeypatch.setattr(_auth_mod, "get_nous_auth_status", lambda: {})
         monkeypatch.setattr(_auth_mod, "get_codex_auth_status", lambda: {})
@@ -519,7 +519,7 @@ def test_run_doctor_accepts_hermes_provider_ids_that_catalog_aliases(
     monkeypatch.setitem(sys.modules, "model_tools", fake_model_tools)
 
     try:
-        from hermes_cli import auth as _auth_mod
+        from atlaz_cli import auth as _auth_mod
         monkeypatch.setattr(_auth_mod, "get_nous_auth_status", lambda: {})
         monkeypatch.setattr(_auth_mod, "get_codex_auth_status", lambda: {})
         monkeypatch.setattr(_auth_mod, "get_xai_oauth_auth_status", lambda: {})
@@ -565,7 +565,7 @@ def test_run_doctor_accepts_kimi_coding_cn_provider(monkeypatch, tmp_path):
     monkeypatch.setitem(sys.modules, "model_tools", fake_model_tools)
 
     try:
-        from hermes_cli import auth as _auth_mod
+        from atlaz_cli import auth as _auth_mod
         monkeypatch.setattr(_auth_mod, "get_nous_auth_status", lambda: {})
         monkeypatch.setattr(_auth_mod, "get_codex_auth_status", lambda: {})
         monkeypatch.setattr(_auth_mod, "get_auth_status", lambda provider: {"logged_in": True})
@@ -605,7 +605,7 @@ def test_run_doctor_termux_does_not_mark_browser_available_without_agent_browser
     monkeypatch.setitem(sys.modules, "model_tools", fake_model_tools)
 
     try:
-        from hermes_cli import auth as _auth_mod
+        from atlaz_cli import auth as _auth_mod
         monkeypatch.setattr(_auth_mod, "get_nous_auth_status", lambda: {})
         monkeypatch.setattr(_auth_mod, "get_codex_auth_status", lambda: {})
         monkeypatch.setattr(_auth_mod, "get_xai_oauth_auth_status", lambda: {})
@@ -645,7 +645,7 @@ def test_run_doctor_kimi_cn_env_is_detected_and_probe_is_null_safe(monkeypatch, 
     monkeypatch.setitem(sys.modules, "model_tools", fake_model_tools)
 
     try:
-        from hermes_cli import auth as _auth_mod
+        from atlaz_cli import auth as _auth_mod
         monkeypatch.setattr(_auth_mod, "get_nous_auth_status", lambda: {})
         monkeypatch.setattr(_auth_mod, "get_codex_auth_status", lambda: {})
         monkeypatch.setattr(_auth_mod, "get_xai_oauth_auth_status", lambda: {})
@@ -694,7 +694,7 @@ def test_run_doctor_dashscope_retries_china_endpoint_after_intl_unauthorized(mon
     monkeypatch.setitem(sys.modules, "model_tools", fake_model_tools)
 
     try:
-        from hermes_cli import auth as _auth_mod
+        from atlaz_cli import auth as _auth_mod
         monkeypatch.setattr(_auth_mod, "get_nous_auth_status", lambda: {})
         monkeypatch.setattr(_auth_mod, "get_codex_auth_status", lambda: {})
         monkeypatch.setattr(_auth_mod, "get_xai_oauth_auth_status", lambda: {})
@@ -753,7 +753,7 @@ def test_run_doctor_opencode_go_skips_invalid_models_probe(monkeypatch, tmp_path
     monkeypatch.setitem(sys.modules, "model_tools", fake_model_tools)
 
     try:
-        from hermes_cli import auth as _auth_mod
+        from atlaz_cli import auth as _auth_mod
         monkeypatch.setattr(_auth_mod, "get_nous_auth_status", lambda: {})
         monkeypatch.setattr(_auth_mod, "get_codex_auth_status", lambda: {})
         monkeypatch.setattr(_auth_mod, "get_xai_oauth_auth_status", lambda: {})
@@ -792,7 +792,7 @@ class TestGitHubTokenCheck:
         monkeypatch.setenv("HERMES_HOME", str(home))
         monkeypatch.setenv("PATH", "/nonexistent")  # gh not found
 
-        from hermes_cli.doctor import run_doctor
+        from atlaz_cli.doctor import run_doctor
         import io, contextlib
 
         buf = io.StringIO()
@@ -810,7 +810,7 @@ class TestGitHubTokenCheck:
         monkeypatch.setenv("GITHUB_TOKEN", "ghp_test123")
         monkeypatch.setenv("PATH", "/nonexistent")  # gh not found
 
-        from hermes_cli.doctor import run_doctor
+        from atlaz_cli.doctor import run_doctor
         import io, contextlib
 
         buf = io.StringIO()
@@ -847,7 +847,7 @@ class TestGitHubTokenCheck:
         import subprocess
         monkeypatch.setattr(subprocess, "run", mock_run)
 
-        from hermes_cli.doctor import run_doctor
+        from atlaz_cli.doctor import run_doctor
         import io, contextlib
 
         buf = io.StringIO()
@@ -899,7 +899,7 @@ def _run_doctor_with_healthy_oauth_fallback(
     )
     monkeypatch.setitem(sys.modules, "model_tools", fake_model_tools)
 
-    from hermes_cli import auth as _auth_mod
+    from atlaz_cli import auth as _auth_mod
 
     monkeypatch.setattr(_auth_mod, "get_nous_auth_status", lambda: {"logged_in": True})
     monkeypatch.setattr(_auth_mod, "get_codex_auth_status", lambda: {})
@@ -981,46 +981,46 @@ def test_run_doctor_ignores_invalid_direct_keys_when_oauth_fallback_is_healthy(
 
 
 def test_has_healthy_oauth_fallback_returns_false_for_unknown_provider():
-    from hermes_cli.doctor import _has_healthy_oauth_fallback_for_apikey_provider
+    from atlaz_cli.doctor import _has_healthy_oauth_fallback_for_apikey_provider
     assert _has_healthy_oauth_fallback_for_apikey_provider("unknown-provider") is False
 
 
 class TestHasHealthyOauthFallbackForXai:
     def test_returns_true_when_xai_oauth_healthy(self, monkeypatch):
-        from hermes_cli import auth as _auth_mod
+        from atlaz_cli import auth as _auth_mod
         monkeypatch.setattr(_auth_mod, "get_xai_oauth_auth_status", lambda: {"logged_in": True})
-        from hermes_cli.doctor import _has_healthy_oauth_fallback_for_apikey_provider
+        from atlaz_cli.doctor import _has_healthy_oauth_fallback_for_apikey_provider
         assert _has_healthy_oauth_fallback_for_apikey_provider("xai") is True
 
     def test_returns_false_when_xai_oauth_not_logged_in(self, monkeypatch):
-        from hermes_cli import auth as _auth_mod
+        from atlaz_cli import auth as _auth_mod
         monkeypatch.setattr(_auth_mod, "get_xai_oauth_auth_status", lambda: {"logged_in": False})
-        from hermes_cli.doctor import _has_healthy_oauth_fallback_for_apikey_provider
+        from atlaz_cli.doctor import _has_healthy_oauth_fallback_for_apikey_provider
         assert _has_healthy_oauth_fallback_for_apikey_provider("xai") is False
 
     def test_returns_false_when_xai_oauth_returns_none(self, monkeypatch):
-        from hermes_cli import auth as _auth_mod
+        from atlaz_cli import auth as _auth_mod
         monkeypatch.setattr(_auth_mod, "get_xai_oauth_auth_status", lambda: None)
-        from hermes_cli.doctor import _has_healthy_oauth_fallback_for_apikey_provider
+        from atlaz_cli.doctor import _has_healthy_oauth_fallback_for_apikey_provider
         assert _has_healthy_oauth_fallback_for_apikey_provider("xai") is False
 
     def test_returns_false_when_xai_import_unavailable(self, monkeypatch):
         import sys
         # Simulate get_xai_oauth_auth_status missing from auth module
-        monkeypatch.delattr("hermes_cli.auth.get_xai_oauth_auth_status", raising=False)
+        monkeypatch.delattr("atlaz_cli.auth.get_xai_oauth_auth_status", raising=False)
         # Force doctor module to re-import the function
-        monkeypatch.delitem(sys.modules, "hermes_cli.doctor", raising=False)
-        from hermes_cli.doctor import _has_healthy_oauth_fallback_for_apikey_provider
+        monkeypatch.delitem(sys.modules, "atlaz_cli.doctor", raising=False)
+        from atlaz_cli.doctor import _has_healthy_oauth_fallback_for_apikey_provider
         assert _has_healthy_oauth_fallback_for_apikey_provider("xai") is False
 
     def test_xai_import_failure_does_not_affect_gemini(self, monkeypatch):
         import sys
-        from hermes_cli import auth as _auth_mod
+        from atlaz_cli import auth as _auth_mod
         # xAI function missing, but Gemini is healthy
         monkeypatch.delattr(_auth_mod, "get_xai_oauth_auth_status", raising=False)
         monkeypatch.setattr(_auth_mod, "get_gemini_oauth_auth_status", lambda: {"logged_in": True})
-        monkeypatch.delitem(sys.modules, "hermes_cli.doctor", raising=False)
-        from hermes_cli.doctor import _has_healthy_oauth_fallback_for_apikey_provider
+        monkeypatch.delitem(sys.modules, "atlaz_cli.doctor", raising=False)
+        from atlaz_cli.doctor import _has_healthy_oauth_fallback_for_apikey_provider
         assert _has_healthy_oauth_fallback_for_apikey_provider("gemini") is True
 
 
@@ -1055,7 +1055,7 @@ class TestDoctorXaiOAuthStatus:
         )
         monkeypatch.setitem(sys.modules, "model_tools", fake_model_tools)
 
-        from hermes_cli import auth as _auth_mod
+        from atlaz_cli import auth as _auth_mod
         monkeypatch.setattr(_auth_mod, "get_nous_auth_status", lambda: {"logged_in": False})
         monkeypatch.setattr(_auth_mod, "get_codex_auth_status", lambda: {"logged_in": False})
         monkeypatch.setattr(_auth_mod, "get_gemini_oauth_auth_status", lambda: {"logged_in": False})
@@ -1130,7 +1130,7 @@ class TestDoctorXaiOAuthStatus:
         )
         monkeypatch.setitem(sys.modules, "model_tools", fake_model_tools)
 
-        from hermes_cli import auth as _auth_mod
+        from atlaz_cli import auth as _auth_mod
         monkeypatch.setattr(_auth_mod, "get_nous_auth_status", lambda: {"logged_in": False})
         monkeypatch.setattr(_auth_mod, "get_codex_auth_status", lambda: {"logged_in": False})
         monkeypatch.setattr(_auth_mod, "get_gemini_oauth_auth_status", lambda: {"logged_in": False})
@@ -1162,7 +1162,7 @@ class TestDoctorXaiOAuthStatus:
         )
         monkeypatch.setitem(sys.modules, "model_tools", fake_model_tools)
 
-        from hermes_cli import auth as _auth_mod
+        from atlaz_cli import auth as _auth_mod
         monkeypatch.setattr(_auth_mod, "get_nous_auth_status", lambda: {"logged_in": True})
         monkeypatch.setattr(_auth_mod, "get_codex_auth_status", lambda: {"logged_in": False})
         monkeypatch.setattr(_auth_mod, "get_gemini_oauth_auth_status", lambda: {"logged_in": False})
@@ -1223,7 +1223,7 @@ class TestDoctorCodexCliHintPlacement:
         )
         monkeypatch.setitem(sys.modules, "model_tools", fake_model_tools)
 
-        from hermes_cli import auth as _auth_mod
+        from atlaz_cli import auth as _auth_mod
         monkeypatch.setattr(_auth_mod, "get_nous_auth_status", lambda: {"logged_in": False})
         monkeypatch.setattr(_auth_mod, "get_codex_auth_status", lambda: {"logged_in": codex_logged_in})
         monkeypatch.setattr(_auth_mod, "get_gemini_oauth_auth_status", lambda: {"logged_in": False})

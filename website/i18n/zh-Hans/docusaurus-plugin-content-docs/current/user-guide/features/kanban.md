@@ -263,7 +263,7 @@ kanban_complete(summary="decomposed into 2 research tasks + 1 writer; linked dep
 ```json
 {
   "changed_files": ["path/to/file.py"],
-  "verification": ["pytest tests/hermes_cli/test_kanban_db.py -q"],
+  "verification": ["pytest tests/atlaz_cli/test_kanban_db.py -q"],
   "dependencies": ["parent task id or external issue, if any"],
   "blocked_reason": null,
   "retry_notes": "what failed before, if this was a retry",
@@ -590,7 +590,7 @@ hermes kanban gc [--event-retention-days N]            # 工作区 + 旧事件 +
 
 ## `/kanban` 斜杠命令 {#kanban-slash-command}
 
-每个 `hermes kanban <action>` 动词也可以作为 `/kanban <action>` 访问 —— 从交互式 `hermes chat` 会话内部**以及**从任何 gateway 平台（Telegram、Discord、Slack、WhatsApp、Signal、Matrix、Mattermost、电子邮件、SMS）。两个界面都调用完全相同的 `hermes_cli.kanban.run_slash()` 入口点，该入口点复用 `hermes kanban` argparse 树，因此参数界面、标志和输出格式在 CLI、`/kanban` 和 `hermes kanban` 之间完全相同。你不必离开聊天来驱动看板。
+每个 `hermes kanban <action>` 动词也可以作为 `/kanban <action>` 访问 —— 从交互式 `hermes chat` 会话内部**以及**从任何 gateway 平台（Telegram、Discord、Slack、WhatsApp、Signal、Matrix、Mattermost、电子邮件、SMS）。两个界面都调用完全相同的 `atlaz_cli.kanban.run_slash()` 入口点，该入口点复用 `hermes kanban` argparse 树，因此参数界面、标志和输出格式在 CLI、`/kanban` 和 `hermes kanban` 之间完全相同。你不必离开聊天来驱动看板。
 
 ```
 /kanban list

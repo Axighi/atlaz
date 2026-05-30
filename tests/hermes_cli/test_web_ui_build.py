@@ -1,7 +1,7 @@
 """Tests for _web_ui_build_needed — staleness check for the web UI dist.
 
-Critical invariant: the Vite build outputs to hermes_cli/web_dist/
-(vite.config.ts: outDir: "../hermes_cli/web_dist"), NOT web/dist/.
+Critical invariant: the Vite build outputs to atlaz_cli/web_dist/
+(vite.config.ts: outDir: "../atlaz_cli/web_dist"), NOT web/dist/.
 The sentinel must be checked in the correct output directory or the
 freshness check is a no-op and the OOM rebuild always runs.
 """
@@ -12,7 +12,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 
-from hermes_cli.main import _web_ui_build_needed, _build_web_ui, _run_npm_install_deterministic
+from atlaz_cli.main import _web_ui_build_needed, _build_web_ui, _run_npm_install_deterministic
 
 
 def _touch(path: Path, offset: float = 0.0) -> None:
@@ -28,7 +28,7 @@ def _make_web_dir(tmp_path: Path) -> tuple[Path, Path]:
     web_dir = tmp_path / "web"
     web_dir.mkdir()
     (web_dir / "package.json").touch()
-    dist_dir = tmp_path / "hermes_cli" / "web_dist"
+    dist_dir = tmp_path / "atlaz_cli" / "web_dist"
     return web_dir, dist_dir
 
 
@@ -57,7 +57,7 @@ class TestWebUIBuildNeeded:
         assert _web_ui_build_needed(web_dir) is False
 
     def test_web_dist_dir_not_web_dist_subdir(self, tmp_path):
-        """Regression: sentinel must be in hermes_cli/web_dist/, NOT web/dist/."""
+        """Regression: sentinel must be in atlaz_cli/web_dist/, NOT web/dist/."""
         web_dir, dist_dir = _make_web_dir(tmp_path)
         _touch(web_dir / "src" / "App.tsx", offset=-10)
         # Place manifest in wrong location (web/dist/) — should NOT count as fresh
@@ -101,8 +101,8 @@ class TestBuildWebUISkipsWhenFresh:
         web_dir, dist_dir = _make_web_dir(tmp_path)
         _touch(dist_dir / ".vite" / "manifest.json")
 
-        with patch("hermes_cli.main.shutil.which", return_value="/usr/bin/npm"), \
-             patch("hermes_cli.main.subprocess.run") as mock_run:
+        with patch("atlaz_cli.main.shutil.which", return_value="/usr/bin/npm"), \
+             patch("atlaz_cli.main.subprocess.run") as mock_run:
             result = _build_web_ui(web_dir)
 
         assert result is True
@@ -113,9 +113,9 @@ class TestBuildWebUISkipsWhenFresh:
 
         mock_cp = __import__("subprocess").CompletedProcess([], 0, stdout=b"", stderr=b"")
         build_ok = __import__("subprocess").CompletedProcess([], 0, stdout="", stderr="")
-        with patch("hermes_cli.main.shutil.which", return_value="/usr/bin/npm"), \
-             patch("hermes_cli.main.subprocess.run", return_value=mock_cp) as mock_run, \
-             patch("hermes_cli.main._run_with_idle_timeout", return_value=build_ok) as mock_idle:
+        with patch("atlaz_cli.main.shutil.which", return_value="/usr/bin/npm"), \
+             patch("atlaz_cli.main.subprocess.run", return_value=mock_cp) as mock_run, \
+             patch("atlaz_cli.main._run_with_idle_timeout", return_value=build_ok) as mock_idle:
             result = _build_web_ui(web_dir)
 
         assert result is True
@@ -129,7 +129,7 @@ class TestBuildWebUISkipsWhenFresh:
         (web_dir / "package-lock.json").write_text("{}", encoding="utf-8")
 
         mock_cp = __import__("subprocess").CompletedProcess([], 0, stdout="", stderr="")
-        with patch("hermes_cli.main.subprocess.run", return_value=mock_cp) as mock_run:
+        with patch("atlaz_cli.main.subprocess.run", return_value=mock_cp) as mock_run:
             result = _run_npm_install_deterministic("/usr/bin/npm", web_dir)
 
         assert result.returncode == 0
@@ -149,9 +149,9 @@ class TestBuildWebUISkipsWhenFresh:
 
         install_cp = __import__("subprocess").CompletedProcess([], 0, stdout="", stderr="")
         build_cp = __import__("subprocess").CompletedProcess([], 0, stdout="", stderr="")
-        with patch("hermes_cli.main.shutil.which", return_value="/usr/bin/npm"), \
-             patch("hermes_cli.main.subprocess.run", return_value=install_cp), \
-             patch("hermes_cli.main._run_with_idle_timeout", return_value=build_cp) as mock_idle:
+        with patch("atlaz_cli.main.shutil.which", return_value="/usr/bin/npm"), \
+             patch("atlaz_cli.main.subprocess.run", return_value=install_cp), \
+             patch("atlaz_cli.main._run_with_idle_timeout", return_value=build_cp) as mock_idle:
             result = _build_web_ui(web_dir)
 
         assert result is True
@@ -173,10 +173,10 @@ class TestBuildWebUIRetryAndStaleFallback:
         # build attempt 1: fail; build attempt 2: success.
         build_fail = Subprocess.CompletedProcess([], 1, stdout="EPERM", stderr="")
         build_ok = Subprocess.CompletedProcess([], 0, stdout="", stderr="")
-        with patch("hermes_cli.main.shutil.which", return_value="/usr/bin/npm"), \
-             patch("hermes_cli.main._time.sleep") as mock_sleep, \
-             patch("hermes_cli.main.subprocess.run", return_value=install_ok), \
-             patch("hermes_cli.main._run_with_idle_timeout",
+        with patch("atlaz_cli.main.shutil.which", return_value="/usr/bin/npm"), \
+             patch("atlaz_cli.main._time.sleep") as mock_sleep, \
+             patch("atlaz_cli.main.subprocess.run", return_value=install_ok), \
+             patch("atlaz_cli.main._run_with_idle_timeout",
                    side_effect=[build_fail, build_ok]) as mock_idle:
             result = _build_web_ui(web_dir)
 
@@ -193,10 +193,10 @@ class TestBuildWebUIRetryAndStaleFallback:
         Subprocess = __import__("subprocess")
         install_ok = Subprocess.CompletedProcess([], 0, stdout="", stderr="")
         build_fail = Subprocess.CompletedProcess([], 1, stdout="vite ENOMEM", stderr="")
-        with patch("hermes_cli.main.shutil.which", return_value="/usr/bin/npm"), \
-             patch("hermes_cli.main._time.sleep"), \
-             patch("hermes_cli.main.subprocess.run", return_value=install_ok), \
-             patch("hermes_cli.main._run_with_idle_timeout",
+        with patch("atlaz_cli.main.shutil.which", return_value="/usr/bin/npm"), \
+             patch("atlaz_cli.main._time.sleep"), \
+             patch("atlaz_cli.main.subprocess.run", return_value=install_ok), \
+             patch("atlaz_cli.main._run_with_idle_timeout",
                    side_effect=[build_fail, build_fail]):
             result = _build_web_ui(web_dir, fatal=True)
 
@@ -213,10 +213,10 @@ class TestBuildWebUIRetryAndStaleFallback:
         Subprocess = __import__("subprocess")
         install_ok = Subprocess.CompletedProcess([], 0, stdout="", stderr="")
         build_fail = Subprocess.CompletedProcess([], 1, stdout="vite ENOMEM", stderr="")
-        with patch("hermes_cli.main.shutil.which", return_value="/usr/bin/npm"), \
-             patch("hermes_cli.main._time.sleep"), \
-             patch("hermes_cli.main.subprocess.run", return_value=install_ok), \
-             patch("hermes_cli.main._run_with_idle_timeout",
+        with patch("atlaz_cli.main.shutil.which", return_value="/usr/bin/npm"), \
+             patch("atlaz_cli.main._time.sleep"), \
+             patch("atlaz_cli.main.subprocess.run", return_value=install_ok), \
+             patch("atlaz_cli.main._run_with_idle_timeout",
                    side_effect=[build_fail, build_fail]):
             result = _build_web_ui(web_dir, fatal=True)
 

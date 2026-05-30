@@ -1,4 +1,4 @@
-"""Behavior tests for hermes_cli.inventory.
+"""Behavior tests for atlaz_cli.inventory.
 
 Locks the invariants the three migrated consumers (web_server.py
 /api/model/options, tui_gateway model.options, tui_gateway model.save_key)
@@ -22,7 +22,7 @@ from __future__ import annotations
 from unittest.mock import patch
 
 
-from hermes_cli.inventory import (
+from atlaz_cli.inventory import (
     ConfigContext,
     build_models_payload,
     load_picker_context,
@@ -50,7 +50,7 @@ def test_load_picker_context_full_dict():
         providers={"openrouter": {}},
         custom_providers=[{"name": "Ollama", "base_url": "http://localhost:11434/v1"}],
     )
-    with patch("hermes_cli.config.load_config", return_value=cfg):
+    with patch("atlaz_cli.config.load_config", return_value=cfg):
         ctx = load_picker_context()
     assert ctx.current_model == "anthropic/claude-sonnet-4.6"
     assert ctx.current_provider == "openrouter"
@@ -64,7 +64,7 @@ def test_load_picker_context_full_dict():
 
 def test_load_picker_context_falls_back_to_name_when_default_missing():
     cfg = _cfg(model={"name": "gpt-5.4", "provider": "openai"})
-    with patch("hermes_cli.config.load_config", return_value=cfg):
+    with patch("atlaz_cli.config.load_config", return_value=cfg):
         ctx = load_picker_context()
     assert ctx.current_model == "gpt-5.4"
     assert ctx.current_provider == "openai"
@@ -73,7 +73,7 @@ def test_load_picker_context_falls_back_to_name_when_default_missing():
 def test_load_picker_context_string_model_legacy_shape():
     """config.model can be a bare string in older configs."""
     cfg = {"model": "some-model", "providers": {}, "custom_providers": []}
-    with patch("hermes_cli.config.load_config", return_value=cfg):
+    with patch("atlaz_cli.config.load_config", return_value=cfg):
         ctx = load_picker_context()
     assert ctx.current_model == "some-model"
     assert ctx.current_provider == ""
@@ -82,7 +82,7 @@ def test_load_picker_context_string_model_legacy_shape():
 
 def test_load_picker_context_empty_config():
     cfg = _cfg()
-    with patch("hermes_cli.config.load_config", return_value=cfg):
+    with patch("atlaz_cli.config.load_config", return_value=cfg):
         ctx = load_picker_context()
     assert ctx.current_provider == ""
     assert ctx.current_model == ""
@@ -136,7 +136,7 @@ def test_with_overrides_no_args_returns_self_or_equivalent():
 def _list_auth_returning(rows: list[dict]):
     """Patch list_authenticated_providers to return a fixed row list."""
     return patch(
-        "hermes_cli.model_switch.list_authenticated_providers",
+        "atlaz_cli.model_switch.list_authenticated_providers",
         return_value=rows,
     )
 
@@ -168,7 +168,7 @@ def test_build_models_payload_does_not_call_provider_model_ids():
              "source": "built-in"}]
     ctx = _empty_ctx()
     with _list_auth_returning(rows), \
-         patch("hermes_cli.models.provider_model_ids") as mock_pm:
+         patch("atlaz_cli.models.provider_model_ids") as mock_pm:
         build_models_payload(ctx)
     mock_pm.assert_not_called()
 
@@ -187,7 +187,7 @@ def test_include_unconfigured_appends_canonical_skeletons():
         payload = build_models_payload(ctx, include_unconfigured=True)
     # All canonical providers other than openrouter should appear as
     # skeleton rows.
-    from hermes_cli.models import CANONICAL_PROVIDERS
+    from atlaz_cli.models import CANONICAL_PROVIDERS
 
     seen_slugs = {r["slug"] for r in payload["providers"]}
     for entry in CANONICAL_PROVIDERS:
@@ -281,7 +281,7 @@ def test_canonical_order_uses_slug_not_is_user_defined_flag():
     canonical providers configured via the keyed schema get demoted to
     the tail.
     """
-    from hermes_cli.models import CANONICAL_PROVIDERS
+    from atlaz_cli.models import CANONICAL_PROVIDERS
 
     canonical_slug = CANONICAL_PROVIDERS[2].slug  # any canonical
     rows = [
@@ -315,7 +315,7 @@ def test_canonical_order_with_unconfigured_preserves_full_universe():
     has CANONICAL_PROVIDERS in declaration order, hints applied,
     custom rows trailing.
     """
-    from hermes_cli.models import CANONICAL_PROVIDERS
+    from atlaz_cli.models import CANONICAL_PROVIDERS
 
     rows = [
         {"slug": "custom:Ollama", "name": "Ollama", "models": [],
@@ -348,7 +348,7 @@ def test_end_to_end_with_real_context_no_credentials_leak(monkeypatch):
     monkeypatch.setenv("OPENROUTER_API_KEY", canary)
     monkeypatch.setenv("ANTHROPIC_API_KEY", canary)
     cfg = _cfg(model={"provider": "openrouter"})
-    with patch("hermes_cli.config.load_config", return_value=cfg):
+    with patch("atlaz_cli.config.load_config", return_value=cfg):
         ctx = load_picker_context()
     payload = build_models_payload(
         ctx, include_unconfigured=True, picker_hints=True,

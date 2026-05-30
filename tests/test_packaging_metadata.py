@@ -25,7 +25,7 @@ def test_manifest_includes_bundled_skills():
 def test_bundled_plugin_manifests_ship_in_both_wheel_and_sdist():
     """Regression test for #34034 / #28149.
 
-    Plugin discovery (hermes_cli/plugins.py) registers each bundled plugin by
+    Plugin discovery (atlaz_cli/plugins.py) registers each bundled plugin by
     reading its ``plugin.yaml`` / ``plugin.yml`` manifest. Those manifests are
     data files, not Python modules, so they only reach installed packages when
     declared explicitly:

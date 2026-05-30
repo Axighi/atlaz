@@ -28,7 +28,7 @@ from agent.prompt_builder import (
     PLATFORM_HINTS,
     WSL_ENVIRONMENT_HINT,
 )
-from hermes_cli.nous_subscription import NousFeatureState, NousSubscriptionFeatures
+from atlaz_cli.nous_subscription import NousFeatureState, NousSubscriptionFeatures
 
 
 # =========================================================================
@@ -432,7 +432,7 @@ class TestBuildNousSubscriptionPrompt:
     def test_includes_active_subscription_features(self, monkeypatch):
         monkeypatch.setattr("tools.tool_backend_helpers.managed_nous_tools_enabled", lambda: True)
         monkeypatch.setattr(
-            "hermes_cli.nous_subscription.get_nous_subscription_features",
+            "atlaz_cli.nous_subscription.get_nous_subscription_features",
             lambda config=None: NousSubscriptionFeatures(
                 subscribed=True,
                 nous_auth_present=True,
@@ -456,7 +456,7 @@ class TestBuildNousSubscriptionPrompt:
     def test_non_subscriber_prompt_includes_relevant_upgrade_guidance(self, monkeypatch):
         monkeypatch.setattr("tools.tool_backend_helpers.managed_nous_tools_enabled", lambda: True)
         monkeypatch.setattr(
-            "hermes_cli.nous_subscription.get_nous_subscription_features",
+            "atlaz_cli.nous_subscription.get_nous_subscription_features",
             lambda config=None: NousSubscriptionFeatures(
                 subscribed=False,
                 nous_auth_present=False,
@@ -966,7 +966,7 @@ class TestEnvironmentHints:
         monkeypatch.delenv("TERMINAL_ENV", raising=False)
         monkeypatch.setenv("HERMES_ENVIRONMENT_HINT", "ENV-WINS")
         monkeypatch.setattr(
-            "hermes_cli.config.load_config",
+            "atlaz_cli.config.load_config",
             lambda: {"agent": {"environment_hint": "CONFIG-VALUE"}},
         )
         _pb._clear_backend_probe_cache()
@@ -981,7 +981,7 @@ class TestEnvironmentHints:
         monkeypatch.delenv("TERMINAL_ENV", raising=False)
         monkeypatch.delenv("HERMES_ENVIRONMENT_HINT", raising=False)
         monkeypatch.setattr(
-            "hermes_cli.config.load_config",
+            "atlaz_cli.config.load_config",
             lambda: {"agent": {"environment_hint": "CONFIG-VALUE"}},
         )
         _pb._clear_backend_probe_cache()
@@ -994,7 +994,7 @@ class TestEnvironmentHints:
         monkeypatch.setattr(_pb, "is_wsl", lambda: False)
         monkeypatch.delenv("TERMINAL_ENV", raising=False)
         monkeypatch.delenv("HERMES_ENVIRONMENT_HINT", raising=False)
-        monkeypatch.setattr("hermes_cli.config.load_config", lambda: {"agent": {}})
+        monkeypatch.setattr("atlaz_cli.config.load_config", lambda: {"agent": {}})
         _pb._clear_backend_probe_cache()
         result = _pb.build_environment_hints()
         assert "Host:" in result

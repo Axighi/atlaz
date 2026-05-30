@@ -300,7 +300,7 @@ def test_explicit_reset_timestamp_overrides_default_429_ttl(tmp_path, monkeypatc
     monkeypatch.setenv("HERMES_HOME", str(tmp_path / "hermes"))
     # Prevent auto-seeding from Codex CLI tokens on the host
     monkeypatch.setattr(
-        "hermes_cli.auth._import_codex_cli_tokens",
+        "atlaz_cli.auth._import_codex_cli_tokens",
         lambda: None,
     )
     _write_auth_store(
@@ -838,7 +838,7 @@ def test_load_pool_persists_bitwarden_origin_metadata_without_secret(tmp_path, m
     monkeypatch.setenv("HERMES_HOME", str(tmp_path / "hermes"))
     monkeypatch.setenv("OPENROUTER_API_KEY", sentinel)
     monkeypatch.setattr(
-        "hermes_cli.env_loader.get_secret_source",
+        "atlaz_cli.env_loader.get_secret_source",
         lambda env_var: "bitwarden" if env_var == "OPENROUTER_API_KEY" else None,
     )
     _write_auth_store(tmp_path, {"version": 1, "providers": {}})
@@ -1029,7 +1029,7 @@ def test_write_credential_pool_sanitizes_borrowed_payload_at_disk_boundary(tmp_p
     manual_secret = "MANUAL_SECRET_STAYS_PERSISTABLE"
     monkeypatch.setenv("HERMES_HOME", str(tmp_path / "hermes"))
 
-    from hermes_cli.auth import write_credential_pool
+    from atlaz_cli.auth import write_credential_pool
 
     write_credential_pool("openrouter", [
         {
@@ -1072,7 +1072,7 @@ def test_write_credential_pool_treats_unowned_oauth_source_as_borrowed(tmp_path,
     sentinel = "S3NTINEL_DO_NOT_PERSIST_UNOWNED_OAUTH"
     monkeypatch.setenv("HERMES_HOME", str(tmp_path / "hermes"))
 
-    from hermes_cli.auth import write_credential_pool
+    from atlaz_cli.auth import write_credential_pool
 
     write_credential_pool("openrouter", [
         {
@@ -1100,7 +1100,7 @@ def test_write_credential_pool_preserves_known_provider_owned_oauth_state(tmp_pa
     sentinel = "PROVIDER_OWNED_DEVICE_CODE_STAYS_PERSISTABLE"
     monkeypatch.setenv("HERMES_HOME", str(tmp_path / "hermes"))
 
-    from hermes_cli.auth import write_credential_pool
+    from atlaz_cli.auth import write_credential_pool
 
     write_credential_pool("nous", [
         {
@@ -1342,8 +1342,8 @@ def test_nous_pool_terminal_refresh_removes_device_code_entry(tmp_path, monkeypa
     )
 
     from agent.credential_pool import PooledCredential, load_pool
-    from hermes_cli import auth as auth_mod
-    from hermes_cli.auth import AuthError
+    from atlaz_cli import auth as auth_mod
+    from atlaz_cli.auth import AuthError
 
     refresh_calls = {"count": 0}
 
@@ -1540,7 +1540,7 @@ def test_singleton_seed_does_not_clobber_manual_oauth_entry(tmp_path, monkeypatc
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
     monkeypatch.delenv("ANTHROPIC_TOKEN", raising=False)
     monkeypatch.delenv("CLAUDE_CODE_OAUTH_TOKEN", raising=False)
-    monkeypatch.setattr("hermes_cli.auth.is_provider_explicitly_configured", lambda pid: True)
+    monkeypatch.setattr("atlaz_cli.auth.is_provider_explicitly_configured", lambda pid: True)
     _write_auth_store(
         tmp_path,
         {
@@ -1632,7 +1632,7 @@ def test_load_pool_api_key_path_skips_oauth_autodiscovery(tmp_path, monkeypatch)
     monkeypatch.delenv("ANTHROPIC_TOKEN", raising=False)
     monkeypatch.delenv("CLAUDE_CODE_OAUTH_TOKEN", raising=False)
     _write_auth_store(tmp_path, {"version": 1, "providers": {}})
-    monkeypatch.setattr("hermes_cli.auth.is_provider_explicitly_configured", lambda pid: True)
+    monkeypatch.setattr("atlaz_cli.auth.is_provider_explicitly_configured", lambda pid: True)
 
     pkce_called = {"n": 0}
     cc_called = {"n": 0}
@@ -1706,7 +1706,7 @@ def test_load_pool_api_key_path_prunes_stale_oauth_entries(tmp_path, monkeypatch
             },
         },
     )
-    monkeypatch.setattr("hermes_cli.auth.is_provider_explicitly_configured", lambda pid: True)
+    monkeypatch.setattr("atlaz_cli.auth.is_provider_explicitly_configured", lambda pid: True)
     monkeypatch.setattr("agent.anthropic_adapter.read_hermes_oauth_credentials", lambda: None)
     monkeypatch.setattr("agent.anthropic_adapter.read_claude_code_credentials", lambda: None)
 
@@ -1733,7 +1733,7 @@ def test_load_pool_oauth_path_still_autodiscovers(tmp_path, monkeypatch):
     monkeypatch.setenv("ANTHROPIC_TOKEN", "sk-ant-oat01-explicit-oauth-token")
     monkeypatch.delenv("CLAUDE_CODE_OAUTH_TOKEN", raising=False)
     _write_auth_store(tmp_path, {"version": 1, "providers": {}})
-    monkeypatch.setattr("hermes_cli.auth.is_provider_explicitly_configured", lambda pid: True)
+    monkeypatch.setattr("atlaz_cli.auth.is_provider_explicitly_configured", lambda pid: True)
 
     monkeypatch.setattr(
         "agent.anthropic_adapter.read_hermes_oauth_credentials",
@@ -2216,7 +2216,7 @@ def test_load_pool_does_not_seed_claude_code_when_anthropic_not_configured(tmp_p
     )
     # User configured kimi-coding, NOT anthropic
     monkeypatch.setattr(
-        "hermes_cli.auth.is_provider_explicitly_configured",
+        "atlaz_cli.auth.is_provider_explicitly_configured",
         lambda pid: pid == "kimi-coding",
     )
 
@@ -2233,7 +2233,7 @@ def test_load_pool_seeds_copilot_via_gh_auth_token(tmp_path, monkeypatch):
     _write_auth_store(tmp_path, {"version": 1, "credential_pool": {}})
 
     monkeypatch.setattr(
-        "hermes_cli.copilot_auth.resolve_copilot_token",
+        "atlaz_cli.copilot_auth.resolve_copilot_token",
         lambda: ("gho_fake_token_abc123", "gh auth token"),
     )
 
@@ -2254,7 +2254,7 @@ def test_load_pool_does_not_seed_copilot_when_no_token(tmp_path, monkeypatch):
     _write_auth_store(tmp_path, {"version": 1, "credential_pool": {}})
 
     monkeypatch.setattr(
-        "hermes_cli.copilot_auth.resolve_copilot_token",
+        "atlaz_cli.copilot_auth.resolve_copilot_token",
         lambda: ("", ""),
     )
 
@@ -2271,7 +2271,7 @@ def test_load_pool_seeds_qwen_oauth_via_cli_tokens(tmp_path, monkeypatch):
     _write_auth_store(tmp_path, {"version": 1, "credential_pool": {}})
 
     monkeypatch.setattr(
-        "hermes_cli.auth.resolve_qwen_runtime_credentials",
+        "atlaz_cli.auth.resolve_qwen_runtime_credentials",
         lambda **kw: {
             "provider": "qwen-oauth",
             "base_url": "https://portal.qwen.ai/v1",
@@ -2297,10 +2297,10 @@ def test_load_pool_does_not_seed_qwen_oauth_when_no_token(tmp_path, monkeypatch)
     monkeypatch.setenv("HERMES_HOME", str(tmp_path / "hermes"))
     _write_auth_store(tmp_path, {"version": 1, "credential_pool": {}})
 
-    from hermes_cli.auth import AuthError
+    from atlaz_cli.auth import AuthError
 
     monkeypatch.setattr(
-        "hermes_cli.auth.resolve_qwen_runtime_credentials",
+        "atlaz_cli.auth.resolve_qwen_runtime_credentials",
         lambda **kw: (_ for _ in ()).throw(
             AuthError("Qwen CLI credentials not found.", provider="qwen-oauth", code="qwen_auth_missing")
         ),
@@ -2744,7 +2744,7 @@ def _xai_auth_store(access_token: str, refresh_token: str) -> dict:
 
 
 def test_is_terminal_xai_oauth_refresh_error():
-    from hermes_cli.auth import AuthError, _is_terminal_xai_oauth_refresh_error
+    from atlaz_cli.auth import AuthError, _is_terminal_xai_oauth_refresh_error
 
     assert _is_terminal_xai_oauth_refresh_error(
         AuthError("Refresh failed", provider="xai-oauth", code="xai_refresh_failed", relogin_required=True)
@@ -2774,8 +2774,8 @@ def test_xai_oauth_terminal_refresh_clears_auth_json_and_removes_pool_entries(
     _write_auth_store(tmp_path, _xai_auth_store("old-access-token", "old-refresh-token"))
 
     from agent.credential_pool import PooledCredential, load_pool
-    import hermes_cli.auth as auth_mod
-    from hermes_cli.auth import AuthError
+    import atlaz_cli.auth as auth_mod
+    from atlaz_cli.auth import AuthError
 
     pool = load_pool("xai-oauth")
     selected = pool.select()
@@ -2834,8 +2834,8 @@ def test_xai_oauth_nonterminal_refresh_does_not_quarantine(tmp_path, monkeypatch
     _write_auth_store(tmp_path, _xai_auth_store("old-access-token", "old-refresh-token"))
 
     from agent.credential_pool import load_pool
-    import hermes_cli.auth as auth_mod
-    from hermes_cli.auth import AuthError
+    import atlaz_cli.auth as auth_mod
+    from atlaz_cli.auth import AuthError
 
     pool = load_pool("xai-oauth")
     assert pool.select() is not None
@@ -2880,7 +2880,7 @@ def _codex_auth_store(access_token: str, refresh_token: str) -> dict:
 
 
 def test_is_terminal_codex_oauth_refresh_error():
-    from hermes_cli.auth import AuthError, _is_terminal_codex_oauth_refresh_error
+    from atlaz_cli.auth import AuthError, _is_terminal_codex_oauth_refresh_error
 
     assert _is_terminal_codex_oauth_refresh_error(
         AuthError("Refresh failed", provider="openai-codex", code="codex_refresh_failed", relogin_required=True)
@@ -2916,8 +2916,8 @@ def test_codex_oauth_terminal_refresh_clears_auth_json_and_removes_pool_entries(
     _write_auth_store(tmp_path, _codex_auth_store("old-access-token", "old-refresh-token"))
 
     from agent.credential_pool import PooledCredential, load_pool
-    import hermes_cli.auth as auth_mod
-    from hermes_cli.auth import AuthError
+    import atlaz_cli.auth as auth_mod
+    from atlaz_cli.auth import AuthError
 
     pool = load_pool("openai-codex")
     selected = pool.select()
@@ -2975,8 +2975,8 @@ def test_codex_oauth_nonterminal_refresh_does_not_quarantine(tmp_path, monkeypat
     _write_auth_store(tmp_path, _codex_auth_store("old-access-token", "old-refresh-token"))
 
     from agent.credential_pool import load_pool
-    import hermes_cli.auth as auth_mod
-    from hermes_cli.auth import AuthError
+    import atlaz_cli.auth as auth_mod
+    from atlaz_cli.auth import AuthError
 
     pool = load_pool("openai-codex")
     assert pool.select() is not None

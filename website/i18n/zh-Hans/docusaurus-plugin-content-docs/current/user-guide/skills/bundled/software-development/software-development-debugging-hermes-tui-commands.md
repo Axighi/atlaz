@@ -49,7 +49,7 @@ Hermes slash 命令跨越三个层次——Python 命令注册表、tui_gateway 
 
 <!-- ascii-guard-ignore -->
 ```
-Python backend (hermes_cli/commands.py)     <- 规范的 COMMAND_REGISTRY
+Python backend (atlaz_cli/commands.py)     <- 规范的 COMMAND_REGISTRY
        │
        ▼
 TUI gateway (tui_gateway/server.py)         <- slash.exec / command.dispatch
@@ -78,8 +78,8 @@ TUI frontend (ui-tui/src/app/slash/)        <- 本地处理器 + fallthrough
 
 3. **检查命令是否存在于 Python 后端：**
    ```bash
-   search_files --pattern "CommandDef" --file_glob "*.py" --path hermes_cli/
-   search_files --pattern "commandname" --path hermes_cli/commands.py --context 3
+   search_files --pattern "CommandDef" --file_glob "*.py" --path atlaz_cli/
+   search_files --pattern "commandname" --path atlaz_cli/commands.py --context 3
    ```
 
 4. **查看 gateway 实现：**
@@ -91,7 +91,7 @@ TUI frontend (ui-tui/src/app/slash/)        <- 本地处理器 + fallthrough
 
 如果命令存在于 TUI 但未出现在自动补全中：
 
-1. 在 `hermes_cli/commands.py` 的 `COMMAND_REGISTRY` 中添加 `CommandDef` 条目：
+1. 在 `atlaz_cli/commands.py` 的 `COMMAND_REGISTRY` 中添加 `CommandDef` 条目：
    ```python
    CommandDef("commandname", "Description of the command", "Session",
               cli_only=True, aliases=("alias",),
@@ -121,7 +121,7 @@ TUI frontend (ui-tui/src/app/slash/)        <- 本地处理器 + fallthrough
 
 ## 常见问题
 
-1. **命令在 TUI 中显示但不在自动补全中。** 命令已在 TUI 代码库中定义，但 `hermes_cli/commands.py` 的 `COMMAND_REGISTRY` 中缺失。自动补全数据由 Python 端提供。
+1. **命令在 TUI 中显示但不在自动补全中。** 命令已在 TUI 代码库中定义，但 `atlaz_cli/commands.py` 的 `COMMAND_REGISTRY` 中缺失。自动补全数据由 Python 端提供。
 
 2. **命令在自动补全中显示但不工作。** 检查 `tui_gateway/server.py` 中的命令处理器，以及 `ui-tui/src/app/createSlashHandler.ts` 中的前端处理器。如果命令在 Ink 中是纯本地命令，必须在 `app.tsx` 的内置分支中处理；否则会 fallthrough 到 `slash.exec`，必须有对应的 Python 处理器。
 

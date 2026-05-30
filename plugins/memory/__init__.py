@@ -27,7 +27,7 @@ import logging
 import sys
 from pathlib import Path
 from typing import List, Optional, Tuple
-from hermes_cli.config import cfg_get
+from atlaz_cli.config import cfg_get
 
 logger = logging.getLogger(__name__)
 
@@ -313,7 +313,7 @@ def _get_active_memory_provider() -> Optional[str]:
     no plugin loading.
     """
     try:
-        from hermes_cli.config import load_config
+        from atlaz_cli.config import load_config
         config = load_config()
         return cfg_get(config, "memory", "provider") or None
     except Exception:

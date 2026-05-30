@@ -23,7 +23,7 @@ def managed_nous_tools_enabled(*, force_fresh: bool = False) -> bool:
     reflect a just-purchased subscription or credits immediately.
     """
     try:
-        from hermes_cli.nous_account import get_nous_portal_account_info
+        from atlaz_cli.nous_account import get_nous_portal_account_info
 
         if force_fresh:
             account_info = get_nous_portal_account_info(force_fresh=True)
@@ -43,7 +43,7 @@ def nous_tool_gateway_unavailable_message(
 ) -> str:
     """Return account-aware guidance for an unavailable Nous Tool Gateway path."""
     try:
-        from hermes_cli.nous_account import (
+        from atlaz_cli.nous_account import (
             format_nous_portal_entitlement_message,
             get_nous_portal_account_info,
         )
@@ -147,7 +147,7 @@ def prefers_gateway(config_section: str) -> bool:
     Reads ``<section>.use_gateway`` from config.yaml.  Never raises.
     """
     try:
-        from hermes_cli.config import load_config
+        from atlaz_cli.config import load_config
         section = (load_config() or {}).get(config_section)
         if isinstance(section, dict):
             return is_truthy_value(section.get("use_gateway"), default=False)
@@ -160,7 +160,7 @@ def fal_key_is_configured() -> bool:
     """Return True when FAL_KEY is set to a non-whitespace value.
 
     Consults both ``os.environ`` and ``~/.hermes/.env`` (via
-    ``hermes_cli.config.get_env_value`` when available) so tool-side
+    ``atlaz_cli.config.get_env_value`` when available) so tool-side
     checks and CLI setup-time checks agree.  A whitespace-only value
     is treated as unset everywhere.
     """
@@ -169,7 +169,7 @@ def fal_key_is_configured() -> bool:
         # Fall back to the .env file for CLI paths that may run before
         # dotenv is loaded into os.environ.
         try:
-            from hermes_cli.config import get_env_value
+            from atlaz_cli.config import get_env_value
 
             value = get_env_value("FAL_KEY")
         except Exception:

@@ -43,7 +43,7 @@ from typing import Any, Dict, List
 from agent.memory_provider import MemoryProvider
 from hermes_constants import get_hermes_home
 from tools.registry import tool_error
-from hermes_cli.config import cfg_get
+from atlaz_cli.config import cfg_get
 
 logger = logging.getLogger(__name__)
 
@@ -642,10 +642,10 @@ class HindsightMemoryProvider(MemoryProvider):
         import sys
         from pathlib import Path
 
-        from hermes_cli.config import save_config
-        from hermes_cli.secret_prompt import masked_secret_prompt
+        from atlaz_cli.config import save_config
+        from atlaz_cli.secret_prompt import masked_secret_prompt
 
-        from hermes_cli.memory_setup import _curses_select
+        from atlaz_cli.memory_setup import _curses_select
 
         print("\n  Configuring Hindsight memory:\n")
 

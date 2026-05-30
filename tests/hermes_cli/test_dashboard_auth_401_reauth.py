@@ -32,15 +32,15 @@ from fastapi import FastAPI
 from fastapi.responses import Response
 from fastapi.testclient import TestClient
 
-from hermes_cli import web_server
-from hermes_cli.dashboard_auth import clear_providers, register_provider
-from hermes_cli.dashboard_auth.cookies import (
+from atlaz_cli import web_server
+from atlaz_cli.dashboard_auth import clear_providers, register_provider
+from atlaz_cli.dashboard_auth.cookies import (
     SESSION_AT_COOKIE,
     SESSION_RT_COOKIE,
     clear_session_cookies,
     set_session_cookies,
 )
-from tests.hermes_cli.conftest_dashboard_auth import StubAuthProvider
+from tests.atlaz_cli.conftest_dashboard_auth import StubAuthProvider
 
 
 # ---------------------------------------------------------------------------
@@ -221,7 +221,7 @@ class TestNextSameOriginValidation:
         assert "//evil" not in location
 
     def test_safe_next_validator_accepts_same_origin(self):
-        from hermes_cli.dashboard_auth.middleware import _safe_next_target
+        from atlaz_cli.dashboard_auth.middleware import _safe_next_target
 
         class FakeRequest:
             def __init__(self, path, query=""):
@@ -234,7 +234,7 @@ class TestNextSameOriginValidation:
         )
 
     def test_safe_next_validator_rejects_protocol_relative(self):
-        from hermes_cli.dashboard_auth.middleware import _safe_next_target
+        from atlaz_cli.dashboard_auth.middleware import _safe_next_target
 
         class FakeRequest:
             def __init__(self, path):
@@ -243,7 +243,7 @@ class TestNextSameOriginValidation:
         assert _safe_next_target(FakeRequest("//evil.com")) == ""
 
     def test_safe_next_validator_rejects_login_loop(self):
-        from hermes_cli.dashboard_auth.middleware import _safe_next_target
+        from atlaz_cli.dashboard_auth.middleware import _safe_next_target
 
         class FakeRequest:
             def __init__(self, path):
@@ -414,13 +414,13 @@ class TestRenderLoginHtmlNext:
         clear_providers()
 
     def test_no_next_emits_plain_button(self):
-        from hermes_cli.dashboard_auth.login_page import render_login_html
+        from atlaz_cli.dashboard_auth.login_page import render_login_html
         html_out = render_login_html()
         assert 'href="/auth/login?provider=stub"' in html_out
         assert "next=" not in html_out
 
     def test_next_threaded_url_encoded(self):
-        from hermes_cli.dashboard_auth.login_page import render_login_html
+        from atlaz_cli.dashboard_auth.login_page import render_login_html
         html_out = render_login_html(next_path="/sessions?page=2")
         # next= is URL-encoded — quote(safe='') turns "/" into "%2F",
         # "?" into "%3F", "=" into "%3D". The encoded value never
@@ -433,7 +433,7 @@ class TestRenderLoginHtmlNext:
         """Defence in depth: even though the caller validates next_path,
         we still HTML-escape the rendered value so a regression in the
         caller can't trivially produce an HTML-injection sink."""
-        from hermes_cli.dashboard_auth.login_page import render_login_html
+        from atlaz_cli.dashboard_auth.login_page import render_login_html
         # `"` in a path is already URL-encoded by quote() to %22, so it
         # never reaches the HTML escaper as a raw quote. This test pins
         # both layers: quote() does its job AND escape() does its.

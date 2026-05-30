@@ -24,10 +24,10 @@ import pytest
 pytestmark = pytest.mark.xdist_group("dashboard_auth_app_state")
 from fastapi.testclient import TestClient
 
-from hermes_cli import web_server
-from hermes_cli.dashboard_auth import clear_providers, register_provider
-from hermes_cli.dashboard_auth.cookies import SESSION_AT_COOKIE
-from tests.hermes_cli.conftest_dashboard_auth import StubAuthProvider
+from atlaz_cli import web_server
+from atlaz_cli.dashboard_auth import clear_providers, register_provider
+from atlaz_cli.dashboard_auth.cookies import SESSION_AT_COOKIE
+from tests.atlaz_cli.conftest_dashboard_auth import StubAuthProvider
 
 
 @pytest.fixture

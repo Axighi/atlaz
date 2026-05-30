@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 import pytest
 
-from hermes_cli.config import set_config_value, config_command
+from atlaz_cli.config import set_config_value, config_command
 
 
 @pytest.fixture(autouse=True)

@@ -1,0 +1,4 @@
+[console_scripts]
+atlaz = hermes_cli.main:main
+atlaz-acp = acp_adapter.entry:main
+atlaz-agent = run_agent:main
