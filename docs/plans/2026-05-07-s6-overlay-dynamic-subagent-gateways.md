@@ -46,7 +46,7 @@ service registration that only s6 implements.
 - s6-overlay only (no pure-Python fallback).
 - Architecture A (s6 owns PID 1; tini is removed).
 - Interactive TUI must keep working:
-  `docker run -it --rm nousresearch/hermes-agent:latest --tui`.
+  `docker run -it --rm axighi/atlaz:latest --tui`.
 - Dynamic registration is limited to per-profile gateways — one service per
   profile, created when a profile is created, torn down when deleted. A
   `gateway-default` slot is always registered for the root HERMES_HOME

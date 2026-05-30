@@ -21,7 +21,7 @@ Docker 与 Hermes Agent 的交集有两种截然不同的方式：
 mkdir -p ~/.hermes
 docker run -it --rm \
   -v ~/.hermes:/opt/data \
-  nousresearch/hermes-agent setup
+  axighi/atlaz setup
 ```
 
 这将进入设置向导，向导会提示你输入 API 密钥并将其写入 `~/.hermes/.env`。你只需执行一次。强烈建议此时为 gateway 配置一个聊天系统。
@@ -36,7 +36,7 @@ docker run -d \
   --restart unless-stopped \
   -v ~/.hermes:/opt/data \
   -p 8642:8642 \
-  nousresearch/hermes-agent gateway run
+  axighi/atlaz gateway run
 ```
 
 端口 8642 暴露 gateway 的 [OpenAI 兼容 API 服务器](./features/api-server.md)和健康检查端点。如果你只使用聊天平台（Telegram、Discord 等），该端口是可选的；但如果你希望 dashboard 或外部工具访问 gateway，则必须开放。
@@ -53,7 +53,7 @@ docker run -d \
   -e API_SERVER_HOST=0.0.0.0 \
   -e API_SERVER_KEY="$(openssl rand -hex 32)" \
   -e API_SERVER_CORS_ORIGINS='*' \
-  nousresearch/hermes-agent gateway run
+  axighi/atlaz gateway run
 ```
 
 在面向互联网的机器上开放任何端口都存在安全风险。除非你了解相关风险，否则不应这样做。
@@ -69,7 +69,7 @@ docker run -d \
   -v ~/.hermes:/opt/data \
   -p 8642:8642 \
   -e HERMES_DASHBOARD=1 \
-  nousresearch/hermes-agent gateway run
+  axighi/atlaz gateway run
 ```
 
 入口点在 `exec` 主命令之前，以非 root 用户 `hermes` 在后台启动 `hermes dashboard`。Dashboard 输出在 `docker logs` 中以 `[dashboard]` 为前缀，便于与 gateway 日志区分。
@@ -120,7 +120,7 @@ gateway 存活检测需要与 gateway 进程共享 PID 命名空间。
 ```sh
 docker run -it --rm \
   -v ~/.hermes:/opt/data \
-  nousresearch/hermes-agent
+  axighi/atlaz
 ```
 
 或者，如果你已通过 Docker Desktop 等方式在运行中的容器内打开了终端，直接运行：
@@ -163,7 +163,7 @@ docker run -d \
   --restart unless-stopped \
   -v ~/.hermes-work:/opt/data \
   -p 8642:8642 \
-  nousresearch/hermes-agent gateway run
+  axighi/atlaz gateway run
 
 # 个人 profile
 docker run -d \
@@ -171,7 +171,7 @@ docker run -d \
   --restart unless-stopped \
   -v ~/.hermes-personal:/opt/data \
   -p 8643:8642 \
-  nousresearch/hermes-agent gateway run
+  axighi/atlaz gateway run
 ```
 
 在 Docker 中使用独立容器而非 profile 的原因：
@@ -187,7 +187,7 @@ docker run -d \
 ```yaml
 services:
   hermes-work:
-    image: nousresearch/hermes-agent:latest
+    image: axighi/atlaz:latest
     container_name: hermes-work
     restart: unless-stopped
     command: gateway run
@@ -197,7 +197,7 @@ services:
       - ~/.hermes-work:/opt/data
 
   hermes-personal:
-    image: nousresearch/hermes-agent:latest
+    image: axighi/atlaz:latest
     container_name: hermes-personal
     restart: unless-stopped
     command: gateway run
@@ -216,7 +216,7 @@ docker run -it --rm \
   -v ~/.hermes:/opt/data \
   -e ANTHROPIC_API_KEY="sk-ant-..." \
   -e OPENAI_API_KEY="sk-..." \
-  nousresearch/hermes-agent
+  axighi/atlaz
 ```
 
 直接传入的 `-e` 标志会覆盖 `.env` 中的值。这对于不希望将密钥写入磁盘的 CI/CD 或密钥管理器集成非常有用。
@@ -232,7 +232,7 @@ docker run -it --rm \
 ```yaml
 services:
   hermes:
-    image: nousresearch/hermes-agent:latest
+    image: axighi/atlaz:latest
     container_name: hermes
     restart: unless-stopped
     command: gateway run
@@ -276,7 +276,7 @@ docker run -d \
   --restart unless-stopped \
   --memory=4g --cpus=2 \
   -v ~/.hermes:/opt/data \
-  nousresearch/hermes-agent gateway run
+  axighi/atlaz gateway run
 ```
 
 ## Dockerfile 说明
@@ -336,13 +336,13 @@ hermes profile delete coder            # 拆除 s6 槽
 拉取最新镜像并重建容器。你的数据目录不受影响。
 
 ```sh
-docker pull nousresearch/hermes-agent:latest
+docker pull axighi/atlaz:latest
 docker rm -f hermes
 docker run -d \
   --name hermes \
   --restart unless-stopped \
   -v ~/.hermes:/opt/data \
-  nousresearch/hermes-agent gateway run
+  axighi/atlaz gateway run
 ```
 
 或使用 Docker Compose：
@@ -376,10 +376,10 @@ SSH 和 Modal 后端也会进行相同的同步——技能和凭据文件在每
 
 ### 持久安装——构建派生镜像
 
-当工具必须在每次容器启动时立即可用且无需重新安装延迟时，构建一个继承自 `nousresearch/hermes-agent` 并在层中安装该工具的新镜像：
+当工具必须在每次容器启动时立即可用且无需重新安装延迟时，构建一个继承自 `axighi/atlaz` 并在层中安装该工具的新镜像：
 
 ```dockerfile
-FROM nousresearch/hermes-agent:latest
+FROM axighi/atlaz:latest
 
 USER root
 RUN apt-get update \
@@ -400,7 +400,7 @@ docker run -d \
   my-hermes:latest gateway run
 ```
 
-入口点脚本和 `/opt/data` 语义原样继承，本页其余内容仍然适用。拉取更新的上游 `nousresearch/hermes-agent` 时记得重新构建镜像。
+入口点脚本和 `/opt/data` 语义原样继承，本页其余内容仍然适用。拉取更新的上游 `axighi/atlaz` 时记得重新构建镜像。
 
 ### 复杂工具或多服务栈——运行 sidecar 容器
 
@@ -409,7 +409,7 @@ docker run -d \
 ```yaml
 services:
   hermes:
-    image: nousresearch/hermes-agent:latest
+    image: axighi/atlaz:latest
     container_name: hermes
     restart: unless-stopped
     command: gateway run
@@ -467,7 +467,7 @@ services:
             - capabilities: [gpu]
 
   hermes:
-    image: nousresearch/hermes-agent:latest
+    image: axighi/atlaz:latest
     container_name: hermes
     restart: unless-stopped
     command: gateway run
@@ -511,7 +511,7 @@ docker run -d \
   --name hermes \
   -v ~/.hermes:/opt/data \
   -p 8642:8642 \
-  nousresearch/hermes-agent gateway run
+  axighi/atlaz gateway run
 ```
 
 ```yaml
@@ -530,7 +530,7 @@ docker run -d \
   --name hermes \
   --network host \
   -v ~/.hermes:/opt/data \
-  nousresearch/hermes-agent gateway run
+  axighi/atlaz gateway run
 ```
 
 ```yaml
@@ -596,7 +596,7 @@ docker run -d \
   --name hermes \
   --shm-size=1g \
   -v ~/.hermes:/opt/data \
-  nousresearch/hermes-agent gateway run
+  axighi/atlaz gateway run
 ```
 
 ### 网络问题后 gateway 无法重连
@@ -611,6 +611,6 @@ docker restart hermes
 
 ```sh
 docker logs --tail 50 hermes          # 最近日志
-docker run -it --rm nousresearch/hermes-agent:latest version     # 验证版本
+docker run -it --rm axighi/atlaz:latest version     # 验证版本
 docker stats hermes                    # 资源使用情况
 ```
