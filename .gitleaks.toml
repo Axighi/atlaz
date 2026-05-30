@@ -1,0 +1,22 @@
+# .gitleaks.toml — Gitleaks configuration for Axighi/atlaz
+title = "ATLAZ secret scanning config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+paths = [
+  # Test files — contain mock keys and fake credentials
+  "tests/",
+  # Reference documentation — contain example API keys and sample configs
+  "optional-skills/mlops/",
+  "website/docs/",
+  "website/i18n/",
+  # Known safe files (OAuth public client IDs, voice IDs, regex patterns)
+  "agent/anthropic_adapter.py",
+  "agent/google_oauth.py",
+  "atlaz_cli/copilot_auth.py",
+  "hermes_cli/auth.py",
+  "optional-skills/productivity/telephony/scripts/telephony.py",
+  "agent/redact.py",
+]
