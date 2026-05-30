@@ -6265,7 +6265,20 @@ def cmd_import(args):
     run_import(args)
 
 
+def _detect_deprecated_binary_name() -> None:
+    """Print deprecation notice if invoked as ``hermes`` instead of ``atlaz``."""
+    import os
+    prog = os.path.basename(sys.argv[0]) if sys.argv else ""
+    if prog and prog != "atlaz" and "atlaz" not in prog:
+        print(
+            "\033[33m⚠️  'hermes' has been renamed to 'atlaz'. "
+            "Use 'atlaz' instead — 'hermes' will be removed in a future release.\033[0m"
+        )
+
+
 def _print_version_info(*, check_updates: bool = True) -> None:
+    # Deprecation notice when invoked as `hermes` instead of `atlaz`
+    _detect_deprecated_binary_name()
     print(f"Hermes Agent v{__version__} ({__release_date__})")
     print(f"Project: {PROJECT_ROOT}")
 
@@ -14209,7 +14222,18 @@ Examples:
     logs_parser.set_defaults(func=cmd_logs)
 
     # =========================================================================
-    # Parse and execute
+    # help command — show top-level help and exit
+    # =========================================================================
+    help_parser = subparsers.add_parser(
+        "help",
+        help="Show this help message and exit",
+        description="Show top-level usage and available subcommands",
+        add_help=False,
+    )
+    help_parser.set_defaults(func=lambda args: parser.print_help())
+
+    # =========================================================================
+    # Parse and dispatch
     # =========================================================================
     # Pre-process argv so unquoted multi-word session names after -c / -r
     # are merged into a single token before argparse sees them.
