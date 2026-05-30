@@ -1,2 +1,10 @@
-# Auto-generated files — collapse diffs and exclude from language stats
-web/package-lock.json linguist-generated=true
+# Files that are heavily customized for atlaz — always keep our version on merge
+scripts/sync-upstream.sh    merge=atlaz-ours
+hermes_cli/deprecated_shim.py merge=atlaz-ours
+pyproject.toml              merge=atlaz-ours
+
+# Binary/generated files — never merge
+*.svg                       binary
+*.png                       binary
+*.jpg                       binary
+*.ico                       binary
