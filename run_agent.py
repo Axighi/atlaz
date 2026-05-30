@@ -37,6 +37,13 @@ import copy
 import hashlib
 import json
 import logging
+import sys
+
+# Early --help exit before heavy tool imports trigger side effects
+if "-h" in sys.argv or "--help" in sys.argv:
+    print(__doc__)
+    raise SystemExit(0)
+
 logger = logging.getLogger(__name__)
 import os
 import re
