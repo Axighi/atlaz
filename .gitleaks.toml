@@ -1,0 +1,19 @@
+# .gitleaks.toml — Gitleaks configuration for Axighi/atlaz
+title = "ATLAZ secret scanning config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+paths = [
+  "tests/",
+  "optional-skills/mlops/",
+  "website/docs/",
+  "website/i18n/",
+  "agent/anthropic_adapter.py",
+  "agent/google_oauth.py",
+  "atlaz_cli/copilot_auth.py",
+  "hermes_cli/auth.py",
+  "optional-skills/productivity/telephony/scripts/telephony.py",
+  "agent/redact.py",
+]
