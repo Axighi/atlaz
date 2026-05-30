@@ -34,6 +34,17 @@ warn()  { echo -e "${YELLOW}[!]${NC} $1"; }
 err()   { echo -e "${RED}[✗]${NC} $1"; }
 
 # ------------------------------------------------------------------
+# Auto-configure custom merge driver
+# ------------------------------------------------------------------
+setup_merge_driver() {
+    if ! git config merge.atlaz-ours.driver &>/dev/null; then
+        git config merge.atlaz-ours.driver true
+        info "Configured merge driver: atlaz-ours"
+    fi
+}
+setup_merge_driver
+
+# ------------------------------------------------------------------
 # Handle --abort
 # ------------------------------------------------------------------
 if [[ "${1:-}" == "--abort" ]]; then
@@ -42,8 +53,10 @@ if [[ "${1:-}" == "--abort" ]]; then
     else
         warn "No merge in progress to abort"
     fi
-    # Revert any auto-resolve changes
-    git checkout -- . 2>/dev/null || true
+    # Restore only merge-related files (not all local changes)
+    git diff --name-only --diff-filter=M 2>/dev/null | while IFS= read -r f; do
+        git checkout HEAD -- "$f" 2>/dev/null || true
+    done
     exit 0
 fi
 
@@ -83,7 +96,7 @@ UPSTREAM_TIP=$(git rev-parse "$UPSTREAM_REMOTE/$UPSTREAM_BRANCH")
 
 if [[ "$MERGE_BASE" == "$UPSTREAM_TIP" ]]; then
     ok "Already up to date with upstream — nothing to merge."
-    $STASHED && git stash pop 2>/dev/null || true
+    $STASHED && (git stash pop 2>/dev/null || warn "Stash pop had conflicts — check \`git stash list\`") || true
     exit 0
 fi
 
@@ -118,7 +131,7 @@ if [[ "$MERGE_EXIT" -eq 0 ]]; then
         ok "Pushed to origin/main"
     fi
 
-    $STASHED && git stash pop 2>/dev/null || true
+    $STASHED && (git stash pop 2>/dev/null || warn "Stash pop had conflicts — check \`git stash list\`") || true
     exit 0
 fi
 
@@ -154,7 +167,7 @@ for file in $CONFLICT_FILES; do
     UPSTREAM_LABEL="$UPSTREAM_REMOTE/$UPSTREAM_BRANCH"
 
     # Check if this file is in our "always keep atlaz" list
-    if grep -q "^$file " .gitattributes 2>/dev/null | grep -q "merge=atlaz-ours"; then
+    if grep -q "^$file.*merge=atlaz-ours" .gitattributes 2>/dev/null; then
         info "  $file → marked as atlaz-custom (keeping our version)"
         git checkout --ours "$file"
         git add "$file"
@@ -209,7 +222,7 @@ if [[ ${#REAL_CONFLICTS[@]} -gt 0 ]]; then
     done
     echo ""
     echo "To resolve each file:"
-    echo "  Edit the file, fix conflict markers, then: git add $file"
+    echo "  Edit each file, fix conflict markers, then: git add <file>"
     echo "When all resolved: git commit"
     echo "To abort entirely:  git merge --abort"
     echo ""
@@ -227,4 +240,4 @@ else
     fi
 fi
 
-$STASHED && git stash pop 2>/dev/null || true
+$STASHED && (git stash pop 2>/dev/null || warn "Stash pop had conflicts — check \`git stash list\`") || true

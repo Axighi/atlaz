@@ -8,3 +8,6 @@ pyproject.toml              merge=atlaz-ours
 *.png                       binary
 *.jpg                       binary
 *.ico                       binary
+
+# Generated — exclude from language stats
+web/package-lock.json       linguist-generated=true
