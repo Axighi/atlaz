@@ -75,7 +75,7 @@ RUN set -eu; \
     tar -C / -Jxpf /tmp/s6-overlay-symlinks-noarch.tar.xz; \
     rm /tmp/s6-overlay-*.tar.xz /tmp/s6-overlay.sha256
 
-# Non-root user for runtime; UID can be overridden via HERMES_UID at runtime
+# Non-root user for runtime; UID can be overridden via ATLAZ_UID at runtime
 RUN useradd -u 10000 -m -d /opt/data hermes
 
 COPY --chmod=0755 --from=uv_source /usr/local/bin/uv /usr/local/bin/uvx /usr/local/bin/
@@ -163,12 +163,12 @@ RUN cd web && npm run build && \
     cd ../ui-tui && npm run build
 
 # ---------- Permissions ----------
-# Make install dir world-readable so any HERMES_UID can read it at runtime.
+# Make install dir world-readable so any ATLAZ_UID can read it at runtime.
 # The venv needs to be traversable too.
 # node_modules trees additionally need to be writable by the hermes user
 # so the runtime `npm install` triggered by _tui_need_npm_install() in
-# atlaz_cli/main.py succeeds (see #18800). /opt/hermes/web is build-time
-# only (HERMES_WEB_DIST points at atlaz_cli/web_dist) and is intentionally
+# hermes_cli/main.py succeeds (see #18800). /opt/hermes/web is build-time
+# only (ATLAZ_WEB_DIST points at hermes_cli/web_dist) and is intentionally
 # not chowned here.
 # The .venv MUST remain hermes-writable so lazy_deps.py can install
 # remaining optional platform packages and future pin bumps at first use.
@@ -179,7 +179,7 @@ RUN chmod -R a+rX /opt/hermes && \
     chown -R hermes:hermes /opt/hermes/.venv /opt/hermes/ui-tui /opt/hermes/node_modules
 # Start as root so the s6-overlay stage2 hook can usermod/groupmod and chown
 # the data volume. Each supervised service then drops to the hermes user via
-# `s6-setuidgid hermes` in its run script. If HERMES_UID is unset, services
+# `s6-setuidgid hermes` in its run script. If ATLAZ_UID is unset, services
 # run as the default hermes user (UID 10000).
 
 # ---------- Link hermes-agent itself (editable) ----------
@@ -194,7 +194,7 @@ RUN uv pip install --no-cache-dir --no-deps -e "."
 # That makes support triage from container bug reports impossible:
 # we can't tell which commit the user is actually running.
 #
-# Fix: write the commit SHA passed via the HERMES_GIT_SHA build-arg to
+# Fix: write the commit SHA passed via the ATLAZ_GIT_SHA build-arg to
 # /opt/hermes/.hermes_build_sha at build time, and have
 # atlaz_cli/build_info.py read it at runtime.  Both `hermes dump` and
 # banner.get_git_banner_state() try the baked SHA first, then fall back
@@ -204,9 +204,9 @@ RUN uv pip install --no-cache-dir --no-deps -e "."
 # omits the file, and the runtime falls back to live-git lookup.  CI
 # (.github/workflows/docker-publish.yml) passes ${{ github.sha }} so
 # every published image has it.
-ARG HERMES_GIT_SHA=
-RUN if [ -n "${HERMES_GIT_SHA}" ]; then \
-        printf '%s\n' "${HERMES_GIT_SHA}" > /opt/hermes/.hermes_build_sha && \
+ARG ATLAZ_GIT_SHA=
+RUN if [ -n "${ATLAZ_GIT_SHA}" ]; then \
+        printf '%s\n' "${ATLAZ_GIT_SHA}" > /opt/hermes/.hermes_build_sha && \
         chown hermes:hermes /opt/hermes/.hermes_build_sha; \
     fi
 
@@ -224,7 +224,7 @@ COPY docker/s6-rc.d/ /etc/s6-overlay/s6-rc.d/
 # runs before user services start.
 #
 # 02-reconcile-profiles re-creates per-profile gateway s6 service
-# slots from $HERMES_HOME/profiles/<name>/ after a container restart
+# slots from $ATLAZ_HOME/profiles/<name>/ after a container restart
 # (the /run/service/ scandir is tmpfs and wiped on restart). Phase 4.
 RUN mkdir -p /etc/cont-init.d && \
     printf '#!/command/with-contenv sh\nexec /opt/hermes/docker/stage2-hook.sh\n' \
@@ -234,12 +234,12 @@ COPY --chmod=0755 docker/cont-init.d/015-supervise-perms /etc/cont-init.d/015-su
 COPY --chmod=0755 docker/cont-init.d/02-reconcile-profiles /etc/cont-init.d/02-reconcile-profiles
 
 # ---------- Runtime ----------
-ENV HERMES_WEB_DIST=/opt/hermes/atlaz_cli/web_dist
-ENV HERMES_HOME=/opt/data
+ENV ATLAZ_WEB_DIST=/opt/hermes/hermes_cli/web_dist
+ENV ATLAZ_HOME=/opt/data
 
 # `docker exec` privilege-drop shim. When operators run
 # `docker exec <c> hermes ...` they default to root, and any file the
-# command writes under $HERMES_HOME (auth.json, .env, config.yaml) ends
+# command writes under ATLAZ_HOME (auth.json, .env, config.yaml) ends
 # up root-owned and unreadable to the supervised gateway (UID 10000).
 # The shim lives at /opt/hermes/bin/hermes, sits earliest on PATH, and
 # transparently re-exec's the real venv binary via `s6-setuidgid hermes`
@@ -247,7 +247,7 @@ ENV HERMES_HOME=/opt/data
 # `--user hermes`, etc.) hit the short-circuit path with no overhead.
 # Recursion is impossible because the shim exec's the venv binary by
 # absolute path (/opt/hermes/.venv/bin/hermes). See the shim source for
-# the opt-out env var (HERMES_DOCKER_EXEC_AS_ROOT=1).
+# the opt-out env var (ATLAZ_DOCKER_EXEC_AS_ROOT=1).
 COPY --chmod=0755 docker/hermes-exec-shim.sh /opt/hermes/bin/hermes
 
 # Pre-s6 entrypoint.sh did `source .venv/bin/activate` which exported
