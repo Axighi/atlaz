@@ -4,7 +4,7 @@ set -euo pipefail
 # Bootstrap Open WebUI against Hermes Agent's OpenAI-compatible API server.
 #
 # Idempotent by design:
-# - ensures ~/.hermes/.env has API server settings
+# - ensures ~/.atlaz/.env has API server settings
 # - installs Open WebUI into ~/.local/open-webui-venv
 # - writes a reusable launcher at ~/.local/bin/start-open-webui-hermes.sh
 # - optionally installs a user service (launchd on macOS, systemd --user on Linux)

@@ -349,8 +349,8 @@ class TestTeamsInteractiveSetup:
         from atlaz_cli.cli_output (not atlaz_cli.config) and persist
         credentials to .env without crashing.
         """
-        hermes_home = tmp_path / "hermes"
-        monkeypatch.setenv("HERMES_HOME", str(hermes_home))
+        atlaz_home = tmp_path / "hermes"
+        monkeypatch.setenv("HERMES_HOME", str(atlaz_home))
 
         import atlaz_cli.cli_output as cli_output_mod
 
@@ -363,7 +363,7 @@ class TestTeamsInteractiveSetup:
 
         _teams_mod.interactive_setup()
 
-        env_text = (hermes_home / ".env").read_text(encoding="utf-8")
+        env_text = (atlaz_home / ".env").read_text(encoding="utf-8")
         assert "TEAMS_CLIENT_ID=client-id" in env_text
         assert "TEAMS_TENANT_ID=tenant-id" in env_text
 

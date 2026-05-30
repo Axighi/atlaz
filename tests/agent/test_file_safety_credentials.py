@@ -21,12 +21,12 @@ import pytest
 
 @pytest.fixture()
 def fake_home(tmp_path, monkeypatch):
-    """Point ``_hermes_home_path()`` at a tmp dir for isolated checks."""
+    """Point ``_atlaz_home_path()`` at a tmp dir for isolated checks."""
     import agent.file_safety as fs
 
-    home = tmp_path / "hermes_home"
+    home = tmp_path / "atlaz_home"
     home.mkdir()
-    monkeypatch.setattr(fs, "_hermes_home_path", lambda: home)
+    monkeypatch.setattr(fs, "_atlaz_home_path", lambda: home)
     return home
 
 
@@ -111,7 +111,7 @@ def test_path_traversal_resolves_to_blocked(fake_home, tmp_path):
     _create(fake_home, "auth.json")
     sibling = tmp_path / "elsewhere"
     sibling.mkdir()
-    traversal = sibling / ".." / "hermes_home" / "auth.json"
+    traversal = sibling / ".." / "atlaz_home" / "auth.json"
     err = get_read_block_error(str(traversal))
     assert err is not None
     assert "credential store" in err
@@ -304,7 +304,7 @@ def test_profile_mode_blocks_root_credentials(tmp_path, monkeypatch):
     root = tmp_path / "hermes"
     profile = root / "profiles" / "coder"
     profile.mkdir(parents=True)
-    monkeypatch.setattr(fs, "_hermes_home_path", lambda: profile)
+    monkeypatch.setattr(fs, "_atlaz_home_path", lambda: profile)
     monkeypatch.setattr(fs, "_hermes_root_path", lambda: root)
 
     from agent.file_safety import get_read_block_error
