@@ -1,6 +1,6 @@
-# Hermes Agent - Development Guide
+# ATLAZ - Development Guide
 
-Instructions for AI coding assistants and developers working on the hermes-agent codebase.
+Instructions for AI coding assistants and developers working on the atlaz codebase.
 
 ## Development Environment
 

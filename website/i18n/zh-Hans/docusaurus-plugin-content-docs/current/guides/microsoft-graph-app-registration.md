@@ -165,7 +165,7 @@ Azure 客户端密钥有固定的过期时间。在密钥过期前：
 
 1. 在步骤 2 中创建第二个客户端密钥，不要删除第一个。
 2. 用新值更新 `~/.hermes/.env` 中的 `MSGRAPH_CLIENT_SECRET`。
-3. 重启 gateway 以使新密钥生效：`hermes gateway restart`。
+3. 重启 gateway 以使新密钥生效：`atlaz gateway restart`。
 4. 使用上述冒烟测试进行验证。
 5. 在 Azure 门户中删除旧密钥。
 

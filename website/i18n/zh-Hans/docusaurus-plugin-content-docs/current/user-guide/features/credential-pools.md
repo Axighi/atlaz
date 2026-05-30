@@ -70,7 +70,7 @@ anthropic (3 credentials):
 
 ## 交互式管理
 
-不带子命令运行 `hermes auth` 以进入交互式向导：
+不带子命令运行 `atlaz auth` 以进入交互式向导：
 
 ```bash
 hermes auth
@@ -100,18 +100,18 @@ Type [1/2]:
 
 | 命令 | 说明 |
 |---------|-------------|
-| `hermes auth` | 交互式池管理向导 |
-| `hermes auth list` | 显示所有池和凭证 |
-| `hermes auth list <provider>` | 显示指定提供商的池 |
-| `hermes auth add <provider>` | 添加凭证（提示选择类型和密钥） |
-| `hermes auth add <provider> --type api-key --api-key <key>` | 非交互式添加 API 密钥 |
-| `hermes auth add <provider> --type oauth` | 通过浏览器登录添加 OAuth 凭证 |
-| `hermes auth remove <provider> <index>` | 按从 1 开始的索引删除凭证 |
-| `hermes auth reset <provider>` | 清除所有冷却时间/耗尽状态 |
+| `atlaz auth` | 交互式池管理向导 |
+| `atlaz auth list` | 显示所有池和凭证 |
+| `atlaz auth list <provider>` | 显示指定提供商的池 |
+| `atlaz auth add <provider>` | 添加凭证（提示选择类型和密钥） |
+| `atlaz auth add <provider> --type api-key --api-key <key>` | 非交互式添加 API 密钥 |
+| `atlaz auth add <provider> --type oauth` | 通过浏览器登录添加 OAuth 凭证 |
+| `atlaz auth remove <provider> <index>` | 按从 1 开始的索引删除凭证 |
+| `atlaz auth reset <provider>` | 清除所有冷却时间/耗尽状态 |
 
 ## 轮换策略
 
-通过 `hermes auth` → "Set rotation strategy" 配置，或在 `config.yaml` 中设置：
+通过 `atlaz auth` → "Set rotation strategy" 配置，或在 `config.yaml` 中设置：
 
 ```yaml
 credential_pool_strategies:
@@ -143,7 +143,7 @@ credential_pool_strategies:
 
 自定义 OpenAI 兼容端点（Together.ai、RunPod、本地服务器）拥有各自的池，以 `config.yaml` 中 `custom_providers` 的端点名称作为键。
 
-通过 `hermes model` 设置自定义端点时，会自动生成类似 "Together.ai" 或 "Local (localhost:8080)" 的名称，该名称即成为池的键。
+通过 `atlaz model` 设置自定义端点时，会自动生成类似 "Together.ai" 或 "Local (localhost:8080)" 的名称，该名称即成为池的键。
 
 ```bash
 # After setting up a custom endpoint via hermes model:
@@ -178,9 +178,9 @@ Hermes 在启动时自动从多个来源发现凭证并初始化池：
 | Claude Code 凭证 | `~/.claude/.credentials.json` | 是（Anthropic） |
 | Hermes PKCE OAuth | `~/.hermes/auth.json` | 是（Anthropic） |
 | 自定义端点配置 | `config.yaml` 中的 `model.api_key` | 是（自定义端点） |
-| 手动条目 | 通过 `hermes auth add` 添加 | 持久化至 auth.json |
+| 手动条目 | 通过 `atlaz auth add` 添加 | 持久化至 auth.json |
 
-自动初始化的条目在每次池加载时更新——如果你删除了某个环境变量，其池条目会自动清除。通过 `hermes auth add` 添加的手动条目永远不会被自动清除。
+自动初始化的条目在每次池加载时更新——如果你删除了某个环境变量，其池条目会自动清除。通过 `atlaz auth add` 添加的手动条目永远不会被自动清除。
 
 ## 委托与子代理共享
 

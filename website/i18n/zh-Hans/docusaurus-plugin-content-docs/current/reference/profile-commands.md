@@ -6,13 +6,13 @@ sidebar_position: 7
 
 本页涵盖所有与 [Hermes profiles](../user-guide/profiles.md) 相关的命令。通用 CLI 命令请参阅 [CLI 命令参考](./cli-commands.md)。
 
-## `hermes profile`
+## `atlaz profile`
 
 ```bash
 hermes profile <subcommand>
 ```
 
-管理 profile 的顶级命令。不带子命令运行 `hermes profile` 将显示帮助信息。
+管理 profile 的顶级命令。不带子命令运行 `atlaz profile` 将显示帮助信息。
 
 | 子命令 | 描述 |
 |------------|-------------|
@@ -29,7 +29,7 @@ hermes profile <subcommand>
 | `update` | 重新拉取发行版管理的 profile 并重新应用其 bundle。 |
 | `info` | 显示 profile 的发行版元数据（来源 URL、commit、最后更新时间）。 |
 
-## `hermes profile list`
+## `atlaz profile list`
 
 ```bash
 hermes profile list
@@ -49,7 +49,7 @@ $ hermes profile list
 
 无选项。
 
-## `hermes profile use`
+## `atlaz profile use`
 
 ```bash
 hermes profile use <name>
@@ -68,7 +68,7 @@ hermes profile use work
 hermes profile use default
 ```
 
-## `hermes profile create`
+## `atlaz profile create`
 
 ```bash
 hermes profile create <name> [options]
@@ -83,8 +83,8 @@ hermes profile create <name> [options]
 | `--clone-all` | 从当前 profile 复制所有内容（config、memories、skills、sessions、state）。 |
 | `--clone-from <profile>` | 从指定 profile 克隆，而非当前 profile。与 `--clone` 或 `--clone-all` 配合使用。 |
 | `--no-alias` | 跳过 wrapper 脚本创建。 |
-| `--description "<text>"` | 一到两句话描述该 profile 的用途。供 kanban 编排器根据角色而非仅凭 profile 名称来路由任务。可跳过，稍后通过 `hermes profile describe` 添加。持久化保存在 `<profile_dir>/profile.yaml` 中。 |
-| `--no-skills` | 创建一个**空** profile，不启用任何内置 skill。会在 profile 目录中写入 `.no-skills` 标记，使后续 `hermes update` 不再重新植入内置 skill 集，且拒绝与 `--clone` / `--clone-all` 组合使用（因为后者会复制 skill）。适用于不应继承完整 skill 目录的窄化编排器 profile 或沙箱 profile。 |
+| `--description "<text>"` | 一到两句话描述该 profile 的用途。供 kanban 编排器根据角色而非仅凭 profile 名称来路由任务。可跳过，稍后通过 `atlaz profile describe` 添加。持久化保存在 `<profile_dir>/profile.yaml` 中。 |
+| `--no-skills` | 创建一个**空** profile，不启用任何内置 skill。会在 profile 目录中写入 `.no-skills` 标记，使后续 `atlaz update` 不再重新植入内置 skill 集，且拒绝与 `--clone` / `--clone-all` 组合使用（因为后者会复制 skill）。适用于不应继承完整 skill 目录的窄化编排器 profile 或沙箱 profile。 |
 
 创建 profile **不会**将该 profile 目录设为终端命令的默认项目/工作目录。如需让某个 profile 从特定项目目录启动，请在该 profile 的 `config.yaml` 中设置 `terminal.cwd`。
 
@@ -104,7 +104,7 @@ hermes profile create backup --clone-all
 hermes profile create work2 --clone --clone-from work
 ```
 
-## `hermes profile describe`
+## `atlaz profile describe`
 
 ```bash
 hermes profile describe [<name>] [options]
@@ -138,7 +138,7 @@ hermes profile describe researcher --auto
 hermes profile describe --all --auto
 ```
 
-## `hermes profile delete`
+## `atlaz profile delete`
 
 ```bash
 hermes profile delete <name> [options]
@@ -162,7 +162,7 @@ hermes profile delete mybot --yes
 此操作将永久删除 profile 的整个目录，包括所有 config、memories、sessions 和 skills。无法删除当前活跃的 profile。
 :::
 
-## `hermes profile show`
+## `atlaz profile show`
 
 ```bash
 hermes profile show <name>
@@ -190,7 +190,7 @@ SOUL.md: exists
 Alias:   ~/.local/bin/work
 ```
 
-## `hermes profile alias`
+## `atlaz profile alias`
 
 ```bash
 hermes profile alias <name> [options]
@@ -217,7 +217,7 @@ hermes profile alias work --remove
 # 移除 wrapper 脚本
 ```
 
-## `hermes profile rename`
+## `atlaz profile rename`
 
 ```bash
 hermes profile rename <old-name> <new-name>
@@ -238,7 +238,7 @@ hermes profile rename mybot assistant
 # ~/.local/bin/mybot → ~/.local/bin/assistant
 ```
 
-## `hermes profile export`
+## `atlaz profile export`
 
 ```bash
 hermes profile export <name> [options]
@@ -260,7 +260,7 @@ hermes profile export work
 hermes profile export work -o ./work-2026-03-29.tar.gz
 ```
 
-## `hermes profile import`
+## `atlaz profile import`
 
 ```bash
 hermes profile import <archive> [options]
@@ -295,10 +295,10 @@ hermes profile import ./work-2026-03-29.tar.gz --name work-restored
 接收方的用户数据（memories、sessions、auth、对 `.env` 的自有编辑）在初次安装和后续更新中始终得到保留。
 
 :::info
-`hermes profile export` / `import` 仍是在**本机进行 profile 本地备份和恢复**的正确命令。发行版（`install` / `update` / `info`）是独立概念：通过 git 分发 profile，供他人安装。
+`atlaz profile export` / `import` 仍是在**本机进行 profile 本地备份和恢复**的正确命令。发行版（`install` / `update` / `info`）是独立概念：通过 git 分发 profile，供他人安装。
 :::
 
-### `hermes profile install`
+### `atlaz profile install`
 
 ```bash
 hermes profile install <source> [--name <name>] [--alias] [--force] [--yes]
@@ -310,7 +310,7 @@ hermes profile install <source> [--name <name>] [--alias] [--force] [--yes]
 |--------|-------------|
 | `<source>` | Git URL（`github.com/user/repo`、`https://...`、`git@...`、`ssh://`、`git://`）或包含 `distribution.yaml` 的本地目录根路径。 |
 | `--name NAME` | 覆盖 manifest 中的 profile 名称。 |
-| `--alias` | 同时创建 shell wrapper（例如 `telemetry` → `hermes -p telemetry`）。 |
+| `--alias` | 同时创建 shell wrapper（例如 `telemetry` → `atlaz -p telemetry`）。 |
 | `--force` | 覆盖同名的已有 profile。用户数据仍会保留。 |
 | `-y`, `--yes` | 跳过 manifest 预览确认提示。 |
 
@@ -332,7 +332,7 @@ hermes profile install git@github.com:kyle/telemetry-distribution.git
 hermes profile install ./telemetry/
 ```
 
-### `hermes profile update`
+### `atlaz profile update`
 
 ```bash
 hermes profile update <name> [--force-config] [--yes]
@@ -342,7 +342,7 @@ hermes profile update <name> [--force-config] [--yes]
 
 默认保留 `config.yaml` 以保持本地覆盖设置。传入 `--force-config` 可将其重置为发行版附带的 config。
 
-### `hermes profile info`
+### `atlaz profile info`
 
 ```bash
 hermes profile info <name>
@@ -350,7 +350,7 @@ hermes profile info <name>
 
 打印 profile 的发行版 manifest — 名称、版本、所需 Hermes 版本、作者、环境变量要求、来源 URL/路径，以及发行版最后一次 `install` 或 `update` 时记录的 `Installed:` 时间戳。适用于安装前检查共享 profile 的需求，以及发现"该 profile 已安装 6 个月未更新"等情况。
 
-`hermes profile list` 也会在 `Distribution` 列中显示发行版名称和版本，`hermes profile show <name>` / `delete <name>` 会显示来源 URL，让你一眼看出哪些 profile 来自 git 仓库，哪些是本地创建的。
+`atlaz profile list` 也会在 `Distribution` 列中显示发行版名称和版本，`atlaz profile show <name>` / `delete <name>` 会显示来源 URL，让你一眼看出哪些 profile 来自 git 仓库，哪些是本地创建的。
 
 ### 私有发行版
 
@@ -402,11 +402,11 @@ distribution_owned:   # optional; defaults to SOUL.md, config.yaml,
 
 1. 在你的 profile 目录中创建 `distribution.yaml`，至少包含 `name` 和 `version`。
 2. 初始化 git 仓库（或使用已有仓库），推送到 GitHub / GitLab / 任何 Hermes 可克隆的托管平台。
-3. 告知接收方运行 `hermes profile install <your-repo-url>`。
+3. 告知接收方运行 `atlaz profile install <your-repo-url>`。
 
 使用 git tag 进行版本化发布 — 克隆 `HEAD` 的接收方将获得最新状态，你也可以随时在 manifest 中更新 `version:`。
 
-## `hermes -p` / `hermes --profile`
+## `atlaz -p` / `atlaz --profile`
 
 ```bash
 hermes -p <name> <command> [options]
@@ -428,7 +428,7 @@ hermes -p personal skills list
 hermes -p work config edit
 ```
 
-## `hermes completion`
+## `atlaz completion`
 
 ```bash
 hermes completion <shell>
@@ -453,9 +453,9 @@ source ~/.bashrc
 ```
 
 安装后，Tab 补全适用于：
-- `hermes profile <TAB>` — 子命令（list、use、create 等）
-- `hermes profile use <TAB>` — profile 名称
-- `hermes -p <TAB>` — profile 名称
+- `atlaz profile <TAB>` — 子命令（list、use、create 等）
+- `atlaz profile use <TAB>` — profile 名称
+- `atlaz -p <TAB>` — profile 名称
 
 ## 另请参阅
 

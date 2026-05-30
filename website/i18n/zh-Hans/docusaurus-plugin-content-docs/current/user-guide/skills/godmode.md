@@ -115,7 +115,7 @@ undo_jailbreak()
 
 ## Hermes 集成
 
-godmode 技能与 Hermes Agent 的两种配置机制集成：
+godmode 技能与 ATLAZ 的两种配置机制集成：
 
 ### 临时系统提示词（`config.yaml`）
 

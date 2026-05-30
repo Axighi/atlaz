@@ -10,7 +10,7 @@ Some Hermes providers — **xAI Grok OAuth**, **Spotify**, and **remote MCP serv
 
 This works perfectly when Hermes and your browser are on the same machine. It breaks the moment they aren't: your laptop's browser tries to reach `127.0.0.1` on **your laptop**, but the listener is bound to `127.0.0.1` on **the remote server**.
 
-The fix is a one-line SSH local-forward — **or**, when you don't have a real SSH client (GCP Cloud Shell, GitHub Codespaces, EC2 Instance Connect, Gitpod, browser-based web IDEs), the new `--manual-paste` flag introduced in [#26923](https://github.com/NousResearch/hermes-agent/issues/26923).
+The fix is a one-line SSH local-forward — **or**, when you don't have a real SSH client (GCP Cloud Shell, GitHub Codespaces, EC2 Instance Connect, Gitpod, browser-based web IDEs), the new `--manual-paste` flag introduced in [#26923](https://github.com/Axighi/atlaz/issues/26923).
 
 ## TL;DR
 
@@ -40,7 +40,7 @@ hermes auth add xai-oauth --manual-paste
 # → Paste it back into the terminal at the "Callback URL:" prompt.
 ```
 
-The same flag works on `hermes model --manual-paste` for the integrated model picker. Hermes accepts three callback paste forms interchangeably: the full URL, a bare `?code=...&state=...` query fragment, or — when the upstream consent page renders the authorization code in-page instead of redirecting (xAI's current behavior on browser-based consoles) — just the bare code value on its own.
+The same flag works on `atlaz model --manual-paste` for the integrated model picker. Hermes accepts three callback paste forms interchangeably: the full URL, a bare `?code=...&state=...` query fragment, or — when the upstream consent page renders the authorization code in-page instead of redirecting (xAI's current behavior on browser-based consoles) — just the bare code value on its own.
 
 Hermes uses the **same PKCE verifier, state and nonce** for both paths, so the upstream OAuth flow is byte-identical — `--manual-paste` is purely a transport change for the callback hop and is not a security downgrade.
 
@@ -59,7 +59,7 @@ If your provider isn't in the table, you don't need a tunnel.
 
 ## MCP Servers
 
-Remote MCP servers (Linear, Sentry, Atlassian, Asana, Figma, etc.) use the same loopback redirect flow. Hermes auto-picks a free port per server and prints the authorize URL when the OAuth flow kicks off — either at startup (when a new server appears in `mcp_servers:`) or when you run `hermes mcp login <server>`.
+Remote MCP servers (Linear, Sentry, Atlassian, Asana, Figma, etc.) use the same loopback redirect flow. Hermes auto-picks a free port per server and prints the authorize URL when the OAuth flow kicks off — either at startup (when a new server appears in `mcp_servers:`) or when you run `atlaz mcp login <server>`.
 
 You have two ways to complete it from a remote host:
 
@@ -86,7 +86,7 @@ ssh -N -L <port>:127.0.0.1:<port> user@remote-host
 
 Then open the authorize URL in your browser as normal; the redirect tunnels through and the listener picks it up. Use this when you need the flow to complete unattended (e.g. scripted re-auth where you can't paste interactively).
 
-**Pitfall — the 30s config-reload race.** If you edit `~/.hermes/config.yaml` to add an OAuth MCP server from inside a running Hermes session, the CLI auto-reloads MCP connections with a 30s timeout. That's not enough time to complete an interactive OAuth flow, and the reload will give up. Use `hermes mcp login <server>` from a fresh terminal instead — it has no such cap and waits the full 5 min for you to paste back.
+**Pitfall — the 30s config-reload race.** If you edit `~/.hermes/config.yaml` to add an OAuth MCP server from inside a running Hermes session, the CLI auto-reloads MCP connections with a 30s timeout. That's not enough time to complete an interactive OAuth flow, and the reload will give up. Use `atlaz mcp login <server>` from a fresh terminal instead — it has no such cap and waits the full 5 min for you to paste back.
 
 ## Why the listener can't just bind 0.0.0.0
 
@@ -173,11 +173,11 @@ xAI's authorize page shows this when its redirect to `127.0.0.1:<port>/callback`
 
 ### `xAI authorization timed out waiting for the local callback`
 
-Same root cause as above — the redirect never made it back. Check the tunnel is still alive (`ssh -N` doesn't show output, so look at the terminal you started it from), restart it if needed, and re-run `hermes auth add xai-oauth --no-browser`.
+Same root cause as above — the redirect never made it back. Check the tunnel is still alive (`ssh -N` doesn't show output, so look at the terminal you started it from), restart it if needed, and re-run `atlaz auth add xai-oauth --no-browser`.
 
 ### Tokens land in the wrong `~/.hermes`
 
-The tokens are written under the Linux user that ran `hermes auth add ...`. If your gateway / systemd service runs as a different user (e.g. `root` or a dedicated `hermes` user), authenticate as **that** user so the tokens land in their `~/.hermes/auth.json`. `sudo -u hermes -i` or equivalent.
+The tokens are written under the Linux user that ran `atlaz auth add ...`. If your gateway / systemd service runs as a different user (e.g. `root` or a dedicated `atlaz` user), authenticate as **that** user so the tokens land in their `~/.hermes/auth.json`. `sudo -u hermes -i` or equivalent.
 
 ## See Also
 

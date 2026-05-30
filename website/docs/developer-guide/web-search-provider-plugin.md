@@ -1,7 +1,7 @@
 ---
 sidebar_position: 12
 title: "Web Search Provider Plugins"
-description: "How to build a web-search/extract/crawl backend plugin for Hermes Agent"
+description: "How to build a web-search/extract/crawl backend plugin for ATLAZ"
 ---
 
 # Building a Web Search Provider Plugin
@@ -17,7 +17,7 @@ Web search is one of several **backend plugins** Hermes supports. The others (wi
 Hermes scans for web-search backends in three places:
 
 1. **Bundled** — `<repo>/plugins/web/<name>/` (auto-loaded with `kind: backend`, always available)
-2. **User** — `~/.hermes/plugins/web/<name>/` (opt-in via `plugins.enabled` or `hermes plugins enable <name>`)
+2. **User** — `~/.hermes/plugins/web/<name>/` (opt-in via `plugins.enabled` or `atlaz plugins enable <name>`)
 3. **Pip** — packages declaring a `hermes_agent.plugins` entry point
 
 Each plugin's `register(ctx)` function calls `ctx.register_web_search_provider(...)` — that puts the instance into the registry in `agent/web_search_registry.py`. The active provider for each capability is picked by config:
@@ -28,7 +28,7 @@ Each plugin's `register(ctx)` function calls `ctx.register_web_search_provider(.
 | `web_extract` | `web.extract_backend` | `web.backend` |
 | Deep crawl modes inside `web_extract` | `web.extract_backend` | `web.backend` |
 
-When neither key is set, Hermes auto-detects the backend from whichever API key/URL is present in the environment. `hermes tools` walks users through selection.
+When neither key is set, Hermes auto-detects the backend from whichever API key/URL is present in the environment. `atlaz tools` walks users through selection.
 
 ## Directory structure
 
@@ -66,12 +66,12 @@ class MyBackendWebSearchProvider(WebSearchProvider):
 
     @property
     def display_name(self) -> str:
-        # Human label shown in `hermes tools`. Defaults to `name`.
+        # Human label shown in `atlaz tools`. Defaults to `name`.
         return "My Backend"
 
     def is_available(self) -> bool:
         # Cheap check — env var present, optional dep importable, etc.
-        # MUST NOT make network calls (runs on every `hermes tools` paint).
+        # MUST NOT make network calls (runs on every `atlaz tools` paint).
         return bool(os.getenv("MY_BACKEND_API_KEY", "").strip())
 
     def supports_search(self) -> bool:
@@ -140,8 +140,8 @@ requires_env:
 | Key | Purpose |
 |---|---|
 | `kind: backend` | Routes the plugin through the backend-loading path |
-| `provides_web_providers` | List of provider `name`s this plugin registers — used by the loader to advertise the plugin in `hermes tools` even before `register()` runs |
-| `requires_env` | Interactive credential prompt during `hermes plugins install` (see [Build a Hermes Plugin](/guides/build-a-hermes-plugin#gate-on-environment-variables) for the rich format) |
+| `provides_web_providers` | List of provider `name`s this plugin registers — used by the loader to advertise the plugin in `atlaz tools` even before `register()` runs |
+| `requires_env` | Interactive credential prompt during `atlaz plugins install` (see [Build a Hermes Plugin](/guides/build-a-hermes-plugin#gate-on-environment-variables) for the rich format) |
 
 ## ABC reference
 
@@ -150,7 +150,7 @@ Full contract in `agent/web_search_provider.py`. Methods you may override:
 | Member | Required | Default | Purpose |
 |---|---|---|---|
 | `name` | ✅ | — | Stable id used in `web.*_backend` config |
-| `display_name` | — | `name` | Label shown in `hermes tools` |
+| `display_name` | — | `name` | Label shown in `atlaz tools` |
 | `is_available()` | ✅ | — | Cheap availability gate — env vars, optional deps |
 | `supports_search()` | — | `True` | Capability flag for `web_search` routing |
 | `supports_extract()` | — | `False` | Capability flag for `web_extract` routing |
@@ -229,7 +229,7 @@ The `web_search` and `web_extract` tools live in `tools/web_tools.py`. At call t
 4. Dispatch to `search()` / `extract()` / `crawl()`, awaiting if the method is a coroutine
 5. JSON-serialize the response envelope and hand it back to the LLM
 
-Errors surface as the tool result; the LLM decides how to explain them. If no provider is registered (or every available one fails the capability gate), the tool returns a helpful error pointing at `hermes tools`.
+Errors surface as the tool result; the LLM decides how to explain them. If no provider is registered (or every available one fails the capability gate), the tool returns a helpful error pointing at `atlaz tools`.
 
 ## Lazy-installing optional dependencies
 

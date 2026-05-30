@@ -1,12 +1,12 @@
 ---
 sidebar_position: 2
 title: "安装"
-description: "在 Linux、macOS、WSL2、原生 Windows（早期 Beta）或通过 Termux 在 Android 上安装 Hermes Agent"
+description: "在 Linux、macOS、WSL2、原生 Windows（早期 Beta）或通过 Termux 在 Android 上安装 ATLAZ"
 ---
 
 # 安装
 
-使用一行安装命令，两分钟内即可启动并运行 Hermes Agent。
+使用一行安装命令，两分钟内即可启动并运行 ATLAZ。
 
 ## 快速安装
 
@@ -21,7 +21,7 @@ curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scri
 ### Windows（原生，PowerShell）— 早期 Beta
 
 :::warning 早期 BETA
-原生 Windows 支持处于**早期 beta** 阶段。常见路径下可正常安装和运行，但尚未像我们的 POSIX 安装程序那样经过广泛测试。遇到问题请[提交 issue](https://github.com/NousResearch/hermes-agent/issues)。目前在 Windows 上最稳定的方案是在 **WSL2** 内使用上方的 Linux/macOS 一行命令。
+原生 Windows 支持处于**早期 beta** 阶段。常见路径下可正常安装和运行，但尚未像我们的 POSIX 安装程序那样经过广泛测试。遇到问题请[提交 issue](https://github.com/Axighi/atlaz/issues)。目前在 Windows 上最稳定的方案是在 **WSL2** 内使用上方的 Linux/macOS 一行命令。
 :::
 
 打开 PowerShell 并运行：
@@ -64,7 +64,7 @@ curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scri
 :::note Windows 功能对等性（早期 Beta）
 
 原生 Windows 处于**早期 beta** 阶段。除基于浏览器的 dashboard 聊天终端外，其余功能均可在 Windows 上原生运行：
-- **CLI（`hermes chat`、`hermes setup`、`hermes gateway` 等）** — 原生，使用默认终端
+- **CLI（`atlaz chat`、`atlaz setup`、`atlaz gateway` 等）** — 原生，使用默认终端
 - **Gateway（Telegram、Discord、Slack 等）** — 原生，作为后台 PowerShell 进程运行
 - **Cron 调度器** — 原生
 - **浏览器工具** — 原生（通过 Node.js 使用 Chromium）
@@ -180,7 +180,7 @@ hermes setup --portal
    sudo ln -s /home/hermes/.hermes/hermes-agent/venv/bin/hermes /usr/local/bin/hermes
    ```
 
-4. **验证：** `hermes doctor` 现在应能正常运行。如果出现 `ModuleNotFoundError: No module named 'dotenv'`，说明你在用系统 Python 调用仓库源码中的 `hermes` 文件（`~/.hermes/hermes-agent/hermes`），而非 venv 启动器（`~/.hermes/hermes-agent/venv/bin/hermes`）——请修正步骤 3。
+4. **验证：** `atlaz doctor` 现在应能正常运行。如果出现 `ModuleNotFoundError: No module named 'dotenv'`，说明你在用系统 Python 调用仓库源码中的 `hermes` 文件（`~/.hermes/hermes-agent/hermes`），而非 venv 启动器（`~/.hermes/hermes-agent/venv/bin/hermes`）——请修正步骤 3。
 
 同样的方式适用于 Arch（安装程序使用 pacman，具有相同的 sudo 检测逻辑）、Fedora/RHEL 和 openSUSE——这些发行版完全不支持 `--with-deps`，因此管理员始终需要单独安装系统库。安装程序会打印相应的 `dnf`/`zypper` 命令。
 
@@ -191,11 +191,11 @@ hermes setup --portal
 | 问题 | 解决方案 |
 |---------|----------|
 | `hermes: command not found` | 重新加载 shell（`source ~/.bashrc`）或检查 PATH |
-| `API key not set` | 运行 `hermes model` 配置提供商，或 `hermes config set OPENROUTER_API_KEY your_key` |
-| 更新后配置丢失 | 运行 `hermes config check`，然后运行 `hermes config migrate` |
+| `API key not set` | 运行 `atlaz model` 配置提供商，或 `atlaz config set OPENROUTER_API_KEY your_key` |
+| 更新后配置丢失 | 运行 `atlaz config check`，然后运行 `atlaz config migrate` |
 
-如需更多诊断信息，运行 `hermes doctor`——它会告诉你确切缺少什么以及如何修复。
+如需更多诊断信息，运行 `atlaz doctor`——它会告诉你确切缺少什么以及如何修复。
 
 ## 安装方式自动检测
 
-Hermes 会自动检测安装方式（`pip`、git 安装程序、Homebrew 或 NixOS），`hermes update` 会打印对应路径的更新命令。无需设置任何环境变量——检测基于安装目录结构（Python site-packages、`~/.hermes/hermes-agent/`、Homebrew 前缀或 Nix store 路径）。`hermes doctor` 也会在其环境摘要中显示检测到的安装方式。
+Hermes 会自动检测安装方式（`pip`、git 安装程序、Homebrew 或 NixOS），`atlaz update` 会打印对应路径的更新命令。无需设置任何环境变量——检测基于安装目录结构（Python site-packages、`~/.hermes/hermes-agent/`、Homebrew 前缀或 Nix store 路径）。`atlaz doctor` 也会在其环境摘要中显示检测到的安装方式。

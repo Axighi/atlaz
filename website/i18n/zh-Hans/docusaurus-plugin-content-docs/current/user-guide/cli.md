@@ -1,15 +1,15 @@
 ---
 sidebar_position: 1
 title: "CLI 界面"
-description: "掌握 Hermes Agent 终端界面——命令、快捷键、人格设定等"
+description: "掌握 ATLAZ 终端界面——命令、快捷键、人格设定等"
 ---
 
 # CLI 界面
 
-Hermes Agent 的 CLI 是一个完整的终端用户界面（TUI），而非 Web UI。它支持多行编辑、斜杠命令自动补全、对话历史、中断并重定向，以及流式工具输出。专为常驻终端的用户而生。
+ATLAZ 的 CLI 是一个完整的终端用户界面（TUI），而非 Web UI。它支持多行编辑、斜杠命令自动补全、对话历史、中断并重定向，以及流式工具输出。专为常驻终端的用户而生。
 
 :::tip
-Hermes 还提供了一个现代 TUI，支持模态覆盖层、鼠标选择和非阻塞输入。使用 `hermes --tui` 启动——参见 [TUI](tui.md) 指南。
+Hermes 还提供了一个现代 TUI，支持模态覆盖层、鼠标选择和非阻塞输入。使用 `atlaz --tui` 启动——参见 [TUI](tui.md) 指南。
 :::
 
 ## 运行 CLI
@@ -71,7 +71,7 @@ hermes -w -q "Fix issue #123"     # 在 worktree 中以单次查询模式运行
 | 🗜️ N | **上下文压缩次数**——当前运行会话被自动压缩的次数。首次压缩触发后显示。 |
 | ▶ N | **活跃后台任务数**——当前会话中仍在运行的 `/background` prompt（提示词）数量。至少有一个任务进行中时显示。 |
 | 时长 | 会话已用时间 |
-| ⚠ YOLO | **YOLO 模式警告**——当 `HERMES_YOLO_MODE` 开启时显示（通过启动时的 `hermes --yolo` 或会话中的 `/yolo` 切换）。与横幅行警告保持同步，确保你不会忘记自己处于自动批准模式。 |
+| ⚠ YOLO | **YOLO 模式警告**——当 `HERMES_YOLO_MODE` 开启时显示（通过启动时的 `atlaz --yolo` 或会话中的 `/yolo` 切换）。与横幅行警告保持同步，确保你不会忘记自己处于自动批准模式。 |
 
 状态栏会根据终端宽度自适应——≥ 76 列时显示完整布局，52–75 列时显示紧凑布局，低于 52 列时显示最简布局（模型 + 时长，以及 YOLO 徽章（如已激活））。
 
@@ -88,7 +88,7 @@ hermes -w -q "Fix issue #123"     # 在 worktree 中以单次查询模式运行
 
 ### 会话恢复显示
 
-恢复之前的会话时（`hermes -c` 或 `hermes --resume <id>`），横幅与输入提示符之间会出现一个"Previous Conversation"面板，显示对话历史的简洁摘要。详情及配置说明参见[会话——恢复时的对话摘要](sessions.md#conversation-recap-on-resume)。
+恢复之前的会话时（`atlaz -c` 或 `atlaz --resume <id>`），横幅与输入提示符之间会出现一个"Previous Conversation"面板，显示对话历史的简洁摘要。详情及配置说明参见[会话——恢复时的对话摘要](sessions.md#conversation-recap-on-resume)。
 
 ## 快捷键
 
@@ -282,7 +282,7 @@ display:
 在 Unix 系统上，按 **`Ctrl+Z`** 将 Hermes 挂起到后台——与任何终端进程一样。shell 会打印确认信息：
 
 ```
-Hermes Agent has been suspended. Run `fg` to bring Hermes Agent back.
+ATLAZ has been suspended. Run `fg` to bring ATLAZ back.
 ```
 
 在 shell 中输入 `fg` 即可从中断处恢复会话。Windows 不支持此功能。
@@ -347,7 +347,7 @@ hermes -r 20260225_143052_a1b2c3           # 简写形式
 
 恢复会从 SQLite 中还原完整的对话历史。agent 能看到所有之前的消息、工具调用和响应——就像从未离开一样。
 
-在聊天中使用 `/title My Session Name` 为当前会话命名，或从命令行使用 `hermes sessions rename <id> <title>`。使用 `hermes sessions list` 浏览历史会话。
+在聊天中使用 `/title My Session Name` 为当前会话命名，或从命令行使用 `atlaz sessions rename <id> <title>`。使用 `atlaz sessions list` 浏览历史会话。
 
 ### 会话存储
 

@@ -17,7 +17,7 @@ description: "通过 curl + jq 搜索/下载 Tenor GIF"
 | 来源 | 内置（默认安装） |
 | 路径 | `skills/media/gif-search` |
 | 版本 | `1.1.0` |
-| 作者 | Hermes Agent |
+| 作者 | ATLAZ |
 | 许可证 | MIT |
 | 平台 | linux, macos, windows |
 | 标签 | `GIF`, `Media`, `Search`, `Tenor`, `API` |
@@ -103,4 +103,4 @@ curl -s "https://tenor.googleapis.com/v2/search?q=cat&limit=3&key=${TENOR_API_KE
 
 - 对查询进行 URL 编码：空格用 `+`，特殊字符用 `%XX`
 - 在聊天中发送时，`tinygif` URL 更轻量
-- GIF URL 可直接用于 markdown：`![alt](https://github.com/NousResearch/hermes-agent/blob/main/skills/media/gif-search/url)`
+- GIF URL 可直接用于 markdown：`![alt](https://github.com/Axighi/atlaz/blob/main/skills/media/gif-search/url)`

@@ -1,12 +1,12 @@
 ---
 sidebar_position: 1
 title: "架构"
-description: "Hermes Agent 内部结构——主要子系统、执行路径、数据流及延伸阅读指引"
+description: "ATLAZ 内部结构——主要子系统、执行路径、数据流及延伸阅读指引"
 ---
 
 # 架构
 
-本页是 Hermes Agent 内部结构的顶层导图。用它在代码库中定位自己，然后深入各子系统专项文档了解实现细节。
+本页是 ATLAZ 内部结构的顶层导图。用它在代码库中定位自己，然后深入各子系统专项文档了解实现细节。
 
 ## 系统概览
 
@@ -229,7 +229,7 @@ CLI、gateway、cron、ACP 及辅助调用共用的运行时解析器。将 `(pr
 
 ### 插件系统
 
-三种发现来源：`~/.hermes/plugins/`（用户级）、`.hermes/plugins/`（项目级）和 pip entry point。插件通过上下文 API 注册工具、hook 和 CLI 命令。存在两种专用插件类型：记忆提供者（`plugins/memory/`）和上下文引擎（`plugins/context_engine/`）。两者均为单选——每种同时只能激活一个，通过 `hermes plugins` 或 `config.yaml` 配置。
+三种发现来源：`~/.hermes/plugins/`（用户级）、`.hermes/plugins/`（项目级）和 pip entry point。插件通过上下文 API 注册工具、hook 和 CLI 命令。存在两种专用插件类型：记忆提供者（`plugins/memory/`）和上下文引擎（`plugins/context_engine/`）。两者均为单选——每种同时只能激活一个，通过 `atlaz plugins` 或 `config.yaml` 配置。
 
 → [插件指南](/guides/build-a-hermes-plugin)，[记忆提供者插件](./memory-provider-plugin.md)
 
@@ -260,7 +260,7 @@ CLI、gateway、cron、ACP 及辅助调用共用的运行时解析器。将 `(pr
 | **可中断** | API 调用和工具执行可被用户输入或信号在执行中途取消。 |
 | **平台无关的核心** | 单一 AIAgent 类同时服务于 CLI、gateway、ACP、批处理和 API 服务器。平台差异存在于入口点，而非 agent 内部。 |
 | **松耦合** | 可选子系统（MCP、插件、记忆提供者、RL 环境）使用注册表模式和 check_fn 门控，而非硬依赖。 |
-| **Profile 隔离** | 每个 profile（`hermes -p <name>`）拥有独立的 HERMES_HOME、配置、记忆、会话和 gateway PID。多个 profile 可并发运行。 |
+| **Profile 隔离** | 每个 profile（`atlaz -p <name>`）拥有独立的 HERMES_HOME、配置、记忆、会话和 gateway PID。多个 profile 可并发运行。 |
 
 ## 文件依赖链
 

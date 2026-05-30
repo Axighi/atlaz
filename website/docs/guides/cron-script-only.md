@@ -97,7 +97,7 @@ The agent can pause, resume, edit, and remove jobs the same way it creates them:
 >
 > **Hermes:** *(calls `cronjob(action='pause', job_id='abc123')`)*
 >
-> Paused. Resume with "turn it back on" or via `hermes cron resume abc123`.
+> Paused. Resume with "turn it back on" or via `atlaz cron resume abc123`.
 
 > **You:** change it to every 15 minutes
 >

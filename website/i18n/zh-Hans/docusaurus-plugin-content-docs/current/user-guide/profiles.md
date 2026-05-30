@@ -38,7 +38,7 @@ hermes profile create mybot
 hermes profile create researcher --description "Reads source code and external docs, writes findings."
 ```
 
-你也可以稍后通过 `hermes profile describe` 设置或自动生成描述——完整路由模型请参阅 [Kanban 指南](./features/kanban#auto-vs-manual-orchestration)。
+你也可以稍后通过 `atlaz profile describe` 设置或自动生成描述——完整路由模型请参阅 [Kanban 指南](./features/kanban#auto-vs-manual-orchestration)。
 
 ### 仅克隆配置（`--clone`）
 
@@ -81,7 +81,7 @@ coder skills list             # 列出 coder 的技能
 coder config set model.default anthropic/claude-sonnet-4
 ```
 
-别名支持所有 hermes 子命令——底层实际上是 `hermes -p <name>`。
+别名支持所有 hermes 子命令——底层实际上是 `atlaz -p <name>`。
 
 ### `-p` 标志
 
@@ -93,7 +93,7 @@ hermes --profile=coder doctor
 hermes chat -p coder -q "hello"    # 可在任意位置使用
 ```
 
-### 粘性默认值（`hermes profile use`）
+### 粘性默认值（`atlaz profile use`）
 
 ```bash
 hermes profile use coder
@@ -110,7 +110,7 @@ CLI 始终显示当前活跃的 profile：
 
 - **提示符**：显示 `coder ❯` 而非 `❯`
 - **启动横幅**：启动时显示 `Profile: coder`
-- **`hermes profile`**：显示当前 profile 名称、路径、模型、gateway 状态
+- **`atlaz profile`**：显示当前 profile 名称、路径、模型、gateway 状态
 
 ## Profile vs 工作区 vs 沙箱
 
@@ -173,7 +173,7 @@ assistant gateway install     # 创建 hermes-gateway-assistant 服务
 每个 profile 拥有独立的服务名称，各自独立运行。
 
 :::note 在官方 Docker 镜像中
-各 profile 的 gateway 由 [s6-overlay](https://github.com/just-containers/s6-overlay)（容器中的 PID 1）监管，因此 `hermes profile create <name>` 会自动在 `/run/service/gateway-<name>/` 注册 s6 服务槽。`hermes -p <name> gateway start/stop/restart` 会调度到 `s6-svc` 而非直接启动裸进程——崩溃后自动重启，`docker restart` 会保留之前运行的 gateway 集合。详见 [各 profile gateway 监管](/user-guide/docker#per-profile-gateway-supervision)。
+各 profile 的 gateway 由 [s6-overlay](https://github.com/just-containers/s6-overlay)（容器中的 PID 1）监管，因此 `atlaz profile create <name>` 会自动在 `/run/service/gateway-<name>/` 注册 s6 服务槽。`atlaz -p <name> gateway start/stop/restart` 会调度到 `s6-svc` 而非直接启动裸进程——崩溃后自动重启，`docker restart` 会保留之前运行的 gateway 集合。详见 [各 profile gateway 监管](/user-guide/docker#per-profile-gateway-supervision)。
 :::
 
 ## 配置 profile
@@ -197,7 +197,7 @@ coder config set terminal.cwd /absolute/path/to/project
 
 ## 更新
 
-`hermes update` 拉取一次代码（共享），并自动将新的内置技能同步到**所有** profile：
+`atlaz update` 拉取一次代码（共享），并自动将新的内置技能同步到**所有** profile：
 
 ```bash
 hermes update
@@ -225,10 +225,10 @@ hermes profile delete coder
 
 此操作将停止 gateway、移除 systemd/launchd 服务、移除命令别名并删除所有 profile 数据。系统会要求你输入 profile 名称以确认。
 
-使用 `--yes` 跳过确认：`hermes profile delete coder --yes`
+使用 `--yes` 跳过确认：`atlaz profile delete coder --yes`
 
 :::note
-你无法删除默认 profile（`~/.hermes`）。如需删除所有内容，请使用 `hermes uninstall`。
+你无法删除默认 profile（`~/.hermes`）。如需删除所有内容，请使用 `atlaz uninstall`。
 :::
 
 ## Tab 补全

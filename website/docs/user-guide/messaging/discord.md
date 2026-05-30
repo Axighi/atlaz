@@ -1,12 +1,12 @@
 ---
 sidebar_position: 3
 title: "Discord"
-description: "Set up Hermes Agent as a Discord bot"
+description: "Set up ATLAZ as a Discord bot"
 ---
 
 # Discord Setup
 
-Hermes Agent integrates with Discord as a bot, letting you chat with your AI assistant through direct messages or server channels. The bot receives your messages, processes them through the Hermes Agent pipeline (including tool use, memory, and reasoning), and responds in real time. It supports text, voice messages, file attachments, and slash commands.
+ATLAZ integrates with Discord as a bot, letting you chat with your AI assistant through direct messages or server channels. The bot receives your messages, processes them through the ATLAZ pipeline (including tool use, memory, and reasoning), and responds in real time. It supports text, voice messages, file attachments, and slash commands.
 
 Before setup, here's the part most people want to know: how Hermes behaves once it's in your server.
 
@@ -86,7 +86,7 @@ This guide walks you through the full setup process — from creating your bot o
 
 1. Go to the [Discord Developer Portal](https://discord.com/developers/applications) and sign in with your Discord account.
 2. Click **New Application** in the top-right corner.
-3. Enter a name for your application (e.g., "Hermes Agent") and accept the Developer Terms of Service.
+3. Enter a name for your application (e.g., "ATLAZ") and accept the Developer Terms of Service.
 4. Click **Create**.
 
 You'll land on the **General Information** page. Note the **Application ID** — you'll need it later to build the invite URL.
@@ -136,7 +136,7 @@ Click **Save Changes** at the bottom of the page.
 
 ## Step 4: Get the Bot Token
 
-The bot token is the credential Hermes Agent uses to log in as your bot. Still on the **Bot** page:
+The bot token is the credential ATLAZ uses to log in as your bot. Still on the **Bot** page:
 
 1. Under the **Token** section, click **Reset Token**.
 2. If you have two-factor authentication enabled on your Discord account, enter your 2FA code.
@@ -212,7 +212,7 @@ After authorizing, the bot will appear in your server's member list (it will sho
 
 ## Step 7: Find Your Discord User ID
 
-Hermes Agent uses your Discord User ID to control who can interact with the bot. To find it:
+ATLAZ uses your Discord User ID to control who can interact with the bot. To find it:
 
 1. Open Discord (desktop or web app).
 2. Go to **Settings** → **Advanced** → toggle **Developer Mode** to **ON**.
@@ -225,7 +225,7 @@ Your User ID is a long number like `284102345871466496`.
 Developer Mode also lets you copy **Channel IDs** and **Server IDs** the same way — right-click the channel or server name and select Copy ID. You'll need a Channel ID if you want to set a home channel manually.
 :::
 
-## Step 8: Configure Hermes Agent
+## Step 8: Configure ATLAZ
 
 ### Option A: Interactive Setup (Recommended)
 
@@ -259,7 +259,7 @@ hermes gateway
 The bot should come online in Discord within a few seconds. Send it a message — either a DM or in a channel it can see — to test.
 
 :::tip
-You can run `hermes gateway` in the background or as a systemd service for persistent operation. See the deployment docs for details.
+You can run `atlaz gateway` in the background or as a systemd service for persistent operation. See the deployment docs for details.
 :::
 
 ## Configuration Reference
@@ -585,7 +585,7 @@ Hermes automatically registers installed skills as **native Discord Application 
 - Discord has a limit of 100 application commands per bot — if you have more skills than available slots, extra skills are skipped with a warning in the logs
 - Skills are registered during bot startup alongside built-in commands like `/model`, `/reset`, and `/background`
 
-No extra configuration is needed — any skill installed via `hermes skills install` is automatically registered as a Discord slash command on the next gateway restart.
+No extra configuration is needed — any skill installed via `atlaz skills install` is automatically registered as a Discord slash command on the next gateway restart.
 
 ### Disabling Slash Command Registration
 
@@ -673,7 +673,7 @@ Replace the ID with the actual channel ID (right-click → Copy Channel ID with 
 
 ## Voice Messages
 
-Hermes Agent supports Discord voice messages:
+ATLAZ supports Discord voice messages:
 
 - **Incoming voice messages** are automatically transcribed using the configured STT provider: local `faster-whisper` (no key), Groq Whisper (`GROQ_API_KEY`), or OpenAI Whisper (`VOICE_TOOLS_OPENAI_KEY`).
 - **Text-to-speech**: Use `/voice tts` to have the bot send spoken audio responses alongside text replies.
@@ -724,7 +724,7 @@ Refreshing the directory (`/channels refresh` on platforms that expose it, or a 
 
 **Cause**: The Hermes gateway isn't running, or the token is incorrect.
 
-**Fix**: Check that `hermes gateway` is running. Verify `DISCORD_BOT_TOKEN` in your `.env` file. If you recently reset the token, update it.
+**Fix**: Check that `atlaz gateway` is running. Verify `DISCORD_BOT_TOKEN` in your `.env` file. If you recently reset the token, update it.
 
 ### "User not allowed" / Bot ignores you
 
@@ -796,6 +796,6 @@ DISCORD_ALLOW_MENTION_REPLIED_USER=true
 Leave `everyone` and `roles` at `false` unless you know exactly why you need them. It is very easy for an LLM to produce the string `@everyone` inside a normal-looking response; without this protection, that would notify every member of your server.
 :::
 
-For more information on securing your Hermes Agent deployment, see the [Security Guide](../security.md).
+For more information on securing your ATLAZ deployment, see the [Security Guide](../security.md).
 
 

@@ -1,6 +1,6 @@
 ---
 title: "Windows（原生）指南 — 早期 Beta"
-description: "早期 BETA：在 Windows 10 / 11 上原生运行 Hermes Agent — 安装、功能矩阵、UTF-8 控制台、Git Bash、将 gateway 作为计划任务、编辑器处理、PATH、卸载及常见问题"
+description: "早期 BETA：在 Windows 10 / 11 上原生运行 ATLAZ — 安装、功能矩阵、UTF-8 控制台、Git Bash、将 gateway 作为计划任务、编辑器处理、PATH、卸载及常见问题"
 sidebar_label: "Windows（原生）— Beta"
 sidebar_position: 3
 ---
@@ -8,7 +8,7 @@ sidebar_position: 3
 # Windows（原生）指南 — 早期 Beta
 
 :::warning 早期 BETA
-原生 Windows 支持处于**早期 beta** 阶段。它可以安装、运行，并通过了我们的 Windows 陷阱（footgun）lint 检查，但尚未像 Linux/macOS/WSL2 路径那样经过大规模实战验证。预计会有一些粗糙之处——尤其是子进程处理、路径怪癖和非 ASCII 控制台输出方面。遇到问题时，请[提交 issue](https://github.com/NousResearch/hermes-agent/issues) 并附上复现步骤。如果你今天想要一个经过充分验证的环境，请改用 [WSL2 下的 Linux/macOS 安装程序](./windows-wsl-quickstart.md)。
+原生 Windows 支持处于**早期 beta** 阶段。它可以安装、运行，并通过了我们的 Windows 陷阱（footgun）lint 检查，但尚未像 Linux/macOS/WSL2 路径那样经过大规模实战验证。预计会有一些粗糙之处——尤其是子进程处理、路径怪癖和非 ASCII 控制台输出方面。遇到问题时，请[提交 issue](https://github.com/Axighi/atlaz/issues) 并附上复现步骤。如果你今天想要一个经过充分验证的环境，请改用 [WSL2 下的 Linux/macOS 安装程序](./windows-wsl-quickstart.md)。
 :::
 
 Hermes 可在 Windows 10 和 Windows 11 上原生运行——无需 WSL、Cygwin 或 Docker。本页是深度指南：原生支持哪些功能、哪些仅限 WSL、安装程序实际做了什么，以及你可能需要调整的 Windows 专属配置项。
@@ -41,7 +41,7 @@ iex (irm https://raw.githubusercontent.com/NousResearch/hermes-agent/main/script
 | `-Commit` | 未设置 | 将安装固定到指定 commit SHA（覆盖 `-Branch`） |
 | `-Tag` | 未设置 | 将安装固定到指定 git tag（如 `v0.14.0`） |
 | `-NoVenv` | 关闭 | 跳过 venv 创建（高级用法——由你自行管理 Python） |
-| `-SkipSetup` | 关闭 | 跳过安装后的 `hermes setup` 向导 |
+| `-SkipSetup` | 关闭 | 跳过安装后的 `atlaz setup` 向导 |
 | `-HermesHome` | `%LOCALAPPDATA%\hermes` | 覆盖数据目录 |
 | `-InstallDir` | `%LOCALAPPDATA%\hermes\hermes-agent` | 覆盖代码存放位置 |
 
@@ -80,10 +80,10 @@ iex (irm https://raw.githubusercontent.com/NousResearch/hermes-agent/main/script
 7. **根据 `.env` 自动安装消息 SDK** — 如果存在 `TELEGRAM_BOT_TOKEN` / `DISCORD_BOT_TOKEN` / `SLACK_BOT_TOKEN` / `SLACK_APP_TOKEN` / `WHATSAPP_ENABLED`，则运行 `python -m ensurepip --upgrade` 并针对性地调用 `pip install`，确保各平台 SDK 可正常导入。
 8. **设置 `HERMES_GIT_BASH_PATH`** 为解析后的 `bash.exe` 路径，使 Hermes 在新 shell 中能确定性地找到它。
 9. **将 `%LOCALAPPDATA%\hermes\bin` 添加到用户 PATH** — 打开新终端后即可使用 `hermes` 命令。
-10. **运行 `hermes setup`** — 正常的首次运行向导（模型、提供商、工具集）。使用 `-SkipSetup` 跳过。
+10. **运行 `atlaz setup`** — 正常的首次运行向导（模型、提供商、工具集）。使用 `-SkipSetup` 跳过。
 
 :::tip 在 Windows 上跳过繁琐的提供商配置
-原生 Windows 仍处于早期 beta 阶段，逐个配置工具 API key（Firecrawl、FAL、Browser Use、OpenAI TTS）是获得可用 agent 摩擦最大的部分。[Nous Portal](/user-guide/features/tool-gateway) 订阅通过一次 OAuth 登录即可覆盖模型**以及**所有这些工具。安装程序完成后，运行 `hermes setup --portal` 完成配置。
+原生 Windows 仍处于早期 beta 阶段，逐个配置工具 API key（Firecrawl、FAL、Browser Use、OpenAI TTS）是获得可用 agent 摩擦最大的部分。[Nous Portal](/user-guide/features/tool-gateway) 订阅通过一次 OAuth 登录即可覆盖模型**以及**所有这些工具。安装程序完成后，运行 `atlaz setup --portal` 完成配置。
 :::
 
 ## 功能矩阵
@@ -92,8 +92,8 @@ iex (irm https://raw.githubusercontent.com/NousResearch/hermes-agent/main/script
 
 | 功能 | 原生 Windows | WSL2 |
 |---|---|---|
-| CLI（`hermes chat`、`hermes setup`、`hermes gateway` 等） | ✓ | ✓ |
-| 交互式 TUI（`hermes --tui`） | ✓ | ✓ |
+| CLI（`atlaz chat`、`atlaz setup`、`atlaz gateway` 等） | ✓ | ✓ |
+| 交互式 TUI（`atlaz --tui`） | ✓ | ✓ |
 | 消息 gateway（Telegram、Discord、Slack、WhatsApp，15+ 平台） | ✓ | ✓ |
 | Cron 调度器 | ✓ | ✓ |
 | 浏览器工具（通过 Node 驱动 Chromium） | ✓ | ✓ |
@@ -170,7 +170,7 @@ Windows Terminal 将 `Ctrl+Enter` 作为独立按键序列传递。Hermes 将其
 
 ## 在 Windows 登录时运行 gateway
 
-Windows 上的 `hermes gateway install` 使用**计划任务**，并以 Startup 文件夹作为回退——无需管理员权限。
+Windows 上的 `atlaz gateway install` 使用**计划任务**，并以 Startup 文件夹作为回退——无需管理员权限。
 
 ### 安装
 
@@ -196,7 +196,7 @@ hermes gateway restart
 hermes gateway uninstall   # 移除 schtasks 条目、Startup 快捷方式、pid 文件
 ```
 
-`hermes gateway status` 是幂等的——调用一千次也不会意外杀死 gateway。（PR #21561 之前它会静默地这样做，原因是 `os.kill(pid, 0)` 在 C 层与 `CTRL_C_EVENT` 发生碰撞——如果你想了解来龙去脉，请参阅下方"进程管理内部机制"。）
+`atlaz gateway status` 是幂等的——调用一千次也不会意外杀死 gateway。（PR #21561 之前它会静默地这样做，原因是 `os.kill(pid, 0)` 在 C 层与 `CTRL_C_EVENT` 发生碰撞——如果你想了解来龙去脉，请参阅下方"进程管理内部机制"。）
 
 ### 为什么不用 Windows 服务？
 
@@ -222,7 +222,7 @@ hermes gateway uninstall   # 移除 schtasks 条目、Startup 快捷方式、pid
 
 - 安装程序通过 npm 将 `agent-browser` 添加到 PATH。
 - `shutil.which("agent-browser", path=...)` 会自动找到 `.cmd` 垫片——`CreateProcessW` 无法执行无扩展名的 shebang 脚本，因此 Hermes 始终解析到 `.CMD` 包装器。不要手动调用 shebang 脚本；始终通过 `.cmd` 调用。
-- Playwright Chromium 在首次运行时自动安装（`npx playwright install chromium`）。如果安装失败，`hermes doctor` 会给出修复提示。
+- Playwright Chromium 在首次运行时自动安装（`npx playwright install chromium`）。如果安装失败，`atlaz doctor` 会给出修复提示。
 
 ## 在 Windows 上运行 Hermes — 实用说明
 
@@ -276,7 +276,7 @@ Remove-Item -Recurse -Force "$env:USERPROFILE\.hermes"
 Remove-Item -Recurse -Force "$env:LOCALAPPDATA\hermes"
 ```
 
-`hermes uninstall` CLI 子命令还能处理 schtasks 条目以不同任务名注册的情况（旧版安装）——它通过安装路径而非硬编码任务名来搜索。
+`atlaz uninstall` CLI 子命令还能处理 schtasks 条目以不同任务名注册的情况（旧版安装）——它通过安装路径而非硬编码任务名来搜索。
 
 ## 进程管理内部机制
 
@@ -300,13 +300,13 @@ Remove-Item -Recurse -Force "$env:LOCALAPPDATA\hermes"
 你下载的 `install.ps1` 携带了 UTF-8 BOM。`irm | iex` 形式会自动剥离 BOM；`[scriptblock]::Create((irm ...))` 不会。请改用简单的 `irm | iex` 形式，或手动下载脚本并通过 `[IO.File]::WriteAllText($path, $text, (New-Object Text.UTF8Encoding $false))` 保存为不带 BOM 的纯 UTF-8。
 
 **重启后 gateway 无法持续运行。**
-运行 `hermes gateway status`——它会合并 schtasks 条目、Startup 文件夹快捷方式（如有）和运行中的 PID。如果 schtasks 已注册但未运行，组策略可能阻止了 `ONLOGON` 触发器。运行 `schtasks /Query /TN HermesGateway /V /FO LIST` 查看任务失败原因，或通过卸载后使用 `HERMES_GATEWAY_FORCE_STARTUP=1` 重新安装来回退到 Startup 文件夹路径。
+运行 `atlaz gateway status`——它会合并 schtasks 条目、Startup 文件夹快捷方式（如有）和运行中的 PID。如果 schtasks 已注册但未运行，组策略可能阻止了 `ONLOGON` 触发器。运行 `schtasks /Query /TN HermesGateway /V /FO LIST` 查看任务失败原因，或通过卸载后使用 `HERMES_GATEWAY_FORCE_STARTUP=1` 重新安装来回退到 Startup 文件夹路径。
 
 **设置 `$env:EDITOR` 后 `/edit` 仍然无响应。**
 你只在当前进程中设置了它；请关闭并重新打开 shell，或在系统属性 → 环境变量中以用户作用域设置。在新 PowerShell 窗口中用 `echo $env:EDITOR` 验证。
 
 **浏览器工具启动了，但工具调用超时。**
-Chromium 在首次运行时自动安装。如果安装失败（GitHub 限速、Playwright CDN 故障），运行 `hermes doctor`——它会检测缺失的 Chromium 并打印修复所需的确切 `npx playwright install chromium` 命令。
+Chromium 在首次运行时自动安装。如果安装失败（GitHub 限速、Playwright CDN 故障），运行 `atlaz doctor`——它会检测缺失的 Chromium 并打印修复所需的确切 `npx playwright install chromium` 命令。
 
 **`agent-browser` 报奇怪的 Node 版本错误。**
 安装程序在 `%LOCALAPPDATA%\hermes\node` 配置了 Node 22，但你的 PATH 中可能有更靠前的旧版系统 Node 18。要么将 Hermes 的 node 目录移到 PATH 前面，要么如果你不在其他地方使用 Node，删除系统安装。

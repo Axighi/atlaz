@@ -14,7 +14,7 @@ OpenAI's general-purpose speech recognition model. Supports 99 languages, transc
 
 | | |
 |---|---|
-| Source | Optional — install with `hermes skills install official/mlops/whisper` |
+| Source | Optional — install with `atlaz skills install official/mlops/whisper` |
 | Path | `optional-skills/mlops/whisper` |
 | Version | `1.0.0` |
 | Author | Orchestra Research |

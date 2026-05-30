@@ -1,11 +1,11 @@
 ---
 title: 上下文压缩与缓存
-description: Hermes Agent 如何通过双重压缩系统和 Anthropic prompt 缓存高效管理上下文窗口。
+description: ATLAZ 如何通过双重压缩系统和 Anthropic prompt 缓存高效管理上下文窗口。
 ---
 
 # 上下文压缩与缓存
 
-Hermes Agent 使用双重压缩系统和 Anthropic prompt（提示词）缓存，在长对话中高效管理上下文窗口用量。
+ATLAZ 使用双重压缩系统和 Anthropic prompt（提示词）缓存，在长对话中高效管理上下文窗口用量。
 
 源文件：`agent/context_engine.py`（ABC）、`agent/context_compressor.py`（默认引擎）、
 `agent/prompt_caching.py`、`gateway/run.py`（会话清理）、`run_agent.py`（搜索 `_compress_context`）
@@ -34,7 +34,7 @@ context:
 
 插件引擎**永远不会自动激活**——用户必须在 `context.engine` 中显式设置插件名称。默认的 `"compressor"` 始终使用内置实现。
 
-通过 `hermes plugins` → Provider Plugins → Context Engine 进行配置，或直接编辑 `config.yaml`。
+通过 `atlaz plugins` → Provider Plugins → Context Engine 进行配置，或直接编辑 `config.yaml`。
 
 关于构建上下文引擎插件，请参阅 [Context Engine 插件](/developer-guide/context-engine-plugin)。
 

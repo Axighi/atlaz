@@ -1,14 +1,14 @@
 ---
-title: "Hermes Agent — Configure, extend, or contribute to Hermes Agent"
-sidebar_label: "Hermes Agent"
-description: "Configure, extend, or contribute to Hermes Agent"
+title: "ATLAZ — Configure, extend, or contribute to ATLAZ"
+sidebar_label: "ATLAZ"
+description: "Configure, extend, or contribute to ATLAZ"
 ---
 
 {/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}
 
-# Hermes Agent
+# ATLAZ
 
-Configure, extend, or contribute to Hermes Agent.
+Configure, extend, or contribute to ATLAZ.
 
 ## Skill metadata
 
@@ -17,7 +17,7 @@ Configure, extend, or contribute to Hermes Agent.
 | Source | Bundled (installed by default) |
 | Path | `skills/autonomous-ai-agents/hermes-agent` |
 | Version | `2.1.0` |
-| Author | Hermes Agent + Teknium |
+| Author | ATLAZ + Teknium |
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `hermes`, `setup`, `configuration`, `multi-agent`, `spawning`, `cli`, `gateway`, `development` |
@@ -29,9 +29,9 @@ Configure, extend, or contribute to Hermes Agent.
 The following is the complete skill definition that Hermes loads when this skill is triggered. This is what the agent sees as instructions when the skill is active.
 :::
 
-# Hermes Agent
+# ATLAZ
 
-Hermes Agent is an open-source AI agent framework by Nous Research that runs in your terminal, messaging platforms, and IDEs. It belongs to the same category as Claude Code (Anthropic), Codex (OpenAI), and OpenClaw — autonomous coding and task-execution agents that use tool calling to interact with your system. Hermes works with any LLM provider (OpenRouter, Anthropic, OpenAI, DeepSeek, local models, and 15+ others) and runs on Linux, macOS, and WSL.
+ATLAZ is an open-source AI agent framework by Nous Research that runs in your terminal, messaging platforms, and IDEs. It belongs to the same category as Claude Code (Anthropic), Codex (OpenAI), and OpenClaw — autonomous coding and task-execution agents that use tool calling to interact with your system. Hermes works with any LLM provider (OpenRouter, Anthropic, OpenAI, DeepSeek, local models, and 15+ others) and runs on Linux, macOS, and WSL.
 
 What makes Hermes different:
 
@@ -44,9 +44,9 @@ What makes Hermes different:
 
 People use Hermes for software development, research, system administration, data analysis, content creation, home automation, and anything else that benefits from an AI agent with persistent context and full system access.
 
-**This skill helps you work with Hermes Agent effectively** — setting it up, configuring features, spawning additional agent instances, troubleshooting issues, finding the right commands and settings, and understanding how the system works when you need to extend or contribute to it.
+**This skill helps you work with ATLAZ effectively** — setting it up, configuring features, spawning additional agent instances, troubleshooting issues, finding the right commands and settings, and understanding how the system works when you need to extend or contribute to it.
 
-**Docs:** https://hermes-agent.nousresearch.com/docs/
+**Docs:** https://atlaz.nousresearch.com/docs/
 
 ## Quick Start
 
@@ -170,7 +170,7 @@ hermes gateway setup        Configure platforms
 
 Supported platforms: Telegram, Discord, Slack, WhatsApp, Signal, Email, SMS, Matrix, Mattermost, Home Assistant, DingTalk, Feishu, WeCom, BlueBubbles (iMessage), Weixin (WeChat), API Server, Webhooks. Open WebUI connects via the API Server adapter.
 
-Platform docs: https://hermes-agent.nousresearch.com/docs/user-guide/messaging/
+Platform docs: https://atlaz.nousresearch.com/docs/user-guide/messaging/
 
 ### Sessions
 
@@ -249,7 +249,7 @@ hermes uninstall            Uninstall Hermes
 
 Type these during an interactive chat session. New commands land fairly
 often; if something below looks stale, run `/help` in-session for the
-authoritative list or see the [live slash commands reference](https://hermes-agent.nousresearch.com/docs/reference/slash-commands).
+authoritative list or see the [live slash commands reference](https://atlaz.nousresearch.com/docs/reference/slash-commands).
 The registry of record is `atlaz_cli/commands.py` — every consumer
 (autocomplete, Telegram menu, Slack mapping, `/help`) derives from it.
 
@@ -366,7 +366,7 @@ Profiles use `~/.hermes/profiles/<name>/` with the same layout.
 
 ### Config Sections
 
-Edit with `hermes config edit` or `hermes config set section.key value`.
+Edit with `atlaz config edit` or `atlaz config set section.key value`.
 
 | Section | Key options |
 |---------|-------------|
@@ -382,18 +382,18 @@ Edit with `hermes config edit` or `hermes config set section.key value`.
 | `delegation` | `model`, `provider`, `base_url`, `api_key`, `max_iterations` (50), `reasoning_effort` |
 | `checkpoints` | `enabled`, `max_snapshots` (50) |
 
-Full config reference: https://hermes-agent.nousresearch.com/docs/user-guide/configuration
+Full config reference: https://atlaz.nousresearch.com/docs/user-guide/configuration
 
 ### Providers
 
-20+ providers supported. Set via `hermes model` or `hermes setup`.
+20+ providers supported. Set via `atlaz model` or `atlaz setup`.
 
 | Provider | Auth | Key env var |
 |----------|------|-------------|
 | OpenRouter | API key | `OPENROUTER_API_KEY` |
 | Anthropic | API key | `ANTHROPIC_API_KEY` |
-| Nous Portal | OAuth | `hermes auth` |
-| OpenAI Codex | OAuth | `hermes auth` |
+| Nous Portal | OAuth | `atlaz auth` |
+| OpenAI Codex | OAuth | `atlaz auth` |
 | GitHub Copilot | Token | `COPILOT_GITHUB_TOKEN` |
 | Google Gemini | API key | `GOOGLE_API_KEY` or `GEMINI_API_KEY` |
 | DeepSeek | API key | `DEEPSEEK_API_KEY` |
@@ -408,15 +408,15 @@ Full config reference: https://hermes-agent.nousresearch.com/docs/user-guide/con
 | Kilo Code | API key | `KILOCODE_API_KEY` |
 | OpenCode Zen | API key | `OPENCODE_ZEN_API_KEY` |
 | OpenCode Go | API key | `OPENCODE_GO_API_KEY` |
-| Qwen OAuth | OAuth | `hermes auth add qwen-oauth` |
+| Qwen OAuth | OAuth | `atlaz auth add qwen-oauth` |
 | Custom endpoint | Config | `model.base_url` + `model.api_key` in config.yaml |
 | GitHub Copilot ACP | External | `COPILOT_CLI_PATH` or Copilot CLI |
 
-Full provider docs: https://hermes-agent.nousresearch.com/docs/integrations/providers
+Full provider docs: https://atlaz.nousresearch.com/docs/integrations/providers
 
 ### Toolsets
 
-Enable/disable via `hermes tools` (interactive) or `hermes tools enable/disable NAME`.
+Enable/disable via `atlaz tools` (interactive) or `atlaz tools enable/disable NAME`.
 
 | Toolset | What it provides |
 |---------|-----------------|
@@ -469,7 +469,7 @@ Secret redaction is **off by default** — tool output (terminal stdout, `read_f
 hermes config set security.redact_secrets true       # enable globally
 ```
 
-**Restart required.** `security.redact_secrets` is snapshotted at import time — toggling it mid-session (e.g. via `export HERMES_REDACT_SECRETS=true` from a tool call) will NOT take effect for the running process. Tell the user to run `hermes config set security.redact_secrets true` in a terminal, then start a new session. This is deliberate — it prevents an LLM from flipping the toggle on itself mid-task.
+**Restart required.** `security.redact_secrets` is snapshotted at import time — toggling it mid-session (e.g. via `export HERMES_REDACT_SECRETS=true` from a tool call) will NOT take effect for the running process. Tell the user to run `atlaz config set security.redact_secrets true` in a terminal, then start a new session. This is deliberate — it prevents an LLM from flipping the toggle on itself mid-task.
 
 Disable again with:
 ```bash
@@ -499,7 +499,7 @@ hermes config set approvals.mode off         # bypass everything (not recommende
 ```
 
 Per-invocation bypass without changing config:
-- `hermes --yolo …`
+- `atlaz --yolo …`
 - `export HERMES_YOLO_MODE=1`
 
 Note: YOLO / `approvals.mode: off` does NOT turn off secret redaction. They are independent.
@@ -510,7 +510,7 @@ Some shell-hook integrations require explicit allowlisting before they fire. Man
 
 ### Disabling the web/browser/image-gen tools
 
-To keep the model away from network or media tools entirely, open `hermes tools` and toggle per-platform. Takes effect on next session (`/reset`). See the Tools & Skills section above.
+To keep the model away from network or media tools entirely, open `atlaz tools` and toggle per-platform. Takes effect on next session (`/reset`). See the Tools & Skills section above.
 
 ---
 
@@ -625,7 +625,7 @@ terminal(command="tmux new-session -d -s resumed 'hermes --resume 20260225_14305
 - **Prefer `delegate_task` for quick subtasks** — less overhead than spawning a full process
 - **Use `-w` (worktree mode)** when spawning agents that edit code — prevents git conflicts
 - **Set timeouts** for one-shot mode — complex tasks can take 5-10 minutes
-- **Use `hermes chat -q` for fire-and-forget** — no PTY needed
+- **Use `atlaz chat -q` for fire-and-forget** — no PTY needed
 - **Use tmux for interactive sessions** — raw PTY mode has `\r` vs `\n` issues with prompt_toolkit
 - **For scheduled tasks**, use the `cronjob` tool instead of spawning — handles delivery and retry
 
@@ -656,7 +656,7 @@ Config: `delegation.*` in `config.yaml`.
 ### Cron (scheduled jobs)
 
 Durable scheduler — `cron/jobs.py` + `cron/scheduler.py`. Drive it via
-the `cronjob` tool, the `hermes cron` CLI (`list`, `add`, `edit`,
+the `cronjob` tool, the `atlaz cron` CLI (`list`, `add`, `edit`,
 `pause`, `resume`, `run`, `remove`), or the `/cron` slash command.
 
 - **Schedules:** duration (`"30m"`, `"2h"`), "every" phrase
@@ -672,7 +672,7 @@ the `cronjob` tool, the `hermes cron` CLI (`list`, `add`, `edit`,
   header/footer instead of being mirrored into the target gateway
   session (keeps role alternation intact).
 
-User docs: https://hermes-agent.nousresearch.com/docs/user-guide/features/cron
+User docs: https://atlaz.nousresearch.com/docs/user-guide/features/cron
 
 ### Curator (skill lifecycle)
 
@@ -680,7 +680,7 @@ Background maintenance for agent-created skills. Tracks usage, marks
 idle skills stale, archives stale ones, keeps a pre-run tar.gz backup
 so nothing is lost.
 
-- **CLI:** `hermes curator <verb>` — `status`, `run`, `pause`, `resume`,
+- **CLI:** `atlaz curator <verb>` — `status`, `run`, `pause`, `resume`,
   `pin`, `unpin`, `archive`, `restore`, `prune`, `backup`, `rollback`.
 - **Slash:** `/curator <subcommand>` mirrors the CLI.
 - **Scope:** only touches skills with `created_by: "agent"` provenance.
@@ -693,12 +693,12 @@ so nothing is lost.
 
 Config: `curator.*` (`enabled`, `interval_hours`, `min_idle_hours`,
 `stale_after_days`, `archive_after_days`, `backup.*`).
-User docs: https://hermes-agent.nousresearch.com/docs/user-guide/features/curator
+User docs: https://atlaz.nousresearch.com/docs/user-guide/features/curator
 
 ### Kanban (multi-agent work queue)
 
 Durable SQLite board for multi-profile / multi-worker collaboration.
-Users drive it via `hermes kanban <verb>`; dispatcher-spawned workers
+Users drive it via `atlaz kanban <verb>`; dispatcher-spawned workers
 see a focused `kanban_*` toolset gated by `HERMES_KANBAN_TASK`, and
 orchestrator profiles can opt into the broader `kanban` toolset. Normal
 sessions still have zero `kanban_*` schema footprint unless configured.
@@ -722,7 +722,7 @@ sessions still have zero `kanban_*` schema footprint unless configured.
   `HERMES_KANBAN_BOARD` pinned in env); tenant is a soft namespace
   within a board for workspace-path + memory-key isolation.
 
-User docs: https://hermes-agent.nousresearch.com/docs/user-guide/features/kanban
+User docs: https://atlaz.nousresearch.com/docs/user-guide/features/kanban
 
 ---
 
@@ -761,7 +761,7 @@ Ctrl+Enter?" This is how the Ctrl+Enter = c-j fact was established.
 
 **HTTP 400 "No models provided" on first run.** `config.yaml` was saved
 with a UTF-8 BOM (common when Windows apps write it). Re-save as UTF-8
-without BOM. `hermes config edit` writes without BOM; manual edits in
+without BOM. `atlaz config edit` writes without BOM; manual edits in
 Notepad are the usual culprit.
 
 ### `execute_code` / Sandbox
@@ -824,15 +824,15 @@ and logs — avoids shell-escaping backslashes in bash.
 3. In gateway: `/restart`. In CLI: exit and relaunch.
 
 ### Tool not available
-1. `hermes tools` — check if toolset is enabled for your platform
+1. `atlaz tools` — check if toolset is enabled for your platform
 2. Some tools need env vars (check `.env`)
 3. `/reset` after enabling tools
 
 ### Model/provider issues
-1. `hermes doctor` — check config and dependencies
-2. `hermes auth` — re-authenticate OAuth providers (or `hermes auth add <provider>`)
+1. `atlaz doctor` — check config and dependencies
+2. `atlaz auth` — re-authenticate OAuth providers (or `atlaz auth add <provider>`)
 3. Check `.env` has the right API key
-4. **Copilot 403**: `gh auth login` tokens do NOT work for Copilot API. You must use the Copilot-specific OAuth device code flow via `hermes model` → GitHub Copilot.
+4. **Copilot 403**: `gh auth login` tokens do NOT work for Copilot API. You must use the Copilot-specific OAuth device code flow via `atlaz model` → GitHub Copilot.
 
 ### Changes not taking effect
 - **Tools/skills:** `/reset` starts a new session with updated toolset
@@ -840,9 +840,9 @@ and logs — avoids shell-escaping backslashes in bash.
 - **Code changes:** Restart the CLI or gateway process
 
 ### Skills not showing
-1. `hermes skills list` — verify installed
-2. `hermes skills config` — check platform enablement
-3. Load explicitly: `/skill name` or `hermes -s name`
+1. `atlaz skills list` — verify installed
+2. `atlaz skills config` — check platform enablement
+3. Load explicitly: `/skill name` or `atlaz -s name`
 
 ### Gateway issues
 Check logs first:
@@ -873,27 +873,27 @@ hermes config set auxiliary.vision.model <model_name>
 
 | Looking for... | Location |
 |----------------|----------|
-| Config options | `hermes config edit` or [Configuration docs](https://hermes-agent.nousresearch.com/docs/user-guide/configuration) |
-| Available tools | `hermes tools list` or [Tools reference](https://hermes-agent.nousresearch.com/docs/reference/tools-reference) |
-| Slash commands | `/help` in session or [Slash commands reference](https://hermes-agent.nousresearch.com/docs/reference/slash-commands) |
-| Skills catalog | `hermes skills browse` or [Skills catalog](https://hermes-agent.nousresearch.com/docs/reference/skills-catalog) |
-| Provider setup | `hermes model` or [Providers guide](https://hermes-agent.nousresearch.com/docs/integrations/providers) |
-| Platform setup | `hermes gateway setup` or [Messaging docs](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/) |
-| MCP servers | `hermes mcp list` or [MCP guide](https://hermes-agent.nousresearch.com/docs/user-guide/features/mcp) |
-| Profiles | `hermes profile list` or [Profiles docs](https://hermes-agent.nousresearch.com/docs/user-guide/profiles) |
-| Cron jobs | `hermes cron list` or [Cron docs](https://hermes-agent.nousresearch.com/docs/user-guide/features/cron) |
-| Memory | `hermes memory status` or [Memory docs](https://hermes-agent.nousresearch.com/docs/user-guide/features/memory) |
-| Env variables | `hermes config env-path` or [Env vars reference](https://hermes-agent.nousresearch.com/docs/reference/environment-variables) |
-| CLI commands | `hermes --help` or [CLI reference](https://hermes-agent.nousresearch.com/docs/reference/cli-commands) |
+| Config options | `atlaz config edit` or [Configuration docs](https://atlaz.nousresearch.com/docs/user-guide/configuration) |
+| Available tools | `atlaz tools list` or [Tools reference](https://atlaz.nousresearch.com/docs/reference/tools-reference) |
+| Slash commands | `/help` in session or [Slash commands reference](https://atlaz.nousresearch.com/docs/reference/slash-commands) |
+| Skills catalog | `atlaz skills browse` or [Skills catalog](https://atlaz.nousresearch.com/docs/reference/skills-catalog) |
+| Provider setup | `atlaz model` or [Providers guide](https://atlaz.nousresearch.com/docs/integrations/providers) |
+| Platform setup | `atlaz gateway setup` or [Messaging docs](https://atlaz.nousresearch.com/docs/user-guide/messaging/) |
+| MCP servers | `atlaz mcp list` or [MCP guide](https://atlaz.nousresearch.com/docs/user-guide/features/mcp) |
+| Profiles | `atlaz profile list` or [Profiles docs](https://atlaz.nousresearch.com/docs/user-guide/profiles) |
+| Cron jobs | `atlaz cron list` or [Cron docs](https://atlaz.nousresearch.com/docs/user-guide/features/cron) |
+| Memory | `atlaz memory status` or [Memory docs](https://atlaz.nousresearch.com/docs/user-guide/features/memory) |
+| Env variables | `atlaz config env-path` or [Env vars reference](https://atlaz.nousresearch.com/docs/reference/environment-variables) |
+| CLI commands | `atlaz --help` or [CLI reference](https://atlaz.nousresearch.com/docs/reference/cli-commands) |
 | Gateway logs | `~/.hermes/logs/gateway.log` |
-| Session files | `hermes sessions browse` (reads state.db) |
+| Session files | `atlaz sessions browse` (reads state.db) |
 | Source code | `~/.hermes/hermes-agent/` |
 
 ---
 
 ## Contributor Quick Reference
 
-For occasional contributors and PR authors. Full developer docs: https://hermes-agent.nousresearch.com/docs/developer-guide/
+For occasional contributors and PR authors. Full developer docs: https://atlaz.nousresearch.com/docs/developer-guide/
 
 ### Project Layout
 

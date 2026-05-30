@@ -1,7 +1,7 @@
 ---
 sidebar_position: 5
 title: "WhatsApp"
-description: "通过内置 Baileys 桥接将 Hermes Agent 设置为 WhatsApp 机器人"
+description: "通过内置 Baileys 桥接将 ATLAZ 设置为 WhatsApp 机器人"
 ---
 
 # WhatsApp 配置
@@ -82,7 +82,7 @@ hermes whatsapp
 
 1. 在手机上安装 WhatsApp（或使用支持双 SIM 的 WhatsApp Business 应用）
 2. 用新号码注册 WhatsApp
-3. 运行 `hermes whatsapp` 并从该 WhatsApp 账号扫描二维码
+3. 运行 `atlaz whatsapp` 并从该 WhatsApp 账号扫描二维码
 
 ---
 
@@ -160,7 +160,7 @@ Hermes 支持 WhatsApp 上的语音功能：
 
 - **接收：** 语音消息（`.ogg` opus 格式）会使用已配置的 STT 提供商自动转录：本地 `faster-whisper`、Groq Whisper（`GROQ_API_KEY`）或 OpenAI Whisper（`VOICE_TOOLS_OPENAI_KEY`）
 - **发送：** TTS 响应以 MP3 音频文件附件形式发送
-- Agent 响应默认以"⚕ **Hermes Agent**"为前缀。可在 `config.yaml` 中自定义或禁用：
+- Agent 响应默认以"⚕ **ATLAZ**"为前缀。可在 `config.yaml` 中自定义或禁用：
 
 ```yaml
 # ~/.hermes/config.yaml
@@ -203,12 +203,12 @@ AI 响应中的标准 Markdown 会自动转换为 WhatsApp 的原生格式：
 | 问题 | 解决方案 |
 |------|---------|
 | **二维码无法扫描** | 确保终端宽度足够（60 列以上）。尝试换用其他终端。确保从正确的 WhatsApp 账号（机器人号码，而非个人号码）扫描。 |
-| **二维码过期** | 二维码约每 20 秒刷新一次。如果超时，重新运行 `hermes whatsapp`。 |
+| **二维码过期** | 二维码约每 20 秒刷新一次。如果超时，重新运行 `atlaz whatsapp`。 |
 | **会话未持久化** | 检查 `~/.hermes/platforms/whatsapp/session` 是否存在且可写。如在容器中运行，请将其挂载为持久卷。 |
-| **意外退出登录** | WhatsApp 会在长时间不活跃后取消关联设备。保持手机开机并连接网络，如有需要使用 `hermes whatsapp` 重新配对。 |
+| **意外退出登录** | WhatsApp 会在长时间不活跃后取消关联设备。保持手机开机并连接网络，如有需要使用 `atlaz whatsapp` 重新配对。 |
 | **桥接崩溃或重连循环** | 重启 gateway，更新 Hermes，如会话因 WhatsApp 协议变更而失效则重新配对。 |
 | **WhatsApp 更新后机器人停止工作** | 更新 Hermes 以获取最新桥接版本，然后重新配对。 |
-| **macOS："Node.js not installed"但终端中 node 可用** | launchd 服务不继承你的 shell PATH。运行 `hermes gateway install` 将当前 PATH 重新快照到 plist 中，然后运行 `hermes gateway start`。详见 [Gateway 服务文档](./index.md#macos-launchd)。 |
+| **macOS："Node.js not installed"但终端中 node 可用** | launchd 服务不继承你的 shell PATH。运行 `atlaz gateway install` 将当前 PATH 重新快照到 plist 中，然后运行 `atlaz gateway start`。详见 [Gateway 服务文档](./index.md#macos-launchd)。 |
 | **未收到消息** | 确认 `WHATSAPP_ALLOWED_USERS` 包含发送者号码（含国家代码，不含 `+` 或空格），或将其设为 `*` 允许所有人。在 `.env` 中设置 `WHATSAPP_DEBUG=true` 并重启 gateway，可在 `bridge.log` 中查看原始消息事件。 |
 | **机器人向陌生人回复配对码** | 如需对未授权私信静默处理，在 `~/.hermes/config.yaml` 中设置 `whatsapp.unauthorized_dm_behavior: ignore`。 |
 

@@ -17,7 +17,7 @@ description: "调试 Python：pdb REPL + debugpy 远程（DAP）"
 | 来源 | 内置（默认安装） |
 | 路径 | `skills/software-development/python-debugpy` |
 | 版本 | `1.0.0` |
-| 作者 | Hermes Agent |
+| 作者 | ATLAZ |
 | 许可证 | MIT |
 | 平台 | linux, macos |
 | 标签 | `debugging`, `python`, `pdb`, `debugpy`, `breakpoints`, `dap`, `post-mortem` |
@@ -299,7 +299,7 @@ nc 127.0.0.1 4444
 ### `run_agent.py` / CLI — 一次性运行
 最简单：在可疑行附近添加 `breakpoint()`，然后正常运行 `hermes`。控制权将在暂停点返回到你的终端。
 
-### `tui_gateway` 子进程（由 `hermes --tui` 启动）
+### `tui_gateway` 子进程（由 `atlaz --tui` 启动）
 gateway 作为 Node TUI 的子进程运行。可选方案：
 
 **A. 修改 gateway 源码：**
@@ -309,7 +309,7 @@ import debugpy
 debugpy.listen(("127.0.0.1", 5678))
 debugpy.wait_for_client()
 ```
-启动 `hermes --tui`。TUI 将显示为冻结状态（其后端正在等待）。附加客户端后，执行在你 `continue` 时恢复。
+启动 `atlaz --tui`。TUI 将显示为冻结状态（其后端正在等待）。附加客户端后，执行在你 `continue` 时恢复。
 
 **B. 在特定处理器中使用 `remote-pdb`：**
 ```python

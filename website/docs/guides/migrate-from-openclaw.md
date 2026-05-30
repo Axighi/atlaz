@@ -1,15 +1,15 @@
 ---
 sidebar_position: 10
 title: "Migrate from OpenClaw"
-description: "Complete guide to migrating your OpenClaw / Clawdbot setup to Hermes Agent — what gets migrated, how config maps, and what to check after."
+description: "Complete guide to migrating your OpenClaw / Clawdbot setup to ATLAZ — what gets migrated, how config maps, and what to check after."
 ---
 
 # Migrate from OpenClaw
 
-`hermes claw migrate` imports your OpenClaw (or legacy Clawdbot/Moldbot) setup into Hermes. This guide covers exactly what gets migrated, the config key mappings, and what to verify after migration.
+`atlaz claw migrate` imports your OpenClaw (or legacy Clawdbot/Moldbot) setup into Hermes. This guide covers exactly what gets migrated, the config key mappings, and what to verify after migration.
 
 :::tip
-If your OpenClaw setup was multi-provider, `hermes setup --portal` collapses it to one OAuth — 300+ models plus the Tool Gateway in a single login. See [Nous Portal](/integrations/nous-portal).
+If your OpenClaw setup was multi-provider, `atlaz setup --portal` collapses it to one OAuth — 300+ models plus the Tool Gateway in a single login. See [Nous Portal](/integrations/nous-portal).
 :::
 
 ## Quick start
@@ -37,7 +37,7 @@ Reads from `~/.openclaw/` by default. Legacy `~/.clawdbot/` or `~/.moltbot/` dir
 | `--preset <name>` | `full` (all compatible settings) or `user-data` (excludes infrastructure config). Neither preset imports secrets by default — pass `--migrate-secrets` explicitly. |
 | `--overwrite` | Overwrite existing Hermes files on conflicts (default: refuse to apply when the plan has conflicts). |
 | `--migrate-secrets` | Include API keys. Required even under `--preset full` — no preset imports secrets silently. |
-| `--no-backup` | Skip the pre-migration zip snapshot of `~/.hermes/` (by default a single restore-point archive is written before apply, under `~/.hermes/backups/pre-migration-*.zip`; restorable with `hermes import`). |
+| `--no-backup` | Skip the pre-migration zip snapshot of `~/.hermes/` (by default a single restore-point archive is written before apply, under `~/.hermes/backups/pre-migration-*.zip`; restorable with `atlaz import`). |
 | `--source <path>` | Custom OpenClaw directory. |
 | `--workspace-target <path>` | Where to place `AGENTS.md`. |
 | `--skill-conflict <mode>` | `skip` (default), `overwrite`, or `rename`. |
@@ -172,11 +172,11 @@ These are saved to `~/.hermes/migration/openclaw/<timestamp>/archive/` for manua
 | `TOOLS.md` | `archive/workspace/TOOLS.md` | Hermes has built-in tool instructions |
 | `HEARTBEAT.md` | `archive/workspace/HEARTBEAT.md` | Use cron jobs for periodic tasks |
 | `BOOTSTRAP.md` | `archive/workspace/BOOTSTRAP.md` | Use context files or skills |
-| Cron jobs | `archive/cron-config.json` | Recreate with `hermes cron create` |
+| Cron jobs | `archive/cron-config.json` | Recreate with `atlaz cron create` |
 | Plugins | `archive/plugins-config.json` | See [plugins guide](/user-guide/features/hooks) |
-| Hooks/webhooks | `archive/hooks-config.json` | Use `hermes webhook` or gateway hooks |
-| Memory backend | `archive/memory-backend-config.json` | Configure via `hermes honcho` |
-| Skills registry | `archive/skills-registry-config.json` | Use `hermes skills config` |
+| Hooks/webhooks | `archive/hooks-config.json` | Use `atlaz webhook` or gateway hooks |
+| Memory backend | `archive/memory-backend-config.json` | Configure via `atlaz honcho` |
+| Skills registry | `archive/skills-registry-config.json` | Use `atlaz skills config` |
 | UI/identity | `archive/ui-identity-config.json` | Use `/skin` command |
 | Logging | `archive/logging-diagnostics-config.json` | Set in `config.yaml` logging section |
 | Multi-agent list | `archive/agents-list.json` | Use Hermes profiles |
@@ -215,7 +215,7 @@ OpenClaw config values for tokens and API keys can be in three formats:
 "channels": { "telegram": { "botToken": { "source": "env", "id": "TELEGRAM_BOT_TOKEN" } } }
 ```
 
-The migration resolves all three formats. For env templates and SecretRef objects with `source: "env"`, it looks up the value in `~/.openclaw/.env` and the `openclaw.json` env sub-object. SecretRef objects with `source: "file"` or `source: "exec"` can't be resolved automatically — the migration warns about these, and those values must be added to Hermes manually via `hermes config set`.
+The migration resolves all three formats. For env templates and SecretRef objects with `source: "env"`, it looks up the value in `~/.openclaw/.env` and the `openclaw.json` env sub-object. SecretRef objects with `source: "file"` or `source: "exec"` can't be resolved automatically — the migration warns about these, and those values must be added to Hermes manually via `atlaz config set`.
 
 ## After migration
 
@@ -225,15 +225,15 @@ The migration resolves all three formats. For env templates and SecretRef object
 
 3. **Start a new session** — imported skills and memory entries take effect in new sessions, not the current one.
 
-4. **Verify API keys** — run `hermes status` to check provider authentication.
+4. **Verify API keys** — run `atlaz status` to check provider authentication.
 
 5. **Test messaging** — if you migrated platform tokens, restart the gateway: `systemctl --user restart hermes-gateway`
 
-6. **Check session policies** — verify `hermes config get session_reset` matches your expectations.
+6. **Check session policies** — verify `atlaz config get session_reset` matches your expectations.
 
-7. **Re-pair WhatsApp** — WhatsApp uses QR code pairing (Baileys), not token migration. Run `hermes whatsapp` to pair.
+7. **Re-pair WhatsApp** — WhatsApp uses QR code pairing (Baileys), not token migration. Run `atlaz whatsapp` to pair.
 
-8. **Archive cleanup** — after confirming everything works, run `hermes claw cleanup` to rename leftover OpenClaw directories to `.pre-migration/` (prevents state confusion).
+8. **Archive cleanup** — after confirming everything works, run `atlaz claw cleanup` to rename leftover OpenClaw directories to `.pre-migration/` (prevents state confusion).
 
 ## Troubleshooting
 
@@ -243,7 +243,7 @@ The migration checks `~/.openclaw/`, then `~/.clawdbot/`, then `~/.moltbot/`. If
 
 ### "No provider API keys found"
 
-Keys might be stored in several places depending on your OpenClaw version: inline in `openclaw.json` under `models.providers.*.apiKey`, in `~/.openclaw/.env`, in the `openclaw.json` `"env"` sub-object, or in `agents/main/agent/auth-profiles.json`. The migration checks all four. If keys use `source: "file"` or `source: "exec"` SecretRefs, they can't be resolved automatically — add them via `hermes config set`.
+Keys might be stored in several places depending on your OpenClaw version: inline in `openclaw.json` under `models.providers.*.apiKey`, in `~/.openclaw/.env`, in the `openclaw.json` `"env"` sub-object, or in `agents/main/agent/auth-profiles.json`. The migration checks all four. If keys use `source: "file"` or `source: "exec"` SecretRefs, they can't be resolved automatically — add them via `atlaz config set`.
 
 ### Skills not appearing after migration
 
@@ -251,4 +251,4 @@ Imported skills land in `~/.hermes/skills/openclaw-imports/`. Start a new sessio
 
 ### TTS voice not migrated
 
-OpenClaw stores TTS settings in two places: `messages.tts.providers.*` and the top-level `talk` config. The migration checks both. If your voice ID was set via the OpenClaw UI (stored in a different path), you may need to set it manually: `hermes config set tts.elevenlabs.voice_id YOUR_VOICE_ID`.
+OpenClaw stores TTS settings in two places: `messages.tts.providers.*` and the top-level `talk` config. The migration checks both. If your voice ID was set via the OpenClaw UI (stored in a different path), you may need to set it manually: `atlaz config set tts.elevenlabs.voice_id YOUR_VOICE_ID`.

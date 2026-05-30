@@ -10,7 +10,7 @@ Hermes can optionally hand `openai/*` and `openai-codex/*` turns to the [Codex C
 This is **opt-in only**. Default Hermes behavior is unchanged unless you flip the flag. Hermes never auto-routes you onto this runtime.
 
 :::tip
-Not using OpenAI Codex? `hermes setup --portal` configures a non-Codex backend with Claude/Gemini/etc. in one step. See [Nous Portal](/integrations/nous-portal).
+Not using OpenAI Codex? `atlaz setup --portal` configures a non-Codex backend with Claude/Gemini/etc. in one step. See [Nous Portal](/integrations/nous-portal).
 :::
 
 ## Why
@@ -87,7 +87,7 @@ These four Hermes tools require the running AIAgent context (mid-loop state) to 
 
 ### Kanban (multi-agent worktree dispatch)
 
-**Works on this runtime, with one subtle dependency.** The kanban dispatcher spawns each worker as a separate `hermes chat -q` subprocess that reads the user's config — which means if `model.openai_runtime: codex_app_server` is set globally, workers also come up on the codex runtime.
+**Works on this runtime, with one subtle dependency.** The kanban dispatcher spawns each worker as a separate `atlaz chat -q` subprocess that reads the user's config — which means if `model.openai_runtime: codex_app_server` is set globally, workers also come up on the codex runtime.
 
 What works inside a codex-runtime worker:
 - Codex's full toolset (shell, apply_patch, update_plan, view_image, web_search) — the worker does its actual task work natively
@@ -99,7 +99,7 @@ What also works because the MCP callback exposes them:
 - **`kanban_show` / `kanban_list`** — read-only board queries for the worker to check its own context.
 - **`kanban_create` / `kanban_unblock` / `kanban_link`** — orchestrator-only operations. Available for orchestrator agents running on the codex runtime that need to dispatch new tasks.
 
-The kanban tools are gated by `HERMES_KANBAN_TASK` env var the dispatcher sets — that var is propagated to the codex subprocess (codex inherits env) and from there to the spawned `hermes-tools` MCP server subprocess. So the tools see the right task id and gate correctly. For Codex app-server workers, Hermes also passes narrow app-server sandbox overrides when `HERMES_KANBAN_TASK` is present: keep `workspace-write` sandboxing, add the **board DB directory plus every Kanban path the dispatcher pinned** as extra writable roots (`HERMES_KANBAN_WORKSPACES_ROOT`, `HERMES_KANBAN_WORKSPACE`, legacy `HERMES_KANBAN_ROOT` — deduplicated, DB-dir first), and keep network disabled by default. This avoids the brittle `:danger-no-sandbox` workaround while letting `kanban_complete` / `kanban_block` update the board DB **and** letting workers write reports/artifacts under workspace mounts that live outside the DB directory (e.g. `/media/.../kanban-workspaces/...` on a separate drive — [issue #27941](https://github.com/NousResearch/hermes-agent/issues/27941)).
+The kanban tools are gated by `HERMES_KANBAN_TASK` env var the dispatcher sets — that var is propagated to the codex subprocess (codex inherits env) and from there to the spawned `hermes-tools` MCP server subprocess. So the tools see the right task id and gate correctly. For Codex app-server workers, Hermes also passes narrow app-server sandbox overrides when `HERMES_KANBAN_TASK` is present: keep `workspace-write` sandboxing, add the **board DB directory plus every Kanban path the dispatcher pinned** as extra writable roots (`HERMES_KANBAN_WORKSPACES_ROOT`, `HERMES_KANBAN_WORKSPACE`, legacy `HERMES_KANBAN_ROOT` — deduplicated, DB-dir first), and keep network disabled by default. This avoids the brittle `:danger-no-sandbox` workaround while letting `kanban_complete` / `kanban_block` update the board DB **and** letting workers write reports/artifacts under workspace mounts that live outside the DB directory (e.g. `/media/.../kanban-workspaces/...` on a separate drive — [issue #27941](https://github.com/Axighi/atlaz/issues/27941)).
 
 ### Cron jobs
 
@@ -143,7 +143,7 @@ The kanban tools are gated by `HERMES_KANBAN_TASK` env var the dispatcher sets �
    ```bash
    codex login                  # writes tokens to ~/.codex/auth.json
    ```
-   Hermes' own `hermes auth login codex` writes to `~/.hermes/auth.json` — that's a separate session. **Run `codex login` separately** if you haven't.
+   Hermes' own `atlaz auth login codex` writes to `~/.hermes/auth.json` — that's a separate session. **Run `codex login` separately** if you haven't.
 
 3. **(Optional) Install the Codex plugins you want.** When you enable the runtime, Hermes auto-migrates whichever curated plugins you've already installed via Codex CLI:
    ```bash
@@ -275,7 +275,7 @@ The self-improvement review fork inherits the main runtime via `_current_main_ru
 Hermes wraps everything it manages between two marker comments:
 
 ```toml
-# managed by hermes-agent — `hermes codex-runtime migrate` regenerates this section
+# managed by hermes-agent — `atlaz codex-runtime migrate` regenerates this section
 default_permissions = ":workspace"
 [mcp_servers.filesystem]
 ...
@@ -295,7 +295,7 @@ Anything you add **inside** the managed block will get clobbered on the next mig
 
 ## Multi-profile / multi-tenant setups
 
-By default, Hermes points the codex subprocess at `~/.codex/` regardless of which Hermes profile is active. This means `hermes -p work` and `hermes -p personal` share the same Codex auth, plugins, and config. For most users this is the right behavior — it matches what running `codex` CLI directly would do.
+By default, Hermes points the codex subprocess at `~/.codex/` regardless of which Hermes profile is active. This means `atlaz -p work` and `atlaz -p personal` share the same Codex auth, plugins, and config. For most users this is the right behavior — it matches what running `codex` CLI directly would do.
 
 If you want per-profile Codex isolation (separate auth, separate installed plugins, separate config), set `CODEX_HOME` explicitly per profile. The cleanest way is to point at a directory under your `HERMES_HOME`:
 
@@ -304,7 +304,7 @@ If you want per-profile Codex isolation (separate auth, separate installed plugi
 CODEX_HOME=~/.hermes/profiles/work/codex hermes chat
 ```
 
-You'll need to re-run `codex login` once with that `CODEX_HOME` set so the OAuth tokens land in the profile-scoped location. After that, `hermes -p work` will operate on isolated Codex state.
+You'll need to re-run `codex login` once with that `CODEX_HOME` set so the OAuth tokens land in the profile-scoped location. After that, `atlaz -p work` will operate on isolated Codex state.
 
 We don't auto-scope this because moving an existing user's `~/.codex/` would silently invalidate their Codex CLI auth — anyone who already ran `codex login` would have to re-authenticate. Opt-in feels safer than surprising users.
 
@@ -377,7 +377,7 @@ Effective on the next session. The Codex managed block stays in `~/.codex/config
 
 ## Limitations
 
-This runtime is **opt-in beta**. Working as of Hermes Agent 2026.5 + Codex CLI 0.130.0:
+This runtime is **opt-in beta**. Working as of ATLAZ 2026.5 + Codex CLI 0.130.0:
 
 - Multi-turn conversations
 - `commandExecution` and `fileChange` (apply_patch) approvals via Hermes UI
@@ -390,12 +390,12 @@ This runtime is **opt-in beta**. Working as of Hermes Agent 2026.5 + Codex CLI 0
 
 Known limitations:
 
-- **Hermes auth and codex auth are separate sessions.** You need both `codex login` AND `hermes auth login codex` for the cleanest UX (the runtime uses codex's session for the LLM call). This is a deliberate design choice in Hermes' `_import_codex_cli_tokens` — Hermes won't share OAuth state with codex CLI to avoid clobbering each other on token refresh.
+- **Hermes auth and codex auth are separate sessions.** You need both `codex login` AND `atlaz auth login codex` for the cleanest UX (the runtime uses codex's session for the LLM call). This is a deliberate design choice in Hermes' `_import_codex_cli_tokens` — Hermes won't share OAuth state with codex CLI to avoid clobbering each other on token refresh.
 - **`delegate_task`, `memory`, `session_search`, `todo` are unavailable on this runtime.** They need the running AIAgent context which a stateless MCP callback can't provide. Use `/codex-runtime auto` when you need these.
 - **No inline patch preview in approval prompts when codex doesn't track the changeset.** Codex's `fileChange` approval params don't always carry the changeset. Hermes caches the data from the corresponding `item/started` notification when possible, but if approval arrives before the item has streamed, the prompt falls back to whatever `reason` codex provides.
 - **Sub-second cancellation isn't guaranteed.** Mid-stream interrupts (Ctrl+C while codex is responding) are sent via `turn/interrupt`, but if codex has already flushed the final message, you get the response anyway.
 
-If you find a bug, [open an issue](https://github.com/NousResearch/hermes-agent/issues) with the output of `hermes logs --since 5m`. Mention `codex-runtime` in the title so it's easy to triage.
+If you find a bug, [open an issue](https://github.com/Axighi/atlaz/issues) with the output of `atlaz logs --since 5m`. Mention `codex-runtime` in the title so it's easy to triage.
 
 ## Architecture
 
@@ -442,4 +442,4 @@ If you find a bug, [open an issue](https://github.com/NousResearch/hermes-agent/
         └──────────────────────────────────────────────────────────┘
 ```
 
-For implementation details, see [PR #24182](https://github.com/NousResearch/hermes-agent/pull/24182) and the [Codex app-server protocol README](https://github.com/openai/codex/blob/main/codex-rs/app-server/README.md).
+For implementation details, see [PR #24182](https://github.com/Axighi/atlaz/pull/24182) and the [Codex app-server protocol README](https://github.com/openai/codex/blob/main/codex-rs/app-server/README.md).

@@ -88,10 +88,10 @@ Hermes proxy upstream adapters
   [nous    ] Nous Portal — ready (bearer expires 2026-05-15T06:43:21Z)
 ```
 
-If you see `not logged in`, run `hermes auth add nous`. If you see
+If you see `not logged in`, run `atlaz auth add nous`. If you see
 `credentials need attention`, your refresh token was revoked (rare —
 happens if you signed out from the Portal web UI) — just re-run
-`hermes auth add nous`.
+`atlaz auth add nous`.
 
 ## Allowed paths
 

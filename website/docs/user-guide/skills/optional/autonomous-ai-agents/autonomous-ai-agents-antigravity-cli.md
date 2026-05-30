@@ -14,10 +14,10 @@ Operate the Antigravity CLI (agy): plugins, auth, sandbox.
 
 | | |
 |---|---|
-| Source | Optional — install with `hermes skills install official/autonomous-ai-agents/antigravity-cli` |
+| Source | Optional — install with `atlaz skills install official/autonomous-ai-agents/antigravity-cli` |
 | Path | `optional-skills/autonomous-ai-agents/antigravity-cli` |
 | Version | `0.1.0` |
-| Author | Tony Simons (asimons81), Hermes Agent |
+| Author | Tony Simons (asimons81), ATLAZ |
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `Coding-Agent`, `Antigravity`, `CLI`, `Auth`, `Plugins`, `Sandbox` |

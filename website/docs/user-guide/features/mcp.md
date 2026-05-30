@@ -1,12 +1,12 @@
 ---
 sidebar_position: 4
 title: "MCP (Model Context Protocol)"
-description: "Connect Hermes Agent to external tool servers via MCP — and control exactly which MCP tools Hermes loads"
+description: "Connect ATLAZ to external tool servers via MCP — and control exactly which MCP tools Hermes loads"
 ---
 
 # MCP (Model Context Protocol)
 
-MCP lets Hermes Agent connect to external tool servers so the agent can use tools that live outside Hermes itself — GitHub, databases, file systems, browser stacks, internal APIs, and more.
+MCP lets ATLAZ connect to external tool servers so the agent can use tools that live outside Hermes itself — GitHub, databases, file systems, browser stacks, internal APIs, and more.
 
 If you have ever wanted Hermes to use a tool that already exists somewhere else, MCP is usually the cleanest way to do it.
 
@@ -85,7 +85,7 @@ Catalog entries can require:
 - **OAuth** (remote MCP) — written as `auth: oauth` in your config; the MCP
   client opens a browser on first connection.
 - **OAuth** (third-party provider like Google/GitHub) — Hermes points you at
-  `hermes auth <provider>` if you haven't authenticated already.
+  `atlaz auth <provider>` if you haven't authenticated already.
 
 ### Tool selection at install time
 
@@ -116,7 +116,7 @@ written (cleanest config shape, identical behavior).
 **If the probe fails** (server unreachable, OAuth not yet completed,
 backing service not running), the install still succeeds: the manifest's
 `tools.default_enabled` is applied directly (if declared), or no filter is
-written (if not). Re-run `hermes mcp configure <name>` once the server is
+written (if not). Re-run `atlaz mcp configure <name>` once the server is
 reachable to refine.
 
 ### Trust model
@@ -130,7 +130,7 @@ the hermes-agent repo, so Nous has reviewed each entry before it shipped —
 `transport.command:` invocation.
 
 Manifests live at
-[`optional-mcps/<name>/manifest.yaml`](https://github.com/NousResearch/hermes-agent/tree/main/optional-mcps)
+[`optional-mcps/<name>/manifest.yaml`](https://github.com/Axighi/atlaz/tree/main/optional-mcps)
 on GitHub. The picker also prints the manifest's `source:` URL at install
 time so you can quickly verify the upstream repo.
 
@@ -139,7 +139,7 @@ time so you can quickly verify the upstream repo.
 Manifests pin a `manifest_version`. The catalog is forward-compatible: if a
 PR adds an entry with a newer `manifest_version` than your installed Hermes
 understands, the picker will surface a warning (`⚠ '<name>' requires a newer
-Hermes`) for that entry instead of silently hiding it. Run `hermes update`
+Hermes`) for that entry instead of silently hiding it. Run `atlaz update`
 to install the latest Hermes when you see that.
 
 ### Runtime `${ENV_VAR}` substitution
@@ -166,11 +166,11 @@ you want to opt into.
 
 ### Updating the catalog manifest
 
-MCPs are never auto-updated. Re-run `hermes mcp install <name>` to refresh
+MCPs are never auto-updated. Re-run `atlaz mcp install <name>` to refresh
 after a Hermes update if a manifest version changed.
 
 To add an MCP to the catalog, open a PR against
-[`optional-mcps/`](https://github.com/NousResearch/hermes-agent/tree/main/optional-mcps).
+[`optional-mcps/`](https://github.com/Axighi/atlaz/tree/main/optional-mcps).
 
 ## Two kinds of MCP servers
 
@@ -227,9 +227,9 @@ On first connect, Hermes prints an authorize URL, opens your browser when possib
 - **Paste-back (no setup):** on an interactive terminal Hermes prints "Or paste the redirect URL here…" alongside the authorize URL. Open the URL in your browser, approve, copy the full URL the browser ends up on (the redirect will show a connection error — that's expected), paste it at the prompt. Bare `?code=…&state=…` query strings work too.
 - **SSH port forward:** `ssh -N -L <port>:127.0.0.1:<port> user@host` in a separate terminal, then let the redirect flow normally.
 
-See [OAuth over SSH / Remote Hosts](../../guides/oauth-over-ssh.md#mcp-servers) for the full walkthrough, including DCR-less servers (e.g. Slack), pre-registered `client_id`/`client_secret`, scope customization, and re-auth via `hermes mcp login <server>`.
+See [OAuth over SSH / Remote Hosts](../../guides/oauth-over-ssh.md#mcp-servers) for the full walkthrough, including DCR-less servers (e.g. Slack), pre-registered `client_id`/`client_secret`, scope customization, and re-auth via `atlaz mcp login <server>`.
 
-**Pitfall — config auto-reload race.** When you edit `~/.hermes/config.yaml` from inside a running Hermes session, the CLI auto-reloads MCP connections with a 30s timeout. That's not enough for an interactive OAuth flow. Add the entry, then run `hermes mcp login <server>` from a fresh terminal — it waits the full 5 minutes for you to complete auth.
+**Pitfall — config auto-reload race.** When you edit `~/.hermes/config.yaml` from inside a running Hermes session, the CLI auto-reloads MCP connections with a 30s timeout. That's not enough for an interactive OAuth flow. Add the entry, then run `atlaz mcp login <server>` from a fresh terminal — it waits the full 5 minutes for you to complete auth.
 
 ## Basic configuration reference
 
@@ -271,7 +271,7 @@ mcp_servers:
 
 ## Built-in presets
 
-For well-known MCP servers, `hermes mcp add` accepts a `--preset` flag that fills in the transport details so you don't have to look up the command and args. The preset only supplies defaults — anything else (env vars, headers, filtering) you pass on the same command line still wins.
+For well-known MCP servers, `atlaz mcp add` accepts a `--preset` flag that fills in the transport details so you don't have to look up the command and args. The preset only supplies defaults — anything else (env vars, headers, filtering) you pass on the same command line still wins.
 
 | Preset | What it wires up |
 |---|---|
@@ -291,7 +291,7 @@ mcp_servers:
     args: ["mcp-server"]
 ```
 
-You can pick any local name (`hermes mcp add my-codex --preset codex` is fine); the preset only provides the `command`/`args` defaults.
+You can pick any local name (`atlaz mcp add my-codex --preset codex` is fine); the preset only provides the `command`/`args` defaults.
 
 ## How Hermes registers MCP tools
 
@@ -720,7 +720,7 @@ The gateway does NOT need to be running for read operations (listing conversatio
 
 ### Current limits
 
-- The embedded `hermes mcp serve` exposes a **stdio-only** MCP server today. If you need an HTTP MCP server, run a separate adapter — or, much more commonly, use the MCP **client** side of Hermes, which already speaks both stdio and HTTP (`url` + `headers` in `mcp_servers.yaml` / `config.yaml`; see [HTTP servers](#http-servers) above).
+- The embedded `atlaz mcp serve` exposes a **stdio-only** MCP server today. If you need an HTTP MCP server, run a separate adapter — or, much more commonly, use the MCP **client** side of Hermes, which already speaks both stdio and HTTP (`url` + `headers` in `mcp_servers.yaml` / `config.yaml`; see [HTTP servers](#http-servers) above).
 - Event polling at ~200ms intervals via mtime-optimized DB polling (skips work when files are unchanged)
 - No `claude/channel` push notification protocol yet
 - Text-only sends (no media/attachment sending through `messages_send`)

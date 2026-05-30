@@ -1,23 +1,23 @@
 ---
-title: "Openclaw Migration — Migrate a user's OpenClaw customization footprint into Hermes Agent"
+title: "Openclaw Migration — Migrate a user's OpenClaw customization footprint into ATLAZ"
 sidebar_label: "Openclaw Migration"
-description: "Migrate a user's OpenClaw customization footprint into Hermes Agent"
+description: "Migrate a user's OpenClaw customization footprint into ATLAZ"
 ---
 
 {/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}
 
 # Openclaw Migration
 
-Migrate a user's OpenClaw customization footprint into Hermes Agent. Imports Hermes-compatible memories, SOUL.md, command allowlists, user skills, and selected workspace assets from ~/.openclaw, then reports exactly what could not be migrated and why.
+Migrate a user's OpenClaw customization footprint into ATLAZ. Imports Hermes-compatible memories, SOUL.md, command allowlists, user skills, and selected workspace assets from ~/.openclaw, then reports exactly what could not be migrated and why.
 
 ## Skill metadata
 
 | | |
 |---|---|
-| Source | Optional — install with `hermes skills install official/migration/openclaw-migration` |
+| Source | Optional — install with `atlaz skills install official/migration/openclaw-migration` |
 | Path | `optional-skills/migration/openclaw-migration` |
 | Version | `1.0.0` |
-| Author | Hermes Agent (Nous Research) |
+| Author | ATLAZ (Nous Research) |
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `Migration`, `OpenClaw`, `Hermes`, `Memory`, `Persona`, `Import` |
@@ -31,7 +31,7 @@ The following is the complete skill definition that Hermes loads when this skill
 
 # OpenClaw -> Hermes Migration
 
-Use this skill when a user wants to move their OpenClaw setup into Hermes Agent with minimal manual cleanup.
+Use this skill when a user wants to move their OpenClaw setup into ATLAZ with minimal manual cleanup.
 
 ## CLI Command
 
@@ -47,7 +47,7 @@ hermes claw migrate --source /custom/path/.openclaw  # Custom source
 
 The CLI command runs the same migration script described below. Use this skill (via the agent) when you want an interactive, guided migration with dry-run previews and per-item conflict resolution.
 
-**First-time setup:** The `hermes setup` wizard automatically detects `~/.openclaw` and offers migration before configuration begins.
+**First-time setup:** The `atlaz setup` wizard automatically detects `~/.openclaw` and offers migration before configuration begins.
 
 ## What this skill does
 

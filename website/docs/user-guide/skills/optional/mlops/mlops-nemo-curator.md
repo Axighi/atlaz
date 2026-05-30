@@ -14,7 +14,7 @@ GPU-accelerated data curation for LLM training. Supports text/image/video/audio.
 
 | | |
 |---|---|
-| Source | Optional — install with `hermes skills install official/mlops/nemo-curator` |
+| Source | Optional — install with `atlaz skills install official/mlops/nemo-curator` |
 | Path | `optional-skills/mlops/nemo-curator` |
 | Version | `1.0.0` |
 | Author | Orchestra Research |
@@ -390,8 +390,8 @@ cluster.close()
 
 ## References
 
-- **[Filtering Guide](https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/nemo-curator/references/filtering.md)** - 30+ quality filters, heuristics
-- **[Deduplication Guide](https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/nemo-curator/references/deduplication.md)** - Exact, fuzzy, semantic methods
+- **[Filtering Guide](https://github.com/Axighi/atlaz/blob/main/optional-skills/mlops/nemo-curator/references/filtering.md)** - 30+ quality filters, heuristics
+- **[Deduplication Guide](https://github.com/Axighi/atlaz/blob/main/optional-skills/mlops/nemo-curator/references/deduplication.md)** - Exact, fuzzy, semantic methods
 
 ## Resources
 

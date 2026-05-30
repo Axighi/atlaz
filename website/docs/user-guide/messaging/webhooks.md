@@ -15,7 +15,7 @@ The agent processes the event and can respond by posting comments on PRs, sendin
 <div style={{position: 'relative', width: '100%', aspectRatio: '16 / 9', marginBottom: '1.5rem'}}>
   <iframe
     src="https://www.youtube.com/embed/WNYe5mD4fY8"
-    title="Hermes Agent — Webhooks Tutorial"
+    title="ATLAZ — Webhooks Tutorial"
     style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0}}
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
     allowFullScreen
@@ -26,8 +26,8 @@ The agent processes the event and can respond by posting comments on PRs, sendin
 
 ## Quick Start
 
-1. Enable via `hermes gateway setup` or environment variables
-2. Define routes in `config.yaml` **or** create them dynamically with `hermes webhook subscribe`
+1. Enable via `atlaz gateway setup` or environment variables
+2. Define routes in `config.yaml` **or** create them dynamically with `atlaz webhook subscribe`
 3. Point your service at `http://your-server:8644/webhooks/<route-name>`
 
 ---
@@ -329,7 +329,7 @@ hermes webhook subscribe antenna-matches \
 
 ## Dynamic Subscriptions (CLI) {#dynamic-subscriptions}
 
-In addition to static routes in `config.yaml`, you can create webhook subscriptions dynamically using the `hermes webhook` CLI command. This is especially useful when the agent itself needs to set up event-driven triggers.
+In addition to static routes in `config.yaml`, you can create webhook subscriptions dynamically using the `atlaz webhook` CLI command. This is especially useful when the agent itself needs to set up event-driven triggers.
 
 ### Create a subscription
 
@@ -373,7 +373,7 @@ hermes webhook test github-issues --payload '{"issue": {"number": 42, "title": "
 
 ### Agent-driven subscriptions
 
-The agent can create subscriptions via the terminal tool when guided by the `webhook-subscriptions` skill. Ask the agent to "set up a webhook for GitHub issues" and it will run the appropriate `hermes webhook subscribe` command.
+The agent can create subscriptions via the terminal tool when guided by the `webhook-subscriptions` skill. Ask the agent to "set up a webhook for GitHub issues" and it will run the appropriate `atlaz webhook subscribe` command.
 
 ---
 
@@ -458,7 +458,7 @@ Webhook payloads contain attacker-controlled data — PR titles, commit messages
 
 ### Agent not responding
 
-- Run the gateway in foreground to see logs: `hermes gateway run`
+- Run the gateway in foreground to see logs: `atlaz gateway run`
 - Check that the prompt template is rendering correctly
 - Verify the delivery target is configured and connected
 

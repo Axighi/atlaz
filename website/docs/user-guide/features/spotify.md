@@ -2,17 +2,17 @@
 
 Hermes can control Spotify directly — playback, queue, search, playlists, saved tracks/albums, and listening history — using Spotify's official Web API with PKCE OAuth. Tokens are stored in `~/.hermes/auth.json` and refreshed automatically on 401; you only log in once per machine.
 
-Unlike Hermes' built-in OAuth integrations (Google, GitHub Copilot, Codex), Spotify requires every user to register their own lightweight developer app. Spotify does not let third parties ship a public OAuth app that anyone can use. It takes about two minutes and `hermes auth spotify` walks you through it.
+Unlike Hermes' built-in OAuth integrations (Google, GitHub Copilot, Codex), Spotify requires every user to register their own lightweight developer app. Spotify does not let third parties ship a public OAuth app that anyone can use. It takes about two minutes and `atlaz auth spotify` walks you through it.
 
 ## Prerequisites
 
 - A Spotify account. **Free** works for search, playlist, library, and activity tools. **Premium** is required for playback control (play, pause, skip, seek, volume, queue add, transfer).
-- Hermes Agent installed and running.
+- ATLAZ installed and running.
 - For playback tools: an **active Spotify Connect device** — the Spotify app must be open on at least one device (phone, desktop, web player, speaker) so the Web API has something to control. If nothing is active you'll get a `403 Forbidden` with a "no active device" message; open Spotify on any device and retry.
 
 ## Setup
 
-### One-shot: `hermes tools` or first-run setup
+### One-shot: `atlaz tools` or first-run setup
 
 The fastest path. Run:
 
@@ -20,7 +20,7 @@ The fastest path. Run:
 hermes tools
 ```
 
-Scroll to `🎵 Spotify`, press space to toggle it on, then `s` to save. The same toggle is also available during the first-run `hermes setup` / `hermes setup tools` flow. Spotify stays opt-in, so enabling it there runs the same provider-aware configuration as `hermes tools`.
+Scroll to `🎵 Spotify`, press space to toggle it on, then `s` to save. The same toggle is also available during the first-run `atlaz setup` / `atlaz setup tools` flow. Spotify stays opt-in, so enabling it there runs the same provider-aware configuration as `atlaz tools`.
 
 Hermes drops you straight into the OAuth flow — if you don't have a Spotify app yet, it walks you through creating one inline. Once you finish, the toolset is enabled AND authenticated in one pass.
 
@@ -84,7 +84,7 @@ For jump-box / bastion setups and other gotchas (mosh, tmux, port conflicts), se
 hermes auth status spotify
 ```
 
-Shows whether tokens are present and when the access token expires. Refresh is automatic: when any Spotify API call returns 401, the client exchanges the refresh token and retries once. Refresh tokens persist across Hermes restarts, so you only re-auth if you revoke the app in your Spotify account settings or run `hermes auth logout spotify`.
+Shows whether tokens are present and when the access token expires. Refresh is automatic: when any Spotify API call returns 401, the client exchanges the refresh token and retries once. Refresh tokens persist across Hermes restarts, so you only re-auth if you revoke the app in your Spotify account settings or run `atlaz auth logout spotify`.
 
 ## Using it
 
@@ -214,7 +214,7 @@ hermes cron add \
 
 - **An active device must exist when the cron fires.** If no Spotify client is running (phone/desktop/Connect speaker), playback actions return `403 no active device`. For morning playlists, the trick is to target a device that's always on (Sonos, Echo, a smart speaker) rather than your phone.
 - **Premium required for anything that mutates playback** — play, pause, skip, volume, transfer. Read-only cron jobs (scheduled "email me my recently played tracks") work fine on Free.
-- **The cron agent inherits your active toolsets.** Spotify must be enabled in `hermes tools` for the cron session to see the Spotify tools.
+- **The cron agent inherits your active toolsets.** Spotify must be enabled in `atlaz tools` for the cron session to see the Spotify tools.
 - **Cron jobs run with `skip_memory=True`** so they don't write to your memory store.
 
 Full cron reference: [Cron Jobs](./cron).
@@ -241,7 +241,7 @@ To revoke the app on Spotify's side, visit [Apps connected to your account](http
 
 **`429 Too Many Requests`** — Spotify's rate limit. Hermes returns a friendly error; wait a minute and retry. If this persists, you're probably running a tight loop in a script — Spotify's quota resets roughly every 30 seconds.
 
-**`401 Unauthorized` keeps coming back** — Your refresh token was revoked (usually because you removed the app from your account, or the app was deleted). Run `hermes auth spotify` again.
+**`401 Unauthorized` keeps coming back** — Your refresh token was revoked (usually because you removed the app from your account, or the app was deleted). Run `atlaz auth spotify` again.
 
 **Wizard doesn't open the browser** — If you're over SSH or in a container without a display, Hermes detects it and skips the auto-open. Copy the dashboard URL it prints and open it manually.
 

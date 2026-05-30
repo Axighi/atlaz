@@ -14,7 +14,7 @@ Serverless GPU cloud platform for running ML workloads. Use when you need on-dem
 
 | | |
 |---|---|
-| Source | Optional — install with `hermes skills install official/mlops/modal` |
+| Source | Optional — install with `atlaz skills install official/mlops/modal` |
 | Path | `optional-skills/mlops/modal` |
 | Version | `1.0.0` |
 | Author | Orchestra Research |
@@ -351,8 +351,8 @@ if __name__ == "__main__":
 
 ## References
 
-- **[Advanced Usage](https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/modal/references/advanced-usage.md)** - Multi-GPU, distributed training, cost optimization
-- **[Troubleshooting](https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/modal/references/troubleshooting.md)** - Common issues and solutions
+- **[Advanced Usage](https://github.com/Axighi/atlaz/blob/main/optional-skills/mlops/modal/references/advanced-usage.md)** - Multi-GPU, distributed training, cost optimization
+- **[Troubleshooting](https://github.com/Axighi/atlaz/blob/main/optional-skills/mlops/modal/references/troubleshooting.md)** - Common issues and solutions
 
 ## Resources
 

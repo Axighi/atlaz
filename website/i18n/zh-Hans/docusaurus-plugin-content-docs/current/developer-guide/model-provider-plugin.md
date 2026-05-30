@@ -1,7 +1,7 @@
 ---
 sidebar_position: 10
 title: "模型提供商插件"
-description: "如何为 Hermes Agent 构建模型提供商（推理后端）插件"
+description: "如何为 ATLAZ 构建模型提供商（推理后端）插件"
 ---
 
 # 构建模型提供商插件
@@ -31,7 +31,7 @@ plugins/model-providers/my-provider/
 └── README.md         # 安装说明（可选）
 ```
 
-唯一必需的文件是 `__init__.py`。`plugin.yaml` 供 `hermes plugins` 用于自省，以及供通用 PluginManager 将插件路由到正确的加载器；若缺少该文件，通用加载器会回退到源码文本启发式检测。
+唯一必需的文件是 `__init__.py`。`plugin.yaml` 供 `atlaz plugins` 用于自省，以及供通用 PluginManager 将插件路由到正确的加载器；若缺少该文件，通用加载器会回退到源码文本启发式检测。
 
 ## 最简示例——一个简单的 API key 提供商
 
@@ -75,9 +75,9 @@ author: Your Name
 |---|---|---|
 | 凭据解析 | `atlaz_cli/auth.py` | `PROVIDER_REGISTRY["acme-inference"]` 从 profile 填充 |
 | `--provider` CLI 标志 | `atlaz_cli/main.py` | 接受 `acme-inference` |
-| `hermes model` 选择器 | `atlaz_cli/models.py` | 出现在 `CANONICAL_PROVIDERS` 中，从 `{base_url}/models` 获取模型列表 |
-| `hermes doctor` | `atlaz_cli/doctor.py` | 对 `ACME_API_KEY` 及 `{base_url}/models` 进行健康检查 |
-| `hermes setup` | `atlaz_cli/config.py` | `ACME_API_KEY` 出现在 `OPTIONAL_ENV_VARS` 和设置向导中 |
+| `atlaz model` 选择器 | `atlaz_cli/models.py` | 出现在 `CANONICAL_PROVIDERS` 中，从 `{base_url}/models` 获取模型列表 |
+| `atlaz doctor` | `atlaz_cli/doctor.py` | 对 `ACME_API_KEY` 及 `{base_url}/models` 进行健康检查 |
+| `atlaz setup` | `atlaz_cli/config.py` | `ACME_API_KEY` 出现在 `OPTIONAL_ENV_VARS` 和设置向导中 |
 | URL 反向映射 | `agent/model_metadata.py` | 主机名 → 提供商名称，用于自动检测 |
 | 辅助模型 | `agent/auxiliary_client.py` | 使用 `default_aux_model` 进行压缩/摘要 |
 | 运行时解析 | `atlaz_cli/runtime_provider.py` | 返回正确的 `base_url`、`api_key`、`api_mode` |
@@ -92,7 +92,7 @@ author: Your Name
 | `name` | str | 规范 ID——与 `config.yaml` 中的 `model.provider` 及 `--provider` 标志匹配 |
 | `aliases` | `tuple[str, ...]` | 由 `get_provider_profile()` 解析的别名（如 `grok` → `xai`） |
 | `api_mode` | str | `chat_completions` \| `codex_responses` \| `anthropic_messages` \| `bedrock_converse` |
-| `display_name` | str | 在 `hermes model` 选择器中显示的人类可读标签 |
+| `display_name` | str | 在 `atlaz model` 选择器中显示的人类可读标签 |
 | `description` | str | 选择器副标题 |
 | `signup_url` | str | 首次运行设置时显示（"在此获取 API key"） |
 | `env_vars` | `tuple[str, ...]` | 按优先级排列的 API key 环境变量；最后一个 `*_BASE_URL` 条目用作用户 base URL 覆盖 |
@@ -243,7 +243,7 @@ hermes -z "hello" --provider my-provider -m some-model
 
 ## 通用 PluginManager 集成
 
-通用 `PluginManager`（即 `hermes plugins` 操作的对象）**能看到**模型提供商插件，但不会导入它们——`providers/__init__.py` 负责管理其生命周期。Manager 记录 manifest 用于自省，并按 `kind: model-provider` 分类。当你将一个未标记的用户插件放入 `$HERMES_HOME/plugins/`，而该插件恰好调用了带 `ProviderProfile` 的 `register_provider`，Manager 会通过源码文本启发式检测自动将其归类为 `kind: model-provider`——因此即使没有 `plugin.yaml`，插件仍能正确路由。
+通用 `PluginManager`（即 `atlaz plugins` 操作的对象）**能看到**模型提供商插件，但不会导入它们——`providers/__init__.py` 负责管理其生命周期。Manager 记录 manifest 用于自省，并按 `kind: model-provider` 分类。当你将一个未标记的用户插件放入 `$HERMES_HOME/plugins/`，而该插件恰好调用了带 `ProviderProfile` 的 `register_provider`，Manager 会通过源码文本启发式检测自动将其归类为 `kind: model-provider`——因此即使没有 `plugin.yaml`，插件仍能正确路由。
 
 ## 通过 pip 分发
 

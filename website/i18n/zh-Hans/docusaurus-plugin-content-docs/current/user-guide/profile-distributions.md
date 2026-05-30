@@ -39,7 +39,7 @@ my-research-agent/
 hermes profile install github.com/you/my-research-agent --alias
 ```
 
-……他们就拥有了完整的 agent。填入自己的 API 密钥（`.env.EXAMPLE` → `.env`），即可运行 `my-research-agent chat`，或通过 Telegram / Discord / Slack / 任何 gateway 平台与其交互。当你推送新版本时，他们运行 `hermes profile update my-research-agent` 即可拉取你的更改——他们的记忆和会话保持不变。
+……他们就拥有了完整的 agent。填入自己的 API 密钥（`.env.EXAMPLE` → `.env`），即可运行 `my-research-agent chat`，或通过 Telegram / Discord / Slack / 任何 gateway 平台与其交互。当你推送新版本时，他们运行 `atlaz profile update my-research-agent` 即可拉取你的更改——他们的记忆和会话保持不变。
 
 ## 为什么选择 git？
 
@@ -65,7 +65,7 @@ hermes profile install github.com/you/my-research-agent --alias
 
 不适合的场景：
 
-- **你只想在自己的机器上备份一个 profile。** 使用 [`hermes profile export` / `import`](../reference/profile-commands.md#hermes-profile-export)——那正是这两个命令的用途。
+- **你只想在自己的机器上备份一个 profile。** 使用 [`atlaz profile export` / `import`](../reference/profile-commands.md#hermes-profile-export)——那正是这两个命令的用途。
 - **你想随 agent 一起共享 API 密钥。** `auth.json` 和 `.env` 被刻意排除在分发之外。每个安装者使用自己的凭据。
 - **你想共享记忆 / 会话 / 对话历史。** 这些是用户数据，不是分发内容，永远不会被发送。
 
@@ -146,7 +146,7 @@ git tag v1.1.0
 git push --tags
 ```
 
-运行 `hermes profile update research-bot` 的接收方将拉取最新版本。
+运行 `atlaz profile update research-bot` 的接收方将拉取最新版本。
 
 ### 仓库结构示例
 
@@ -291,7 +291,7 @@ Environment variables:
   SERPAPI_KEY (optional) — SerpAPI key for web search
 ```
 
-`hermes profile list` 还会显示 `Distribution` 列，让你一眼看出哪些 profile 来自仓库，哪些是手动构建的：
+`atlaz profile list` 还会显示 `Distribution` 列，让你一眼看出哪些 profile 来自仓库，哪些是手动构建的：
 
 ```
  Profile          Model                        Gateway      Alias        Distribution
@@ -362,7 +362,7 @@ hermes profile install github.com/you/research-bot --alias
 # 填写 .env，完成。
 ```
 
-在笔记本上的任何迭代（`git commit && push`）都可以通过 `hermes profile update research-bot` 同步到工作站。记忆按机器独立保存——笔记本记住自己的对话，工作站记住自己的，互不干扰。
+在笔记本上的任何迭代（`git commit && push`）都可以通过 `atlaz profile update research-bot` 同步到工作站。记忆按机器独立保存——笔记本记住自己的对话，工作站记住自己的，互不干扰。
 
 ### 团队：发布经过审核的内部 agent
 
@@ -382,7 +382,7 @@ hermes profile install git@github.com:your-org/pr-reviewer.git --alias
 pr-reviewer chat
 ```
 
-当负责人发布 v1.1（更好的 SOUL、新技能）时，工程师运行 `hermes profile update pr-reviewer`，所有人在几分钟内就能用上新版本。
+当负责人发布 v1.1（更好的 SOUL、新技能）时，工程师运行 `atlaz profile update pr-reviewer`，所有人在几分钟内就能用上新版本。
 
 ### 社区：发布公开 agent
 
@@ -457,7 +457,7 @@ hermes profile delete incident-2026-q2
 ### 固定到特定版本
 
 :::note
-Git ref 固定（`#v1.2.0`）已在规划中，但不在初始版本中——目前安装时跟踪默认分支。通过 `hermes profile info <name>` 查看已安装版本，在准备好之前暂缓更新。
+Git ref 固定（`#v1.2.0`）已在规划中，但不在初始版本中——目前安装时跟踪默认分支。通过 `atlaz profile info <name>` 查看已安装版本，在准备好之前暂缓更新。
 :::
 
 ### 查看当前版本与最新版本
@@ -545,7 +545,7 @@ Profile 分发默认不带签名。你信任的是：
 - **git 托管平台**（GitHub / GitLab / 其他平台）能够提供作者推送的原始内容。
 - **作者**不会发布恶意的 SOUL、技能或 cron 任务。
 
-来自分发的 cron 任务**不会自动调度**——安装器会打印 `hermes -p <name> cron list`，你需要显式启用它们。SOUL.md 和技能在你开始与 profile 对话后立即生效，因此如果你从不熟悉的来源安装，请在第一次运行前阅读它们。
+来自分发的 cron 任务**不会自动调度**——安装器会打印 `atlaz -p <name> cron list`，你需要显式启用它们。SOUL.md 和技能在你开始与 profile 对话后立即生效，因此如果你从不熟悉的来源安装，请在第一次运行前阅读它们。
 
 粗略类比：安装分发就像安装浏览器扩展或 VS Code 扩展。低摩擦、高权限，信任来源。对于公司内部分发，使用私有仓库和你现有的 git 认证——无需额外配置。
 
@@ -557,7 +557,7 @@ Profile 分发默认不带签名。你信任的是：
 
 简要说明：
 
-- `install`、`update`、`info` 位于 `hermes profile` 下——不是独立的命令树。
+- `install`、`update`、`info` 位于 `atlaz profile` 下——不是独立的命令树。
 - manifest 格式为 YAML，schema 极简（仅 `name` 为必填）。
 - 安装器使用你本地的 `git` 二进制文件进行克隆，因此 shell 已处理的任何认证（SSH 密钥、credential helper）都能透明生效。
 - 克隆完成后，`.git/` 会被剥离——已安装的 profile 本身不是 git checkout，避免了"不小心将 `.env` 提交到分发 git 历史"的陷阱。
@@ -567,7 +567,7 @@ Profile 分发默认不带签名。你信任的是：
 
 - [Profiles：运行多个 Agent](./profiles.md) — 基础概念
 - [Profile 命令参考](../reference/profile-commands.md) — 每个标志、每个选项
-- [`hermes profile export` / `import`](../reference/profile-commands.md#hermes-profile-export) — 本地备份 / 恢复（非分发）
+- [`atlaz profile export` / `import`](../reference/profile-commands.md#hermes-profile-export) — 本地备份 / 恢复（非分发）
 - [在 Hermes 中使用 SOUL](../guides/use-soul-with-hermes.md) — 编写个性
 - [个性与 SOUL](./features/personality.md) — SOUL 在 agent 中的作用
 - [技能目录](../reference/skills-catalog.md) — 可打包的技能

@@ -182,14 +182,14 @@ hermes teams-pipeline show <job-id>
 
 ### Daily or periodic checks
 
-- run `hermes teams-pipeline maintain-subscriptions --dry-run`
-- inspect `hermes teams-pipeline list --status failed`
+- run `atlaz teams-pipeline maintain-subscriptions --dry-run`
+- inspect `atlaz teams-pipeline list --status failed`
 - verify the Teams delivery target is still the correct chat or channel
 
 ### Before changing webhook URLs or delivery targets
 
 - update the public notification URL or Teams target config
-- run `hermes teams-pipeline validate`
+- run `atlaz teams-pipeline validate`
 - renew or recreate affected subscriptions
 - confirm new events land in the expected sink
 
@@ -223,7 +223,7 @@ Check:
 ### Duplicate or unexpected replays
 
 Check:
-- whether you manually replayed a job with `hermes teams-pipeline run`
+- whether you manually replayed a job with `atlaz teams-pipeline run`
 - whether the sink record already exists for that meeting
 - whether you intentionally enabled a resend path in your local config
 
@@ -237,8 +237,8 @@ Check:
 - [ ] `ffmpeg` is installed if recording fallback is enabled
 - [ ] Teams outbound delivery target is configured and verified
 - [ ] Notion and Linear sinks are configured only if actually needed
-- [ ] `hermes teams-pipeline validate` returns an OK snapshot
-- [ ] `hermes teams-pipeline token-health --force-refresh` succeeds
+- [ ] `atlaz teams-pipeline validate` returns an OK snapshot
+- [ ] `atlaz teams-pipeline token-health --force-refresh` succeeds
 - [ ] **`maintain-subscriptions` is scheduled** (Hermes cron, systemd timer, or crontab — see [Automating subscription renewal](#automating-subscription-renewal-required-for-production)). Without this, Graph subscriptions silently expire within 72 hours.
 - [ ] a real end-to-end meeting event has produced a stored job
 - [ ] at least one summary has reached the intended delivery sink

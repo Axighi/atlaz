@@ -5,7 +5,7 @@ A walkthrough of the four use-cases the Hermes Kanban system was designed for, w
 ## Setup
 
 ```bash
-hermes kanban init           # optional; first `hermes kanban <anything>` auto-inits
+hermes kanban init           # optional; first `atlaz kanban <anything>` auto-inits
 hermes dashboard             # opens http://127.0.0.1:9119 in your browser
 # click Kanban in the left nav
 ```
@@ -22,7 +22,7 @@ Throughout the tutorial, **code blocks labelled `bash` are commands *you* run.**
 
 Six columns, left to right:
 
-- **Triage** — raw ideas. By default the dispatcher auto-runs the **decomposer** (orchestrator-driven fan-out) on tasks here: it reads your profile roster + descriptions and produces a graph of child tasks routed to the best-fit specialists, with the original task held alive as the parent so the orchestrator wakes back up to judge completion when everything finishes. Flip the **Orchestration: Auto/Manual** pill at the top of the kanban page to switch modes. In Manual mode (or for setups without an orchestrator profile) click **⚗ Decompose** on a card, or run `hermes kanban decompose <id>` / `/kanban decompose <id>`. For single tasks that don't need fan-out, **✨ Specify** does a one-shot spec rewrite (goal, approach, acceptance criteria) and promotes to `todo`. Configure the models under `auxiliary.kanban_decomposer` and `auxiliary.triage_specifier` in `config.yaml`. See [Auto vs Manual orchestration](./kanban#auto-vs-manual-orchestration) in the main Kanban guide.
+- **Triage** — raw ideas. By default the dispatcher auto-runs the **decomposer** (orchestrator-driven fan-out) on tasks here: it reads your profile roster + descriptions and produces a graph of child tasks routed to the best-fit specialists, with the original task held alive as the parent so the orchestrator wakes back up to judge completion when everything finishes. Flip the **Orchestration: Auto/Manual** pill at the top of the kanban page to switch modes. In Manual mode (or for setups without an orchestrator profile) click **⚗ Decompose** on a card, or run `atlaz kanban decompose <id>` / `/kanban decompose <id>`. For single tasks that don't need fan-out, **✨ Specify** does a one-shot spec rewrite (goal, approach, acceptance criteria) and promotes to `todo`. Configure the models under `auxiliary.kanban_decomposer` and `auxiliary.triage_specifier` in `config.yaml`. See [Auto vs Manual orchestration](./kanban#auto-vs-manual-orchestration) in the main Kanban guide.
 - **Todo** — created but waiting on dependencies, or not yet assigned.
 - **Ready** — assigned and waiting for the dispatcher to claim.
 - **In progress** — a worker is actively running the task. With "Lanes by profile" on (the default), this column sub-groups by assignee so you can see at a glance what each worker is doing.
@@ -292,7 +292,7 @@ When a worker on task B is spawned and calls `kanban_show()`, the `worker_contex
 
 This replaces the "dig through comments and the work output" dance that plagues flat kanban systems. A PM writes acceptance criteria in the spec's metadata, and the engineer's worker sees them structurally in the parent handoff. An engineer records which tests they ran and how many passed, and the reviewer's worker has that list in hand before opening a diff.
 
-The bulk-close guard exists because this data is per-run. `hermes kanban complete a b c --summary X` (you, from the CLI) is refused — copy-pasting the same summary to three tasks is almost always wrong. Bulk close without the handoff flags still works for the common "I finished a pile of admin tasks" case. The tool surface doesn't expose a bulk variant at all; `kanban_complete` is always single-task-at-a-time for the same reason.
+The bulk-close guard exists because this data is per-run. `atlaz kanban complete a b c --summary X` (you, from the CLI) is refused — copy-pasting the same summary to three tasks is almost always wrong. Bulk close without the handoff flags still works for the common "I finished a pile of admin tasks" case. The tool surface doesn't expose a bulk variant at all; `kanban_complete` is always single-task-at-a-time for the same reason.
 
 ## Inspecting a task currently running
 
@@ -305,6 +305,6 @@ Status is `Running`. The active run appears in the Run History section with outc
 ## Next steps
 
 - [Kanban overview](./kanban) — the full data model, event vocabulary, and CLI reference.
-- `hermes kanban --help` — every subcommand, every flag.
-- `hermes kanban watch --kinds completed,gave_up,timed_out` — live stream terminal events across the whole board.
-- `hermes kanban notify-subscribe <task> --platform telegram --chat-id <id>` — get a gateway ping when a specific task finishes.
+- `atlaz kanban --help` — every subcommand, every flag.
+- `atlaz kanban watch --kinds completed,gave_up,timed_out` — live stream terminal events across the whole board.
+- `atlaz kanban notify-subscribe <task> --platform telegram --chat-id <id>` — get a gateway ping when a specific task finishes.

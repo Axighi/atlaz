@@ -1,13 +1,13 @@
 ---
 title: "Windows (WSL2) Guide"
-description: "Run Hermes Agent on Windows via WSL2 — setup, filesystem access between Windows and Linux, networking, and common pitfalls"
+description: "Run ATLAZ on Windows via WSL2 — setup, filesystem access between Windows and Linux, networking, and common pitfalls"
 sidebar_label: "Windows (WSL2)"
 sidebar_position: 2
 ---
 
 # Windows (WSL2) Guide
 
-Hermes Agent now supports **both** native Windows and WSL2.  This page covers the WSL2 path; for the native PowerShell install see the dedicated **[Windows (Native) Guide](./windows-native.md)**.
+ATLAZ now supports **both** native Windows and WSL2.  This page covers the WSL2 path; for the native PowerShell install see the dedicated **[Windows (Native) Guide](./windows-native.md)**.
 
 **When to pick WSL2 over native:**
 - You want to use the dashboard's embedded terminal (`/chat` tab) — that pane requires a POSIX PTY and is WSL2-only.
@@ -186,7 +186,7 @@ dos2unix path/to/script.sh
 
 ### "Clone inside WSL or on `/mnt/c`?"
 
-Clone inside WSL. Always, unless you have a specific reason not to. A typical Hermes workflow (`hermes chat`, tool calls that `rg`/`ripgrep` the repo, file watchers, background gateway) will be dramatically faster and more reliable against `~/code/myrepo` than `/mnt/c/Users/you/myrepo`.
+Clone inside WSL. Always, unless you have a specific reason not to. A typical Hermes workflow (`atlaz chat`, tool calls that `rg`/`ripgrep` the repo, file watchers, background gateway) will be dramatically faster and more reliable against `~/code/myrepo` than `/mnt/c/Users/you/myrepo`.
 
 One exception: **MCP bridges that launch Windows binaries.** If you're using `chrome-devtools-mcp` through `cmd.exe` (see [MCP guide: WSL → Windows Chrome](/guides/use-mcp-with-hermes#wsl2-bridge-hermes-in-wsl-to-windows-chrome)), Windows may complain with a `UNC` warning if Hermes's current working directory is `~`. In that case, start Hermes from somewhere under `/mnt/c/` so the Windows process has a drive-letter cwd.
 
@@ -214,7 +214,7 @@ For the full table (Ollama / LM Studio / vLLM / SGLang bind addresses, firewall 
 This is the reverse direction and is less documented elsewhere, but it's what you need for:
 
 - Using the Hermes **web dashboard** from a Windows browser.
-- Using the **OpenAI-compatible API server** (exposed by `hermes gateway` when `API_SERVER_ENABLED=true`) from a Windows-side tool. See the [API Server feature page](/user-guide/features/api-server).
+- Using the **OpenAI-compatible API server** (exposed by `atlaz gateway` when `API_SERVER_ENABLED=true`) from a Windows-side tool. See the [API Server feature page](/user-guide/features/api-server).
 - Testing a **messaging gateway** (Telegram, Discord, etc.) where the platform pings a local webhook URL — usually you'd use `cloudflared`/`ngrok` rather than raw port forwarding.
 
 #### Subcase 2a: from the Windows host itself
@@ -275,7 +275,7 @@ it on the Windows side and have it jump into WSL for you:
 3. Name it something obvious like `Hermes`.
 
 That opens Windows Terminal, starts your WSL distro, drops you in your Linux
-home directory, and launches Hermes. If `hermes` is not on PATH yet, open WSL
+home directory, and launches Hermes. If `atlaz` is not on PATH yet, open WSL
 once manually and run `source ~/.bashrc`, or replace the command with
 `uv run hermes` inside your project checkout.
 
@@ -288,7 +288,7 @@ Optional polish:
 
 ### Inside WSL with systemd (recommended)
 
-If you enabled systemd per the setup section above, `hermes gateway` and the API server work the way they do on any Linux machine. Use the gateway setup wizard:
+If you enabled systemd per the setup section above, `atlaz gateway` and the API server work the way they do on any Linux machine. Use the gateway setup wizard:
 
 ```bash
 hermes gateway setup
@@ -320,7 +320,7 @@ If you're running a **Windows-native** local-model server (Ollama for Windows, L
 **"Connection refused" to my Windows-hosted Ollama / LM Studio.**
 See [WSL2 Networking](/integrations/providers#wsl2-networking-windows-users). Ninety percent of the time the server is bound to `127.0.0.1` and needs `0.0.0.0` (Ollama: `OLLAMA_HOST=0.0.0.0`), or you're missing a firewall rule.
 
-**Massive slowness on `git status` / `hermes chat` in a repo.**
+**Massive slowness on `git status` / `atlaz chat` in a repo.**
 You're probably working under `/mnt/c/...`. Move the repo to `~/code/...` (Linux side). Order-of-magnitude faster.
 
 **`bad interpreter: /bin/bash^M` on scripts.**
@@ -341,7 +341,7 @@ Or install `ntpdate` and run it at login.
 **DNS stops working after enabling mirrored mode, or when a VPN is connected.**
 Mirrored mode proxies host network settings into WSL — if Windows DNS is funky (VPN split-tunnel, corporate resolver), WSL inherits that. Workaround: override `resolv.conf` manually (set `generateResolvConf=false` in `/etc/wsl.conf`, then write your own `/etc/resolv.conf` with `1.1.1.1` or your VPN's DNS).
 
-**`hermes` not found after running the installer.**
+**`atlaz` not found after running the installer.**
 The installer adds `~/.local/bin` to your shell's PATH via `~/.bashrc`. You need to `source ~/.bashrc` (or open a new terminal) for it to take effect in the current session.
 
 **Windows Defender is slow on WSL files.**

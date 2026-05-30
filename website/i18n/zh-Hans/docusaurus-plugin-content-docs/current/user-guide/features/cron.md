@@ -523,7 +523,7 @@ cronjob(action="remove", job_id="...")
 
 ## Cron 任务可用的工具集
 
-Cron 在全新的 agent 会话中运行每个任务，不附加任何聊天平台。默认情况下，cron agent 获得**你在 `hermes tools` 中为 `cron` 平台配置的工具集**——不是 CLI 默认值，也不是所有工具。
+Cron 在全新的 agent 会话中运行每个任务，不附加任何聊天平台。默认情况下，cron agent 获得**你在 `atlaz tools` 中为 `cron` 平台配置的工具集**——不是 CLI 默认值，也不是所有工具。
 
 ```bash
 hermes tools
@@ -540,7 +540,7 @@ cronjob(action="create", name="weekly-news-summary",
         prompt="Summarize this week's AI news: ...")
 ```
 
-当任务上设置了 `enabled_toolsets` 时，它优先生效；否则 `hermes tools` 的 cron 平台配置生效；否则 Hermes 回退到内置默认值。这对成本控制很重要：在每个小型"获取新闻"任务中携带 `moa`、`browser`、`delegation` 会在每次 LLM 调用时膨胀工具 schema prompt。
+当任务上设置了 `enabled_toolsets` 时，它优先生效；否则 `atlaz tools` 的 cron 平台配置生效；否则 Hermes 回退到内置默认值。这对成本控制很重要：在每个小型"获取新闻"任务中携带 `moa`、`browser`、`delegation` 会在每次 LLM 调用时膨胀工具 schema prompt。
 
 ### 完全跳过 agent：`wakeAgent`
 
@@ -644,7 +644,7 @@ cronjob(action="create", name="summarize-new-msgs",
 Hermes 自身的 `~/.hermes/state.db` 是内部 schema，会在版本间变更。不要从预运行门控中查询它——指向你自己的数据库或 feed。
 :::
 
-致谢：此方案集由 @iankar8 在 [#2654](https://github.com/NousResearch/hermes-agent/pull/2654) 中的探索所启发，该 PR 提议将 sql/file/command 触发器作为并行机制添加。`script` + `wakeAgent` 门控已以零成本覆盖了所有三种情况，因此该工作以文档形式落地。
+致谢：此方案集由 @iankar8 在 [#2654](https://github.com/Axighi/atlaz/pull/2654) 中的探索所启发，该 PR 提议将 sql/file/command 触发器作为并行机制添加。`script` + `wakeAgent` 门控已以零成本覆盖了所有三种情况，因此该工作以文档形式落地。
 
 ### 串联任务：`context_from`
 

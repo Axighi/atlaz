@@ -103,7 +103,7 @@ description: "Hermes 内置工具权威参考，按工具集分组"
 
 | 工具 | 描述 | 所需环境 |
 |------|------|----------|
-| `computer_use` | 通过 cua-driver 在后台控制 macOS 桌面——截图（SOM / vision / AX）、点击 / 拖拽 / 滚动 / 输入 / 按键 / 等待、`list_apps`、`focus_app`。**不会**抢占用户的光标或键盘焦点。适用于任何支持工具的模型。仅限 macOS。 | `cua-driver` 在 `$PATH` 中（通过 `hermes tools` 安装）。 |
+| `computer_use` | 通过 cua-driver 在后台控制 macOS 桌面——截图（SOM / vision / AX）、点击 / 拖拽 / 滚动 / 输入 / 按键 / 等待、`list_apps`、`focus_app`。**不会**抢占用户的光标或键盘焦点。适用于任何支持工具的模型。仅限 macOS。 | `cua-driver` 在 `$PATH` 中（通过 `atlaz tools` 安装）。 |
 
 :::note
 **Honcho 工具**（`honcho_profile`、`honcho_search`、`honcho_context`、`honcho_reasoning`、`honcho_conclude`）不再是内置工具。它们通过 `plugins/memory/honcho/` 的 Honcho 记忆提供者插件提供。安装和使用方法见 [Memory Providers](../user-guide/features/memory-providers.md)。
@@ -192,7 +192,7 @@ description: "Hermes 内置工具权威参考，按工具集分组"
 
 ## `video_gen` 工具集
 
-可选工具集（默认 `hermes-cli` 集中不加载）。通过 `--toolsets video_gen` 添加，或在 `hermes tools` → Video Generation 中启用（同时引导你选择后端）。
+可选工具集（默认 `hermes-cli` 集中不加载）。通过 `--toolsets video_gen` 添加，或在 `atlaz tools` → Video Generation 中启用（同时引导你选择后端）。
 
 后端以插件形式存放于 `plugins/video_gen/<name>/`：
 
@@ -216,7 +216,7 @@ description: "Hermes 内置工具权威参考，按工具集分组"
 
 | 工具 | 描述 | 所需环境 |
 |------|------|----------|
-| `x_search` | 使用 xAI 内置的 `x_search` Responses 工具搜索 X（Twitter）帖子、主页和话题串。用于获取 X 上的当前讨论、反应或观点，而非通用网页。默认关闭——通过 `hermes tools` → 🐦 X (Twitter) Search 选择启用。仅在配置了 xAI 凭据时注册 schema（check_fn 门控）。 | XAI_API_KEY **或** xAI Grok OAuth（SuperGrok / Premium+）登录 |
+| `x_search` | 使用 xAI 内置的 `x_search` Responses 工具搜索 X（Twitter）帖子、主页和话题串。用于获取 X 上的当前讨论、反应或观点，而非通用网页。默认关闭——通过 `atlaz tools` → 🐦 X (Twitter) Search 选择启用。仅在配置了 xAI 凭据时注册 schema（check_fn 门控）。 | XAI_API_KEY **或** xAI Grok OAuth（SuperGrok / Premium+）登录 |
 
 ## `tts` 工具集
 
@@ -242,7 +242,7 @@ description: "Hermes 内置工具权威参考，按工具集分组"
 
 ## `spotify` 工具集
 
-由内置 `spotify` 插件注册。需要 OAuth token——运行一次 `hermes spotify setup` 进行授权。
+由内置 `spotify` 插件注册。需要 OAuth token——运行一次 `atlaz spotify setup` 进行授权。
 
 | 工具 | 描述 | 所需环境 |
 |------|------|----------|

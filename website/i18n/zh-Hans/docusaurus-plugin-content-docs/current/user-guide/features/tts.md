@@ -6,10 +6,10 @@ description: "跨所有平台的文字转语音与语音消息转录"
 
 # 语音与 TTS
 
-Hermes Agent 支持跨所有消息平台的文字转语音（TTS）输出和语音消息转录（STT）。
+ATLAZ 支持跨所有消息平台的文字转语音（TTS）输出和语音消息转录（STT）。
 
 :::tip Nous 订阅用户
-如果你拥有付费的 [Nous Portal](https://portal.nousresearch.com) 订阅，OpenAI TTS 可通过 **[Tool Gateway](tool-gateway.md)** 使用，无需单独的 OpenAI API 密钥。新安装可运行 `hermes setup --portal` 登录并一次性开启所有 gateway 工具；已有安装可通过 `hermes model` 或 `hermes tools` 选择 **Nous Subscription** 仅启用 TTS。
+如果你拥有付费的 [Nous Portal](https://portal.nousresearch.com) 订阅，OpenAI TTS 可通过 **[Tool Gateway](tool-gateway.md)** 使用，无需单独的 OpenAI API 密钥。新安装可运行 `atlaz setup --portal` 登录并一次性开启所有 gateway 工具；已有安装可通过 `atlaz model` 或 `atlaz tools` 选择 **Nous Subscription** 仅启用 TTS。
 :::
 
 ## 文字转语音（TTS）
@@ -181,7 +181,7 @@ tts:
 
 Piper 是来自 Open Home Foundation（Home Assistant 维护者）的快速本地神经网络 TTS 引擎。它完全在 CPU 上运行，支持 **44 种语言**的预训练声音，无需 API 密钥。
 
-**通过 `hermes tools` 安装** → Voice & TTS → Piper — Hermes 会自动为你运行 `pip install piper-tts`。或手动安装：`pip install piper-tts`。
+**通过 `atlaz tools` 安装** → Voice & TTS → Piper — Hermes 会自动为你运行 `pip install piper-tts`。或手动安装：`pip install piper-tts`。
 
 **切换至 Piper：**
 
@@ -309,7 +309,7 @@ tts:
 | 两三个通过 shell 管道串联的 CLI | **命令提供商** |
 | 仅有 Python SDK，没有 CLI | **插件** |
 | 你希望分块投递的流式字节（生成中的语音气泡） | **插件**（覆盖 `stream()`） |
-| `hermes setup` 使用的声音列表 API | **插件**（覆盖 `list_voices()`） |
+| `atlaz setup` 使用的声音列表 API | **插件**（覆盖 `list_voices()`） |
 | OAuth 刷新流程（非静态 bearer token） | **插件** |
 
 内置提供商始终优先，命令提供商优先于同名插件——因此插件可以安全地注册任何非内置名称，无需担心覆盖现有配置。
@@ -362,15 +362,15 @@ def register(ctx):
     ctx.register_tts_provider(MyTTSProvider())
 ```
 
-启用它（`hermes plugins enable my-tts`），将 `tts.provider` 指向它（在 `config.yaml` 中设置 `tts.provider: my-tts`），`text_to_speech` 工具将通过你的插件路由。
+启用它（`atlaz plugins enable my-tts`），将 `tts.provider` 指向它（在 `config.yaml` 中设置 `tts.provider: my-tts`），`text_to_speech` 工具将通过你的插件路由。
 
 #### 可选 hook
 
 在你的提供商类上覆盖以下方法以获得更丰富的集成：
 
-- `list_voices()` → 返回 `{id, display, language, gender, preview_url}` 字典列表，显示在 `hermes tools` 中。
+- `list_voices()` → 返回 `{id, display, language, gender, preview_url}` 字典列表，显示在 `atlaz tools` 中。
 - `list_models()` → 返回 `{id, display, languages, max_text_length}` 字典列表。
-- `get_setup_schema()` → 返回 `{name, badge, tag, env_vars: [{key, prompt, url}]}` 以驱动 `hermes tools` / `hermes setup` 中的选择器行。若不提供，插件仍可正常工作，但其在选择器中的行信息会很简略。
+- `get_setup_schema()` → 返回 `{name, badge, tag, env_vars: [{key, prompt, url}]}` 以驱动 `atlaz tools` / `atlaz setup` 中的选择器行。若不提供，插件仍可正常工作，但其在选择器中的行信息会很简略。
 - `stream(text, *, voice, model, format, **extra)` → 迭代器，产出音频字节用于流式投递（默认抛出 `NotImplementedError`）。
 - `voice_compatible` 属性 → 若你的输出与 Opus 兼容且 gateway 应将其作为语音气泡投递，则设为 `True`（默认 `False` = 普通音频附件）。
 

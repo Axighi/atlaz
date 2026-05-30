@@ -17,7 +17,7 @@ OBLITERATUS：消除 LLM 拒绝行为（均值差分法）。
 | 来源 | 内置（默认安装） |
 | 路径 | `skills/mlops/inference/obliteratus` |
 | 版本 | `2.0.0` |
-| 作者 | Hermes Agent |
+| 作者 | ATLAZ |
 | 许可证 | MIT |
 | 依赖项 | `obliteratus`, `torch`, `transformers`, `bitsandbytes`, `accelerate`, `safetensors` |
 | 平台 | linux, macos |
@@ -38,7 +38,7 @@ OBLITERATUS：消除 LLM 拒绝行为（均值差分法）。
 
 无需重新训练或微调，即可从开放权重 LLM 中移除拒绝行为（guardrails）。使用机械可解释性（mechanistic interpretability）技术——包括均值差分法（diff-in-means）、SVD、白化 SVD、LEACE 概念擦除、SAE 分解、贝叶斯核投影等——识别并精准切除模型权重中的拒绝方向，同时保留推理能力。
 
-**许可证警告：** OBLITERATUS 采用 AGPL-3.0 许可证。**绝对不要**将其作为 Python 库导入。始终通过 CLI（`obliteratus` 命令）或子进程调用。这样可保持 Hermes Agent 的 MIT 许可证不受污染。
+**许可证警告：** OBLITERATUS 采用 AGPL-3.0 许可证。**绝对不要**将其作为 Python 库导入。始终通过 CLI（`obliteratus` 命令）或子进程调用。这样可保持 ATLAZ 的 MIT 许可证不受污染。
 
 ## 视频指南
 

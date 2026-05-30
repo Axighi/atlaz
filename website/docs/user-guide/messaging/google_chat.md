@@ -1,19 +1,19 @@
 ---
 sidebar_position: 12
 title: "Google Chat"
-description: "Set up Hermes Agent as a Google Chat bot using Cloud Pub/Sub"
+description: "Set up ATLAZ as a Google Chat bot using Cloud Pub/Sub"
 ---
 
 # Google Chat Setup
 
-Connect Hermes Agent to Google Chat as a bot. The integration uses Cloud Pub/Sub
+Connect ATLAZ to Google Chat as a bot. The integration uses Cloud Pub/Sub
 pull subscriptions for inbound events and the Chat REST API for outbound messages.
 Equivalent ergonomics to Slack Socket Mode or Telegram long-polling: your Hermes
 process does not need a public URL, a tunnel, or a TLS certificate. It connects,
 authenticates, and listens on a subscription — the same way a Telegram bot listens
 on a token.
 
-> Run `hermes gateway setup` and pick **Google Chat** for a guided walk-through.
+> Run `atlaz gateway setup` and pick **Google Chat** for a guided walk-through.
 
 :::note Workspace edition
 Google Chat is part of Google Workspace. You can use this integration with a
@@ -297,7 +297,7 @@ evicts only that user's cache. Users don't disrupt each other.
 2. If the subscription has zero messages, Google Chat isn't publishing.
    Double-check the IAM binding on the **topic**:
    `chat-api-push@system.gserviceaccount.com` must have `Pub/Sub Publisher`.
-3. Check `hermes gateway` logs for `[GoogleChat] Connected`. If you see
+3. Check `atlaz gateway` logs for `[GoogleChat] Connected`. If you see
    `[GoogleChat] Config validation failed`, the error message tells you which
    env var to fix.
 

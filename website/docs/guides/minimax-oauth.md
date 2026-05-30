@@ -1,12 +1,12 @@
 ---
 sidebar_position: 15
 title: "MiniMax OAuth"
-description: "Log into MiniMax via browser OAuth and use MiniMax-M2.7 models in Hermes Agent — no API key required"
+description: "Log into MiniMax via browser OAuth and use MiniMax-M2.7 models in ATLAZ — no API key required"
 ---
 
 # MiniMax OAuth
 
-Hermes Agent supports **MiniMax** through a browser-based OAuth login flow, using the same credentials as the [MiniMax portal](https://www.minimax.io). No API key or credit card is required — log in once and Hermes automatically refreshes your session.
+ATLAZ supports **MiniMax** through a browser-based OAuth login flow, using the same credentials as the [MiniMax portal](https://www.minimax.io). No API key or credit card is required — log in once and Hermes automatically refreshes your session.
 
 The transport reuses the `anthropic_messages` adapter (MiniMax exposes an Anthropic Messages-compatible endpoint at `/anthropic`), so all existing tool-calling, streaming, and context features work without any adapter changes.
 
@@ -26,7 +26,7 @@ The transport reuses the `anthropic_messages` adapter (MiniMax exposes an Anthro
 ## Prerequisites
 
 - Python 3.9+
-- Hermes Agent installed
+- ATLAZ installed
 - A MiniMax account at [minimax.io](https://www.minimax.io) (global) or [minimaxi.com](https://www.minimaxi.com) (China)
 - A browser available on the local machine (or use `--no-browser` for remote sessions)
 
@@ -155,7 +155,7 @@ The `minimax-oauth` provider does **not** use `MINIMAX_API_KEY` or `MINIMAX_BASE
 | `MINIMAX_API_KEY` | Used by `minimax` provider only — ignored for `minimax-oauth` |
 | `MINIMAX_CN_API_KEY` | Used by `minimax-cn` provider only — ignored for `minimax-oauth` |
 
-To use `minimax-oauth` as the active provider, set `model.provider: minimax-oauth` in `config.yaml` (use `hermes setup` for the guided flow), or pass `--provider minimax-oauth` for a single invocation:
+To use `minimax-oauth` as the active provider, set `model.provider: minimax-oauth` in `config.yaml` (use `atlaz setup` for the guided flow), or pass `--provider minimax-oauth` for a single invocation:
 
 ```bash
 hermes --provider minimax-oauth
@@ -180,13 +180,13 @@ Hermes refreshes the token on every session start if it is within 60 seconds of 
 
 When the refresh failure is terminal (HTTP 4xx, `invalid_grant`, revoked grant, etc.), Hermes marks the refresh token as dead and quarantines it locally so it doesn't keep replaying the doomed exchange. The agent surfaces a single "re-authentication required" message and stays out of the way until you log in again.
 
-**Fix:** run `hermes auth add minimax-oauth` again to start a fresh login. The quarantine clears on the next successful exchange.
+**Fix:** run `atlaz auth add minimax-oauth` again to start a fresh login. The quarantine clears on the next successful exchange.
 
 ### Authorization timed out
 
 The device-code flow has a finite expiry window. If you don't approve the login in time, Hermes raises a timeout error.
 
-**Fix:** re-run `hermes auth add minimax-oauth` (or `hermes model`). The flow starts fresh.
+**Fix:** re-run `atlaz auth add minimax-oauth` (or `atlaz model`). The flow starts fresh.
 
 ### State mismatch (possible CSRF)
 
@@ -196,7 +196,7 @@ Hermes detected that the `state` value returned by the authorization server does
 
 ### Logging in from a remote server
 
-If `hermes` cannot open a browser window, use `--no-browser`:
+If `atlaz` cannot open a browser window, use `--no-browser`:
 
 ```bash
 hermes auth add minimax-oauth --no-browser
@@ -208,7 +208,7 @@ Hermes prints the URL and code. Open the URL on any device and complete the flow
 
 The auth store has no credentials for `minimax-oauth`. You have not logged in yet, or the credential file was deleted.
 
-**Fix:** run `hermes model` and select MiniMax (OAuth), or run `hermes auth add minimax-oauth`.
+**Fix:** run `atlaz model` and select MiniMax (OAuth), or run `atlaz auth add minimax-oauth`.
 
 ## Logging Out
 

@@ -1,12 +1,12 @@
 ---
 sidebar_position: 15
 title: "Microsoft Foundry"
-description: "将 Hermes Agent 与 Microsoft Foundry 配合使用——OpenAI 风格与 Anthropic 风格端点、传输协议与已部署模型的自动检测"
+description: "将 ATLAZ 与 Microsoft Foundry 配合使用——OpenAI 风格与 Anthropic 风格端点、传输协议与已部署模型的自动检测"
 ---
 
 # Microsoft Foundry
 
-Hermes Agent 的 `azure-foundry` provider 支持 Microsoft Foundry（原 Azure AI Foundry）和 Azure OpenAI。单个 Foundry 资源可以托管两种不同传输格式的模型：
+ATLAZ 的 `azure-foundry` provider 支持 Microsoft Foundry（原 Azure AI Foundry）和 Azure OpenAI。单个 Foundry 资源可以托管两种不同传输格式的模型：
 
 - **OpenAI 风格** — 在 `https://<resource>.openai.azure.com/openai/v1` 等端点上执行 `POST /v1/chat/completions`。用于 GPT-4.x、GPT-5.x、Llama、Mistral 及大多数开放权重模型。
 - **Anthropic 风格** — 在 `https://<resource>.services.ai.azure.com/anthropic` 等端点上执行 `POST /v1/messages`。当 Microsoft Foundry 通过 Anthropic Messages API 格式提供 Claude 模型时使用。
@@ -175,9 +175,9 @@ hermes         # 使用你的 az login 令牌
 
 ### 健康检查
 
-当 `model.auth_mode: entra_id` 时，`hermes doctor` 会对 `DefaultAzureCredential` 运行 10 秒探测，报告哪个内部凭据成功（环境变量是否存在、托管标识端点是否可达等）。
+当 `model.auth_mode: entra_id` 时，`atlaz doctor` 会对 `DefaultAzureCredential` 运行 10 秒探测，报告哪个内部凭据成功（环境变量是否存在、托管标识端点是否可达等）。
 
-`hermes auth` 显示结构化状态块：
+`atlaz auth` 显示结构化状态块：
 
 ```
 azure-foundry (Microsoft Entra ID):
@@ -282,7 +282,7 @@ Hermes 能做的：
 | 变量 | 用途 |
 |----------|---------|
 | `AZURE_FOUNDRY_API_KEY` | Microsoft Foundry / Azure OpenAI 的主 API 密钥（api_key 模式） |
-| `AZURE_FOUNDRY_BASE_URL` | 端点 URL（通过 `hermes model` 设置；环境变量作为回退） |
+| `AZURE_FOUNDRY_BASE_URL` | 端点 URL（通过 `atlaz model` 设置；环境变量作为回退） |
 | `AZURE_ANTHROPIC_KEY` | 由 `provider: anthropic` + Azure base URL 使用（`ANTHROPIC_API_KEY` 的替代） |
 | `AZURE_TENANT_ID` | 服务主体流程的 Entra ID 租户 |
 | `AZURE_CLIENT_ID` | Entra ID 客户端 ID（服务主体、工作负载标识或用户分配的托管标识） |
@@ -292,7 +292,7 @@ Hermes 能做的：
 | `AZURE_AUTHORITY_HOST` | 主权云 authority 主机覆盖 |
 | `IDENTITY_ENDPOINT` / `MSI_ENDPOINT` | App Service、Functions 和 Container Apps 的托管标识端点；VM 通常改用 IMDS |
 
-Azure SDK 直接读取 `AZURE_*` 环境变量。Hermes 除在 `hermes doctor` 输出中报告哪些来源存在外，不会检查这些变量。
+Azure SDK 直接读取 `AZURE_*` 环境变量。Hermes 除在 `atlaz doctor` 输出中报告哪些来源存在外，不会检查这些变量。
 
 ## 故障排查
 
@@ -306,7 +306,7 @@ Azure 在 `/chat/completions` 上提供 gpt-5.x，而非 `/responses`。当 URL 
 端点拒绝了 `/models` 探测和 Anthropic Messages 探测。这对于防火墙后或设有 IP 白名单的私有端点是正常现象。回退到手动选择 API 模式并输入部署名称——一切仍然正常工作，Hermes 只是无法预填选择器。
 
 **选择了错误的传输协议。**
-再次运行 `hermes model`，向导将重新探测。如果探测仍然选择了错误的模式，可以直接编辑 `config.yaml`：
+再次运行 `atlaz model`，向导将重新探测。如果探测仍然选择了错误的模式，可以直接编辑 `config.yaml`：
 
 ```yaml
 model:
@@ -318,10 +318,10 @@ model:
 - 运行 `az login` 刷新你的开发者会话（缓存的令牌可能已过期）。
 - 验证 `Azure AI User`（或 `Foundry User`）角色分配是否已生效：`az role assignment list --assignee <user-or-identity-id>` 应在你的 Foundry 资源上列出该角色。角色传播最多需要 5 分钟。
 - 对于用户分配的托管标识，请仔细检查 `AZURE_CLIENT_ID` 是否与附加到计算资源的标识匹配。
-- 运行 `hermes doctor`——Azure Entra 探测会报告令牌获取是否成功，并提供修复提示。
+- 运行 `atlaz doctor`——Azure Entra 探测会报告令牌获取是否成功，并提供修复提示。
 
 **Entra ID：向导预检挂起或超时。**
-10 秒预检是软性检查。选择"仍然保存，稍后验证"，部署到目标环境后运行 `hermes doctor`。常见原因包括令牌服务不可达或本地登录状态过期——在 CI 中优先使用工作负载标识，使用服务主体时设置 `AZURE_TENANT_ID`+`AZURE_CLIENT_ID`+`AZURE_CLIENT_SECRET`，或在本地开发时运行 `az login`。
+10 秒预检是软性检查。选择"仍然保存，稍后验证"，部署到目标环境后运行 `atlaz doctor`。常见原因包括令牌服务不可达或本地登录状态过期——在 CI 中优先使用工作负载标识，使用服务主体时设置 `AZURE_TENANT_ID`+`AZURE_CLIENT_ID`+`AZURE_CLIENT_SECRET`，或在本地开发时运行 `az login`。
 
 **Anthropic 风格端点使用 Entra ID 时返回 401。**
 验证同一 `Azure AI User`（或 `Foundry User`）角色是否已在 Foundry 资源上分配（它同时覆盖 `/openai/v1` 和 `/anthropic` 路径）。如果向导期间 OpenAI 风格探测成功，但运行时 `claude-*` 请求失败，最常见的原因是早期向导运行遗留的过时 `model.entra.scope`——从 `config.yaml` 中删除 `entra.scope` 行，使运行时回退到默认的 `https://ai.azure.com/.default` scope。

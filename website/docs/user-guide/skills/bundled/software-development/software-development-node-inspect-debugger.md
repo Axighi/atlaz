@@ -17,7 +17,7 @@ Debug Node.js via --inspect + Chrome DevTools Protocol CLI.
 | Source | Bundled (installed by default) |
 | Path | `skills/software-development/node-inspect-debugger` |
 | Version | `1.0.0` |
-| Author | Hermes Agent |
+| Author | ATLAZ |
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `debugging`, `nodejs`, `node-inspect`, `cdp`, `breakpoints`, `ui-tui` |
@@ -217,7 +217,7 @@ cont
 
 When it pauses, `repl` → inspect `props`, state refs, `useInput` handler values, etc.
 
-### Debugging a running `hermes --tui`
+### Debugging a running `atlaz --tui`
 
 The TUI spawns Node from the Python CLI. Easiest path:
 

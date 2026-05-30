@@ -147,7 +147,7 @@ ELEVENLABS_API_KEY=***
 - `openai` → 良好的中间选项
 - `mistral` → 多语言，原生 Opus
 
-### 如果使用 `hermes setup`
+### 如果使用 `atlaz setup`
 
 如果你在设置向导中选择了 NeuTTS，Hermes 会检查 `neutts` 是否已安装。如果缺失，向导会告知你 NeuTTS 需要 Python 包 `neutts` 和系统包 `espeak-ng`，并提供自动安装，使用平台包管理器安装 `espeak-ng`，然后运行：
 

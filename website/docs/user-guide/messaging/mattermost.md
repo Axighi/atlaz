@@ -1,12 +1,12 @@
 ---
 sidebar_position: 8
 title: "Mattermost"
-description: "Set up Hermes Agent as a Mattermost bot"
+description: "Set up ATLAZ as a Mattermost bot"
 ---
 
 # Mattermost Setup
 
-Hermes Agent integrates with Mattermost as a bot, letting you chat with your AI assistant through direct messages or team channels. Mattermost is a self-hosted, open-source Slack alternative — you run it on your own infrastructure, keeping full control of your data. The bot connects via Mattermost's REST API (v4) and WebSocket for real-time events, processes messages through the Hermes Agent pipeline (including tool use, memory, and reasoning), and responds in real time. It supports text, file attachments, images, and slash commands.
+ATLAZ integrates with Mattermost as a bot, letting you chat with your AI assistant through direct messages or team channels. Mattermost is a self-hosted, open-source Slack alternative — you run it on your own infrastructure, keeping full control of your data. The bot connects via Mattermost's REST API (v4) and WebSocket for real-time events, processes messages through the ATLAZ pipeline (including tool use, memory, and reasoning), and responds in real time. It supports text, file attachments, images, and slash commands.
 
 No external Mattermost library is required — the adapter uses `aiohttp`, which is already a Hermes dependency.
 
@@ -72,7 +72,7 @@ If you don't have System Admin access, ask your Mattermost administrator to enab
 2. Click **Add Bot Account**.
 3. Fill in the details:
    - **Username**: e.g., `hermes`
-   - **Display Name**: e.g., `Hermes Agent`
+   - **Display Name**: e.g., `ATLAZ`
    - **Description**: optional
    - **Role**: `Member` is sufficient
 4. Click **Create Bot Account**.
@@ -100,7 +100,7 @@ For DMs, simply open a direct message with the bot — it will be able to respon
 
 ## Step 4: Find Your Mattermost User ID
 
-Hermes Agent uses your Mattermost User ID to control who can interact with the bot. To find it:
+ATLAZ uses your Mattermost User ID to control who can interact with the bot. To find it:
 
 1. Click your **avatar** (top-left corner) → **Profile**.
 2. Your User ID is displayed in the profile dialog — click it to copy.
@@ -122,7 +122,7 @@ curl -H "Authorization: Bearer YOUR_TOKEN" \
 To get a **Channel ID**: click the channel name → **View Info**. The Channel ID is shown in the info panel. You'll need this if you want to set a home channel manually.
 :::
 
-## Step 5: Configure Hermes Agent
+## Step 5: Configure ATLAZ
 
 ### Option A: Interactive Setup (Recommended)
 
@@ -176,7 +176,7 @@ hermes gateway
 The bot should connect to your Mattermost server within a few seconds. Send it a message — either a DM or in a channel where it's been added — to test.
 
 :::tip
-You can run `hermes gateway` in the background or as a systemd service for persistent operation. See the deployment docs for details.
+You can run `atlaz gateway` in the background or as a systemd service for persistent operation. See the deployment docs for details.
 :::
 
 ## Home Channel
@@ -300,7 +300,7 @@ If this returns your bot's user info, the token is valid. If it returns an error
 
 **Cause**: The Hermes gateway isn't running, or it failed to connect.
 
-**Fix**: Check that `hermes gateway` is running. Look at the terminal output for error messages. Common issues: wrong URL, expired token, Mattermost server unreachable.
+**Fix**: Check that `atlaz gateway` is running. Look at the terminal output for error messages. Common issues: wrong URL, expired token, Mattermost server unreachable.
 
 ### "User not allowed" / Bot ignores you
 
@@ -331,10 +331,10 @@ Keys are Mattermost channel IDs (find them in the channel URL or via the API). A
 Always set `MATTERMOST_ALLOWED_USERS` to restrict who can interact with the bot. Without it, the gateway denies all users by default as a safety measure. Only add User IDs of people you trust — authorized users have full access to the agent's capabilities, including tool use and system access.
 :::
 
-For more information on securing your Hermes Agent deployment, see the [Security Guide](../security.md).
+For more information on securing your ATLAZ deployment, see the [Security Guide](../security.md).
 
 ## Notes
 
 - **Self-hosted friendly**: Works with any self-hosted Mattermost instance. No Mattermost Cloud account or subscription required.
-- **No extra dependencies**: The adapter uses `aiohttp` for HTTP and WebSocket, which is already included with Hermes Agent.
+- **No extra dependencies**: The adapter uses `aiohttp` for HTTP and WebSocket, which is already included with ATLAZ.
 - **Team Edition compatible**: Works with both Mattermost Team Edition (free) and Enterprise Edition.

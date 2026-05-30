@@ -1,12 +1,12 @@
 ---
 sidebar_position: 4
 title: "MCP（模型上下文协议）"
-description: "通过 MCP 将 Hermes Agent 连接到外部工具服务器，并精确控制 Hermes 加载哪些 MCP 工具"
+description: "通过 MCP 将 ATLAZ 连接到外部工具服务器，并精确控制 Hermes 加载哪些 MCP 工具"
 ---
 
 # MCP（模型上下文协议）
 
-MCP 让 Hermes Agent 连接到外部工具服务器，使 agent 能够使用 Hermes 本身之外的工具——GitHub、数据库、文件系统、浏览器栈、内部 API 等等。
+MCP 让 ATLAZ 连接到外部工具服务器，使 agent 能够使用 Hermes 本身之外的工具——GitHub、数据库、文件系统、浏览器栈、内部 API 等等。
 
 如果你曾经希望 Hermes 使用某个已经存在于其他地方的工具，MCP 通常是最简洁的方式。
 
@@ -129,7 +129,7 @@ mcp_servers:
 
 ## 内置预设
 
-对于知名 MCP 服务器，`hermes mcp add` 接受 `--preset` 标志，自动填写传输层细节，无需手动查找命令和参数。预设只提供默认值——你在同一命令行传入的其他内容（环境变量、头信息、过滤规则）仍然优先生效。
+对于知名 MCP 服务器，`atlaz mcp add` 接受 `--preset` 标志，自动填写传输层细节，无需手动查找命令和参数。预设只提供默认值——你在同一命令行传入的其他内容（环境变量、头信息、过滤规则）仍然优先生效。
 
 | 预设 | 配置内容 |
 |---|---|
@@ -149,7 +149,7 @@ mcp_servers:
     args: ["mcp-server"]
 ```
 
-你可以使用任意本地名称（`hermes mcp add my-codex --preset codex` 完全可以）；预设只提供 `command`/`args` 默认值。
+你可以使用任意本地名称（`atlaz mcp add my-codex --preset codex` 完全可以）；预设只提供 `command`/`args` 默认值。
 
 ## Hermes 注册 MCP 工具的方式
 
@@ -578,7 +578,7 @@ MCP 服务器直接从 Hermes 的会话存储（`~/.hermes/sessions/sessions.jso
 
 ### 当前限制
 
-- 内嵌的 `hermes mcp serve` 目前只暴露 **stdio-only** MCP 服务器。如果你需要 HTTP MCP 服务器，请运行单独的适配器——或者，更常见的做法是使用 Hermes 的 MCP **客户端**侧，它已经同时支持 stdio 和 HTTP（`mcp_servers.yaml` / `config.yaml` 中的 `url` + `headers`；参见上方的 [HTTP 服务器](#http-servers)）。
+- 内嵌的 `atlaz mcp serve` 目前只暴露 **stdio-only** MCP 服务器。如果你需要 HTTP MCP 服务器，请运行单独的适配器——或者，更常见的做法是使用 Hermes 的 MCP **客户端**侧，它已经同时支持 stdio 和 HTTP（`mcp_servers.yaml` / `config.yaml` 中的 `url` + `headers`；参见上方的 [HTTP 服务器](#http-servers)）。
 - 事件轮询间隔约 200ms，通过基于 mtime 优化的数据库轮询实现（文件未变化时跳过处理）
 - 暂不支持 `claude/channel` 推送通知协议
 - 仅支持纯文本发送（`messages_send` 不支持媒体/附件发送）

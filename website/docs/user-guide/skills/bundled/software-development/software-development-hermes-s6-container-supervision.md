@@ -1,14 +1,14 @@
 ---
 title: "Hermes S6 Container Supervision"
 sidebar_label: "Hermes S6 Container Supervision"
-description: "Modify, debug, or extend the s6-overlay supervision tree inside the Hermes Agent Docker image — adding new services, debugging profile gateways, understandin..."
+description: "Modify, debug, or extend the s6-overlay supervision tree inside the ATLAZ Docker image — adding new services, debugging profile gateways, understandin..."
 ---
 
 {/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}
 
 # Hermes S6 Container Supervision
 
-Modify, debug, or extend the s6-overlay supervision tree inside the Hermes Agent Docker image — adding new services, debugging profile gateways, understanding the Architecture B main-program pattern.
+Modify, debug, or extend the s6-overlay supervision tree inside the ATLAZ Docker image — adding new services, debugging profile gateways, understanding the Architecture B main-program pattern.
 
 ## Skill metadata
 
@@ -17,7 +17,7 @@ Modify, debug, or extend the s6-overlay supervision tree inside the Hermes Agent
 | Source | Bundled (installed by default) |
 | Path | `skills/software-development/hermes-s6-container-supervision` |
 | Version | `1.0.0` |
-| Author | Hermes Agent |
+| Author | ATLAZ |
 | License | MIT |
 | Tags | `docker`, `s6`, `supervision`, `gateway`, `profiles` |
 | Related skills | [`hermes-agent`](/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-hermes-agent), `hermes-agent-dev` |
@@ -39,7 +39,7 @@ Load this skill when you're working on:
 - Modifying `cont-init.d` boot scripts (UID remap, volume seeding, profile reconciliation)
 - Changing the rendered run-script for per-profile gateways (Phase 4)
 
-If you're just running the Hermes Agent and want to use Docker, see `website/docs/user-guide/docker.md` instead.
+If you're just running the ATLAZ and want to use Docker, see `website/docs/user-guide/docker.md` instead.
 
 ## Architecture at a glance
 
@@ -61,7 +61,7 @@ If you're just running the Hermes Agent and want to use Docker, see `website/doc
 │
 ├── s6-rc.d (static services, in /etc/s6-overlay/s6-rc.d/)
 │   ├── main-hermes/run                ← exec sleep infinity (no-op slot)
-│   └── dashboard/run                  ← if HERMES_DASHBOARD=1, runs `hermes dashboard`
+│   └── dashboard/run                  ← if HERMES_DASHBOARD=1, runs `atlaz dashboard`
 │
 ├── /run/service (s6-svscan watches; tmpfs)
 │   ├── gateway-coder/                 ← runtime-registered per-profile
@@ -90,7 +90,7 @@ If you're just running the Hermes Agent and want to use Docker, see `website/doc
 | `docker/entrypoint.sh` | Back-compat shim that `exec`s the stage2 hook. External scripts that hard-coded the old entrypoint path still work. |
 | `atlaz_cli/service_manager.py` | `S6ServiceManager`: `register_profile_gateway`, `unregister_profile_gateway`, `start/stop/restart/is_running`, `list_profile_gateways`. |
 | `atlaz_cli/container_boot.py` | `reconcile_profile_gateways()` — walks persistent profiles, regenerates s6 slots, emits `container-boot.log`. |
-| `atlaz_cli/gateway.py::_dispatch_via_service_manager_if_s6` | Intercepts `hermes gateway start/stop/restart` and routes to s6 when running in a container. |
+| `atlaz_cli/gateway.py::_dispatch_via_service_manager_if_s6` | Intercepts `atlaz gateway start/stop/restart` and routes to s6 when running in a container. |
 
 ## Why Architecture B (CMD as main program, not s6-supervised)
 
@@ -180,11 +180,11 @@ The service directory is on tmpfs and was wiped on container restart. Either the
 
 ### Gateway starts then immediately exits (`down (exitcode 1)` in svstat)
 
-Most likely the profile has no model or auth configured. The service slot is correct — the gateway itself is unconfigured. Run `hermes -p <profile> setup` first. The s6 supervisor will keep restarting it; that's the desired behavior (when you fix the config, the next attempt succeeds and stays up).
+Most likely the profile has no model or auth configured. The service slot is correct — the gateway itself is unconfigured. Run `atlaz -p <profile> setup` first. The s6 supervisor will keep restarting it; that's the desired behavior (when you fix the config, the next attempt succeeds and stays up).
 
 ### Reconciler skipped a profile
 
-The reconciler keys on the **presence of `SOUL.md`** as the "real profile" marker. `hermes profile create` always seeds it. If a profile dir is missing SOUL.md (stray directory, partial restore, backup-in-progress), the reconciler skips it intentionally. Add a `SOUL.md` (even empty) to opt back in.
+The reconciler keys on the **presence of `SOUL.md`** as the "real profile" marker. `atlaz profile create` always seeds it. If a profile dir is missing SOUL.md (stray directory, partial restore, backup-in-progress), the reconciler skips it intentionally. Add a `SOUL.md` (even empty) to opt back in.
 
 ### "Help, the container exits 143!"
 

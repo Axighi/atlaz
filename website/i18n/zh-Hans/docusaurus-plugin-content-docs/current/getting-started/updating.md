@@ -1,7 +1,7 @@
 ---
 sidebar_position: 3
 title: "更新与卸载"
-description: "如何将 Hermes Agent 更新至最新版本或将其卸载"
+description: "如何将 ATLAZ 更新至最新版本或将其卸载"
 ---
 
 # 更新与卸载
@@ -34,12 +34,12 @@ pip install --upgrade hermes-agent    # 或：uv pip install --upgrade hermes-ag
 ```
 
 :::tip
-`hermes update` 会自动检测新的配置选项并提示你添加。如果跳过了该提示，可手动运行 `hermes config check` 查看缺失的选项，再运行 `hermes config migrate` 以交互方式添加。
+`atlaz update` 会自动检测新的配置选项并提示你添加。如果跳过了该提示，可手动运行 `atlaz config check` 查看缺失的选项，再运行 `atlaz config migrate` 以交互方式添加。
 :::
 
 ### 更新过程（Git 安装方式）
 
-运行 `hermes update` 时，将依次执行以下步骤：
+运行 `atlaz update` 时，将依次执行以下步骤：
 
 1. **配对数据快照** — 保存一份轻量级的更新前状态快照（涵盖 `~/.hermes/pairing/`、飞书评论规则及其他运行时修改的状态文件）。可通过 [快照与回滚](../user-guide/checkpoints-and-rollback.md) 中描述的快照恢复流程进行恢复，或从 Hermes 写入 `~/.hermes/` 目录旁的最新快速快照 zip 文件中提取。
 2. **Git pull** — 从 `main` 分支拉取最新代码并更新子模块
@@ -47,9 +47,9 @@ pip install --upgrade hermes-agent    # 或：uv pip install --upgrade hermes-ag
 4. **配置迁移** — 检测自当前版本以来新增的配置选项并提示设置
 5. **Gateway 自动重启** — 更新完成后刷新正在运行的 gateway，使新代码立即生效。由服务管理的 gateway（Linux 上的 systemd、macOS 上的 launchd）通过服务管理器重启；手动启动的 gateway 在 Hermes 能将运行中的 PID 映射回某个 profile 时会自动重新启动。
 
-### 仅预览：`hermes update --check`
+### 仅预览：`atlaz update --check`
 
-想在拉取前确认是否有更新？运行 `hermes update --check` — 对于 Git 安装方式，它会获取并与 `origin/main` 比较提交；对于 pip 安装方式，它会查询 PyPI 上的最新版本。不修改任何文件，不重启 gateway。适合在以"是否有更新"为条件的脚本和 cron 任务中使用。
+想在拉取前确认是否有更新？运行 `atlaz update --check` — 对于 Git 安装方式，它会获取并与 `origin/main` 比较提交；对于 pip 安装方式，它会查询 PyPI 上的最新版本。不修改任何文件，不重启 gateway。适合在以"是否有更新"为条件的脚本和 cron 任务中使用。
 
 ### 完整更新前备份：`--backup`
 
@@ -71,7 +71,7 @@ updates:
 
 ### Windows：另一个 `hermes.exe` 正在运行
 
-在 Windows 上，如果 `hermes update` 检测到另一个 `hermes.exe` 进程持有 venv 入口点可执行文件的句柄，它将拒绝运行 — 最常见的情况是 Hermes Desktop 应用启动的后端进程、另一个终端中打开的 `hermes` REPL，或正在运行的 gateway：
+在 Windows 上，如果 `atlaz update` 检测到另一个 `hermes.exe` 进程持有 venv 入口点可执行文件的句柄，它将拒绝运行 — 最常见的情况是 Hermes Desktop 应用启动的后端进程、另一个终端中打开的 `hermes` REPL，或正在运行的 gateway：
 
 ```
 $ hermes update
@@ -82,8 +82,8 @@ $ hermes update
   Windows blocks REPLACE on a running executable.
 
   Close Hermes Desktop, exit any open `hermes` REPLs, and
-  stop the gateway (`hermes gateway stop`) before retrying.
-  Override with `hermes update --force` if you've already
+  stop the gateway (`atlaz gateway stop`) before retrying.
+  Override with `atlaz update --force` if you've already
   confirmed those processes will not write to the venv.
 ```
 
@@ -93,7 +93,7 @@ $ hermes update
 
 ```
 $ hermes update
-Updating Hermes Agent...
+Updating ATLAZ...
 📥 Pulling latest code...
 Already up to date.  (or: Updating abc1234..def5678)
 📦 Updating dependencies...
@@ -102,26 +102,26 @@ Already up to date.  (or: Updating abc1234..def5678)
 ✅ Config is up to date  (or: Found 2 new options — running migration...)
 🔄 Restarting gateways...
 ✅ Gateway restarted
-✅ Hermes Agent updated successfully!
+✅ ATLAZ updated successfully!
 ```
 
 ### 更新后建议的验证步骤
 
-`hermes update` 处理主要的更新流程，但快速验证可确认一切正常落地：
+`atlaz update` 处理主要的更新流程，但快速验证可确认一切正常落地：
 
 1. `git status --short` — 若工作树出现意外的脏状态，请在继续前检查
-2. `hermes doctor` — 检查配置、依赖项和服务健康状态
-3. `hermes --version` — 确认版本已按预期更新
-4. 如果使用 gateway：`hermes gateway status`
+2. `atlaz doctor` — 检查配置、依赖项和服务健康状态
+3. `atlaz --version` — 确认版本已按预期更新
+4. 如果使用 gateway：`atlaz gateway status`
 5. 如果 `doctor` 报告 npm audit 问题：在标记的目录中运行 `npm audit fix`
 
 :::warning 更新后工作树出现脏状态
-如果 `hermes update` 后 `git status --short` 显示意外变更，请在继续前停下来检查。这通常意味着本地修改被重新应用到了更新后的代码之上，或依赖步骤刷新了锁文件。
+如果 `atlaz update` 后 `git status --short` 显示意外变更，请在继续前停下来检查。这通常意味着本地修改被重新应用到了更新后的代码之上，或依赖步骤刷新了锁文件。
 :::
 
 ### 终端在更新中途断开连接
 
-`hermes update` 针对意外终端断开进行了保护：
+`atlaz update` 针对意外终端断开进行了保护：
 
 - 更新会忽略 `SIGHUP`，因此关闭 SSH 会话或终端窗口不再会在安装中途终止它。`pip` 和 `git` 子进程继承此保护，因此 Python 环境不会因连接断开而处于半安装状态。
 - 更新运行期间，所有输出会同步镜像到 `~/.hermes/logs/update.log`。如果终端消失，重新连接后检查日志，确认更新是否完成以及 gateway 重启是否成功：
@@ -132,7 +132,7 @@ tail -f ~/.hermes/logs/update.log
 
 - `Ctrl-C`（SIGINT）和系统关机（SIGTERM）仍会被响应 — 这些是主动取消操作，而非意外中断。
 
-你不再需要将 `hermes update` 包裹在 `screen` 或 `tmux` 中来应对终端断开。
+你不再需要将 `atlaz update` 包裹在 `screen` 或 `tmux` 中来应对终端断开。
 
 ### 查看当前版本
 
@@ -140,7 +140,7 @@ tail -f ~/.hermes/logs/update.log
 hermes version
 ```
 
-与 [GitHub releases 页面](https://github.com/NousResearch/hermes-agent/releases) 上的最新版本进行比较。
+与 [GitHub releases 页面](https://github.com/Axighi/atlaz/releases) 上的最新版本进行比较。
 
 ### 从消息平台更新
 
@@ -199,7 +199,7 @@ uv pip install -e ".[all]"
 ```
 
 :::warning
-如果新增了配置选项，回滚可能导致配置不兼容。回滚后运行 `hermes config check`，如果遇到错误，请从 `config.yaml` 中删除无法识别的选项。
+如果新增了配置选项，回滚可能导致配置不兼容。回滚后运行 `atlaz config check`，如果遇到错误，请从 `config.yaml` 中删除无法识别的选项。
 :::
 
 ### Nix 用户注意事项

@@ -1,14 +1,14 @@
-# Hermes Agent Security Policy
+# ATLAZ Security Policy
 
-This document describes Hermes Agent's trust model, names the one
+This document describes ATLAZ's trust model, names the one
 security boundary the project treats as load-bearing, and defines the
 scope for vulnerability reports.
 
 ## 1. Reporting a Vulnerability
 
-Report privately via [GitHub Security Advisories](https://github.com/NousResearch/hermes-agent/security/advisories/new)
+Report privately via [GitHub Security Advisories](https://github.com/Axighi/atlaz/security/advisories/new)
 or **security@nousresearch.com**. Do not open public issues for
-security vulnerabilities. **Hermes Agent does not operate a bug
+security vulnerabilities. **ATLAZ does not operate a bug
 bounty program.**
 
 A useful report includes:
@@ -31,7 +31,7 @@ through the private security channel.
 
 ## 2. Trust Model
 
-Hermes Agent is a single-tenant personal agent. Its posture is
+ATLAZ is a single-tenant personal agent. Its posture is
 layered, and the layers are not equally load-bearing. Reporters and
 operators should reason about them in the same terms.
 
@@ -94,9 +94,9 @@ sandbox. Every code path — shell, code-execution, MCP, file tools,
 plugins, hooks, skill loading — is subject to the same filesystem,
 network, process, and (where applicable) inference policy.
 
-Hermes Agent supports this in two ways:
+ATLAZ supports this in two ways:
 
-- **Hermes Agent's own Docker image and Compose setup.** Lighter-
+- **ATLAZ's own Docker image and Compose setup.** Lighter-
   weight; the agent runs in a standard container with operator-
   configured mounts and network policy.
 - **[NVIDIA OpenShell](https://github.com/NVIDIA/OpenShell)**.
@@ -174,7 +174,7 @@ process through which a caller can dispatch agent work, resolve
 approvals, or receive agent output. Each surface has its own
 authorization model, but the rules below apply uniformly.
 
-**Surfaces in Hermes Agent:**
+**Surfaces in ATLAZ:**
 
 - **Gateway platform adapters.** Messaging integrations in
   `gateway/platforms/` (Telegram, Discord, Slack, email, SMS, etc.)
@@ -208,7 +208,7 @@ authorization model, but the rules below apply uniformly.
    access to their approvals or output; authorization is always
    re-checked against the allowlist (or OS-level equivalent).
 4. **Within the authorized set, all callers are equally trusted.**
-   Hermes Agent does not model per-caller capabilities inside a
+   ATLAZ does not model per-caller capabilities inside a
    single adapter. Operators who need capability separation should
    run separate agent instances with separate allowlists.
 5. **Binding a local-only surface to a non-loopback interface is a

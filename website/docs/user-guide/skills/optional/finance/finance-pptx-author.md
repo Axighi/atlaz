@@ -14,7 +14,7 @@ Build PowerPoint decks headless with python-pptx. Pairs with excel-author for mo
 
 | | |
 |---|---|
-| Source | Optional — install with `hermes skills install official/finance/pptx-author` |
+| Source | Optional — install with `atlaz skills install official/finance/pptx-author` |
 | Path | `optional-skills/finance/pptx-author` |
 | Version | `1.0.0` |
 | Author | Anthropic (adapted by Nous Research) |

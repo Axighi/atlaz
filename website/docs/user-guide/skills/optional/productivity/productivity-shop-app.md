@@ -14,7 +14,7 @@ Shop.app: product search, order tracking, returns, reorder.
 
 | | |
 |---|---|
-| Source | Optional — install with `hermes skills install official/productivity/shop-app` |
+| Source | Optional — install with `atlaz skills install official/productivity/shop-app` |
 | Path | `optional-skills/productivity/shop-app` |
 | Version | `0.0.28` |
 | Author | community |

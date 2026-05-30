@@ -1,7 +1,7 @@
 ---
 sidebar_position: 6
 title: "Signal"
-description: "Set up Hermes Agent as a Signal messenger bot via signal-cli daemon"
+description: "Set up ATLAZ as a Signal messenger bot via signal-cli daemon"
 ---
 
 # Signal Setup
@@ -128,7 +128,7 @@ sudo hermes gateway install --system   # Linux only: boot-time system service
 DM access follows the same pattern as all other Hermes platforms:
 
 1. **`SIGNAL_ALLOWED_USERS` set** → only those users can message
-2. **No allowlist set** → unknown users get a DM pairing code (approve via `hermes pairing approve signal CODE`)
+2. **No allowlist set** → unknown users get a DM pairing code (approve via `atlaz pairing approve signal CODE`)
 3. **`SIGNAL_ALLOW_ALL_USERS=true`** → anyone can message (use with caution)
 
 ### Group Access

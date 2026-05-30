@@ -1,12 +1,12 @@
 ---
 sidebar_position: 2
 title: "Installation"
-description: "Install Hermes Agent on Linux, macOS, WSL2, native Windows (early beta), or Android via Termux"
+description: "Install ATLAZ on Linux, macOS, WSL2, native Windows (early beta), or Android via Termux"
 ---
 
 # Installation
 
-Get Hermes Agent up and running in under two minutes with the one-line installer.
+Get ATLAZ up and running in under two minutes with the one-line installer.
 
 ## Quick Install
 
@@ -21,7 +21,7 @@ curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scri
 ### Windows (native, PowerShell) — Early Beta
 
 :::warning Early BETA
-Native Windows support is **early beta**. It installs and works for the common paths, but hasn't been road-tested as broadly as our POSIX installers. Please [file issues](https://github.com/NousResearch/hermes-agent/issues) when you hit rough edges. For the most battle-tested setup on Windows today, use the Linux/macOS one-liner above inside **WSL2** instead.
+Native Windows support is **early beta**. It installs and works for the common paths, but hasn't been road-tested as broadly as our POSIX installers. Please [file issues](https://github.com/Axighi/atlaz/issues) when you hit rough edges. For the most battle-tested setup on Windows today, use the Linux/macOS one-liner above inside **WSL2** instead.
 :::
 
 Open PowerShell and run:
@@ -30,7 +30,7 @@ Open PowerShell and run:
 iex (irm https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1)
 ```
 
-The installer handles **everything**: `uv`, Python 3.11, Node.js 22, `ripgrep`, `ffmpeg`, **and a portable Git Bash** (PortableGit — a self-contained Git-for-Windows distribution that ships `bash.exe` and the full POSIX toolchain Hermes uses for shell commands; on 32-bit Windows the installer falls back to MinGit, which lacks bash and disables terminal-tool / agent-browser features).  It clones the repo under `%LOCALAPPDATA%\hermes\hermes-agent`, creates a virtualenv, and adds `hermes` to your **User PATH**.  Restart your terminal (or open a new PowerShell window) after the install so PATH picks up.
+The installer handles **everything**: `uv`, Python 3.11, Node.js 22, `ripgrep`, `ffmpeg`, **and a portable Git Bash** (PortableGit — a self-contained Git-for-Windows distribution that ships `bash.exe` and the full POSIX toolchain Hermes uses for shell commands; on 32-bit Windows the installer falls back to MinGit, which lacks bash and disables terminal-tool / agent-browser features).  It clones the repo under `%LOCALAPPDATA%\hermes\hermes-agent`, creates a virtualenv, and adds `atlaz` to your **User PATH**.  Restart your terminal (or open a new PowerShell window) after the install so PATH picks up.
 
 **How Git is handled:**
 1. If `git` is already on your PATH, the installer uses your existing install.
@@ -64,7 +64,7 @@ If you want the fully explicit path, follow the dedicated [Termux guide](./termu
 :::note Windows Feature Parity (Early Beta)
 
 Native Windows is in **early beta**. Everything except the browser-based dashboard chat terminal runs natively on Windows:
-- **CLI (`hermes chat`, `hermes setup`, `hermes gateway`, …)** — native, uses your default terminal
+- **CLI (`atlaz chat`, `atlaz setup`, `atlaz gateway`, …)** — native, uses your default terminal
 - **Gateway (Telegram, Discord, Slack, …)** — native, runs as a background PowerShell process
 - **Cron scheduler** — native
 - **Browser tool** — native (Chromium via Node.js)
@@ -76,13 +76,13 @@ Set `HERMES_DISABLE_WINDOWS_UTF8=1` in your environment if you hit an encoding-r
 
 ### What the Installer Does
 
-The installer handles everything automatically — all dependencies (Python, Node.js, ripgrep, ffmpeg), the repo clone, virtual environment, global `hermes` command setup, and LLM provider configuration. By the end, you're ready to chat.
+The installer handles everything automatically — all dependencies (Python, Node.js, ripgrep, ffmpeg), the repo clone, virtual environment, global `atlaz` command setup, and LLM provider configuration. By the end, you're ready to chat.
 
 #### Install Layout
 
 Where the installer puts things depends on whether you're installing as a normal user or as root:
 
-| Installer | Code lives at | `hermes` binary | Data directory |
+| Installer | Code lives at | `atlaz` binary | Data directory |
 |---|---|---|---|
 | pip install | Python site-packages | `~/.local/bin/hermes` (console_scripts) | `~/.hermes/` |
 | Per-user (git installer) | `~/.hermes/hermes-agent/` | `~/.local/bin/hermes` (symlink) | `~/.hermes/` |
@@ -151,7 +151,7 @@ If you want to clone the repo and install from source — for contributing, runn
 
 ## Non-Sudo / System Service User Installs
 
-Running Hermes as a dedicated unprivileged user (e.g. a `hermes` systemd service account, or any user without `sudo` access) is supported. The only thing on the install path that genuinely needs root is Playwright's `--with-deps` step, which `apt`-installs shared libraries (`libnss3`, `libxkbcommon`, etc.) used by Chromium. The installer detects whether sudo is available and gracefully degrades when it isn't — it will install the Chromium binary into the service user's own Playwright cache and print the exact command an administrator needs to run separately.
+Running Hermes as a dedicated unprivileged user (e.g. a `atlaz` systemd service account, or any user without `sudo` access) is supported. The only thing on the install path that genuinely needs root is Playwright's `--with-deps` step, which `apt`-installs shared libraries (`libnss3`, `libxkbcommon`, etc.) used by Chromium. The installer detects whether sudo is available and gracefully degrades when it isn't — it will install the Chromium binary into the service user's own Playwright cache and print the exact command an administrator needs to run separately.
 
 **Recommended split (Debian/Ubuntu):**
 
@@ -171,7 +171,7 @@ Running Hermes as a dedicated unprivileged user (e.g. a `hermes` systemd service
    curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash -s -- --skip-browser
    ```
 
-3. **Make `hermes` available to the service user's shells.** The installer writes the launcher to `~/.local/bin/hermes`. System service accounts often have a minimal PATH that doesn't include `~/.local/bin`. Either add it to the user's environment, or symlink the launcher into a system location:
+3. **Make `atlaz` available to the service user's shells.** The installer writes the launcher to `~/.local/bin/hermes`. System service accounts often have a minimal PATH that doesn't include `~/.local/bin`. Either add it to the user's environment, or symlink the launcher into a system location:
    ```bash
    # Option A — add to the service user's profile
    echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
@@ -180,7 +180,7 @@ Running Hermes as a dedicated unprivileged user (e.g. a `hermes` systemd service
    sudo ln -s /home/hermes/.hermes/hermes-agent/venv/bin/hermes /usr/local/bin/hermes
    ```
 
-4. **Verify:** `hermes doctor` should now run cleanly. If you get `ModuleNotFoundError: No module named 'dotenv'`, you're invoking the repo source `hermes` file (`~/.hermes/hermes-agent/hermes`) with system Python instead of the venv launcher (`~/.hermes/hermes-agent/venv/bin/hermes`) — fix step 3.
+4. **Verify:** `atlaz doctor` should now run cleanly. If you get `ModuleNotFoundError: No module named 'dotenv'`, you're invoking the repo source `atlaz` file (`~/.hermes/hermes-agent/hermes`) with system Python instead of the venv launcher (`~/.hermes/hermes-agent/venv/bin/hermes`) — fix step 3.
 
 The same pattern works on Arch (the installer uses pacman with the same sudo-detection logic), Fedora/RHEL, and openSUSE — those distros don't support `--with-deps` at all, so an administrator always installs the system libraries separately. The relevant `dnf`/`zypper` commands are printed by the installer.
 
@@ -191,11 +191,11 @@ The same pattern works on Arch (the installer uses pacman with the same sudo-det
 | Problem | Solution |
 |---------|----------|
 | `hermes: command not found` | Reload your shell (`source ~/.bashrc`) or check PATH |
-| `API key not set` | Run `hermes model` to configure your provider, or `hermes config set OPENROUTER_API_KEY your_key` |
-| Missing config after update | Run `hermes config check` then `hermes config migrate` |
+| `API key not set` | Run `atlaz model` to configure your provider, or `atlaz config set OPENROUTER_API_KEY your_key` |
+| Missing config after update | Run `atlaz config check` then `atlaz config migrate` |
 
-For more diagnostics, run `hermes doctor` — it will tell you exactly what's missing and how to fix it.
+For more diagnostics, run `atlaz doctor` — it will tell you exactly what's missing and how to fix it.
 
 ## Install method auto-detection
 
-Hermes auto-detects whether it was installed via `pip`, the git installer, Homebrew, or NixOS, and `hermes update` prints the matching update command for that path. There's no env var to set — the detection is based on the install layout (Python site-packages, `~/.hermes/hermes-agent/`, Homebrew prefix, or Nix store path). `hermes doctor` also surfaces the detected method under its environment summary.
+Hermes auto-detects whether it was installed via `pip`, the git installer, Homebrew, or NixOS, and `atlaz update` prints the matching update command for that path. There's no env var to set — the detection is based on the install layout (Python site-packages, `~/.hermes/hermes-agent/`, Homebrew prefix, or Nix store path). `atlaz doctor` also surfaces the detected method under its environment summary.

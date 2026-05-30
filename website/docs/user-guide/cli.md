@@ -1,19 +1,19 @@
 ---
 sidebar_position: 1
 title: "CLI Interface"
-description: "Master the Hermes Agent terminal interface — commands, keybindings, personalities, and more"
+description: "Master the ATLAZ terminal interface — commands, keybindings, personalities, and more"
 ---
 
 # CLI Interface
 
-Hermes Agent's CLI is a full terminal user interface (TUI) — not a web UI. It features multiline editing, slash-command autocomplete, conversation history, interrupt-and-redirect, and streaming tool output. Built for people who live in the terminal.
+ATLAZ's CLI is a full terminal user interface (TUI) — not a web UI. It features multiline editing, slash-command autocomplete, conversation history, interrupt-and-redirect, and streaming tool output. Built for people who live in the terminal.
 
 :::tip First-time setup
-One command — `hermes setup --portal` — and you're ready to `hermes chat`. See [Nous Portal](/integrations/nous-portal).
+One command — `atlaz setup --portal` — and you're ready to `atlaz chat`. See [Nous Portal](/integrations/nous-portal).
 :::
 
 :::tip
-Hermes also ships a modern TUI with modal overlays, mouse selection, and non-blocking input. Launch it with `hermes --tui` — see the [TUI](tui.md) guide.
+Hermes also ships a modern TUI with modal overlays, mouse selection, and non-blocking input. Launch it with `atlaz --tui` — see the [TUI](tui.md) guide.
 :::
 
 ## Running the CLI
@@ -75,7 +75,7 @@ A persistent status bar sits above the input area, updating in real time:
 | 🗜️ N | **Context compression count** — how many times the running session has been auto-compressed. Appears once the first compression fires. |
 | ▶ N | **Active background tasks** — how many `/background` prompts are still running in the current session. Appears whenever at least one task is in flight. |
 | Duration | Elapsed session time |
-| ⚠ YOLO | **YOLO mode warning** — shown whenever `HERMES_YOLO_MODE` is on (either `hermes --yolo` at launch or `/yolo` toggled mid-session). Mirrors the banner-line warning so you can't forget you're in auto-approve mode. |
+| ⚠ YOLO | **YOLO mode warning** — shown whenever `HERMES_YOLO_MODE` is on (either `atlaz --yolo` at launch or `/yolo` toggled mid-session). Mirrors the banner-line warning so you can't forget you're in auto-approve mode. |
 
 The bar adapts to terminal width — full layout at ≥ 76 columns, compact at 52–75, minimal (model + duration, plus the YOLO badge when active) below 52.
 
@@ -92,7 +92,7 @@ Use `/usage` for a detailed breakdown including per-category costs (input vs out
 
 ### Session Resume Display
 
-When resuming a previous session (`hermes -c` or `hermes --resume <id>`), a "Previous Conversation" panel appears between the banner and the input prompt, showing a compact recap of the conversation history. See [Sessions — Conversation Recap on Resume](sessions.md#conversation-recap-on-resume) for details and configuration.
+When resuming a previous session (`atlaz -c` or `atlaz --resume <id>`), a "Previous Conversation" panel appears between the banner and the input prompt, showing a compact recap of the conversation history. See [Sessions — Conversation Recap on Resume](sessions.md#conversation-recap-on-resume) for details and configuration.
 
 ## Keybindings
 
@@ -286,7 +286,7 @@ The very first time you press Enter while Hermes is working, Hermes prints a one
 On Unix systems, press **`Ctrl+Z`** to suspend Hermes to the background — just like any terminal process. The shell prints a confirmation:
 
 ```
-Hermes Agent has been suspended. Run `fg` to bring Hermes Agent back.
+ATLAZ has been suspended. Run `fg` to bring ATLAZ back.
 ```
 
 Type `fg` in your shell to resume the session exactly where you left off. This is not supported on Windows.
@@ -351,7 +351,7 @@ hermes -r 20260225_143052_a1b2c3           # Short form
 
 Resuming restores the full conversation history from SQLite. The agent sees all previous messages, tool calls, and responses — just as if you never left.
 
-Use `/title My Session Name` inside a chat to name the current session, or `hermes sessions rename <id> <title>` from the command line. Use `hermes sessions list` to browse past sessions.
+Use `/title My Session Name` inside a chat to name the current session, or `atlaz sessions rename <id> <title>` from the command line. Use `atlaz sessions list` to browse past sessions.
 
 ### Session Storage
 

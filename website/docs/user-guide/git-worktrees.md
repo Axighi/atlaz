@@ -7,7 +7,7 @@ description: "Run multiple Hermes agents safely on the same repository using git
 
 # Git Worktrees
 
-Hermes Agent is often used on large, long‑lived repositories. When you want to:
+ATLAZ is often used on large, long‑lived repositories. When you want to:
 
 - Run **multiple agents in parallel** on the same project, or
 - Keep experimental refactors isolated from your main branch,
@@ -20,7 +20,7 @@ This page shows how to combine worktrees with Hermes so each session has a clean
 
 Hermes treats the **current working directory** as the project root:
 
-- CLI: the directory where you run `hermes` or `hermes chat`
+- CLI: the directory where you run `atlaz` or `atlaz chat`
 - Messaging gateways: the directory set by `MESSAGING_CWD`
 
 If you run multiple agents in the **same checkout**, their changes can interfere with each other:
@@ -137,7 +137,7 @@ Notes:
 - **Avoid running Hermes from the bare repo root when using worktrees**
   - Prefer the worktree directories instead, so each agent has a clear scope.
 
-## Using `hermes -w` (Automatic Worktree Mode)
+## Using `atlaz -w` (Automatic Worktree Mode)
 
 Hermes has a built‑in `-w` flag that **automatically creates a disposable git worktree** with its own branch. You don't need to set up worktrees manually — just `cd` into your repo and run:
 
@@ -158,7 +158,7 @@ This is the easiest way to get worktree isolation. You can also combine it with 
 hermes -w -q "Fix issue #123"
 ```
 
-For parallel agents, open multiple terminals and run `hermes -w` in each — every invocation gets its own worktree and branch automatically.
+For parallel agents, open multiple terminals and run `atlaz -w` in each — every invocation gets its own worktree and branch automatically.
 
 ## Putting It All Together
 

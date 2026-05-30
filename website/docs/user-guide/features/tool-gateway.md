@@ -61,7 +61,7 @@ hermes portal tools       # Gateway catalog with current routing per tool
 hermes status             # Full system status (Tool Gateway is one section)
 ```
 
-`hermes portal status` shows a section like:
+`atlaz portal status` shows a section like:
 
 ```
 ◆ Nous Tool Gateway
@@ -110,13 +110,13 @@ Image generation defaults to FLUX 2 Klein 9B for speed. Override per-call by pas
 | Recraft V4 Pro | `fal-ai/recraft/v4/pro` | Vector-style, graphic design |
 | Qwen Image | `fal-ai/qwen-image` | Alibaba multimodal |
 
-The set evolves — `hermes tools` → Image Generation shows the current live list.
+The set evolves — `atlaz tools` → Image Generation shows the current live list.
 
 ---
 
 ## Configuration reference
 
-Most users never need to touch this — `hermes model` and `hermes tools` cover every workflow interactively. This section is for writing config.yaml directly or scripting setups.
+Most users never need to touch this — `atlaz model` and `atlaz tools` cover every workflow interactively. This section is for writing config.yaml directly or scripting setups.
 
 ### Per-tool `use_gateway` flag
 
@@ -148,7 +148,7 @@ web:
   use_gateway: false   # Hermes now uses FIRECRAWL_API_KEY from .env
 ```
 
-`hermes tools` automatically clears the flag when you pick a non-gateway provider, so this usually happens for you.
+`atlaz tools` automatically clears the flag when you pick a non-gateway provider, so this usually happens for you.
 
 ### Self-hosted gateway (advanced)
 
@@ -171,7 +171,7 @@ Yes. Tool Gateway operates at the tool-execution layer, not the CLI. Every inter
 
 ### What happens if my subscription expires?
 
-Tools routed through the gateway stop working until you renew or swap in direct API keys via `hermes tools`. Hermes shows a clear error pointing at the portal.
+Tools routed through the gateway stop working until you renew or swap in direct API keys via `atlaz tools`. Hermes shows a clear error pointing at the portal.
 
 ### Can I see usage or costs per tool?
 
@@ -179,7 +179,7 @@ Yes — the [Nous Portal dashboard](https://portal.nousresearch.com) breaks usag
 
 ### Is Modal (serverless terminal) included?
 
-Modal is available as an **optional add-on** through the Nous subscription, not part of the default Tool Gateway bundle. Configure it via `hermes setup terminal` or directly in `config.yaml` when you want a remote sandbox for shell execution.
+Modal is available as an **optional add-on** through the Nous subscription, not part of the default Tool Gateway bundle. Configure it via `atlaz setup terminal` or directly in `config.yaml` when you want a remote sandbox for shell execution.
 
 ### Do I need to delete my existing API keys when I enable the gateway?
 

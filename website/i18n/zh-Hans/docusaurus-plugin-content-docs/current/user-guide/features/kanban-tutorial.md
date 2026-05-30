@@ -5,7 +5,7 @@ Hermes Kanban 系统所设计的四个使用场景的完整演示，需在浏览
 ## 准备工作
 
 ```bash
-hermes kanban init           # 可选；首次执行 `hermes kanban <任何命令>` 会自动初始化
+hermes kanban init           # 可选；首次执行 `atlaz kanban <任何命令>` 会自动初始化
 hermes dashboard             # 在浏览器中打开 http://127.0.0.1:9119
 # 点击左侧导航栏中的 Kanban
 ```
@@ -22,7 +22,7 @@ dashboard 是**你**观察系统最便捷的地方。dispatcher 生成的 agent 
 
 从左到右共六列：
 
-- **Triage（分类）** — 原始想法。默认情况下，dispatcher 会对此处的任务自动运行**分解器**（orchestrator 驱动的扇出）：它读取你的 profile 名册和描述，生成一张子任务图，将任务路由给最合适的专家，同时保持原始任务作为父任务存活，以便在所有子任务完成后 orchestrator 重新唤醒来判断完成情况。点击 kanban 页面顶部的 **Orchestration: Auto/Manual** 切换按钮来切换模式。在 Manual 模式下（或没有 orchestrator profile 的配置中），点击卡片上的 **⚗ Decompose**，或运行 `hermes kanban decompose <id>` / `/kanban decompose <id>`。对于不需要扇出的单个任务，**✨ Specify** 会进行一次性规格重写（目标、方法、验收标准）并将任务提升到 `todo`。在 `config.yaml` 的 `auxiliary.kanban_decomposer` 和 `auxiliary.triage_specifier` 下配置相关模型。参见主 Kanban 指南中的[自动与手动编排](./kanban#auto-vs-manual-orchestration)。
+- **Triage（分类）** — 原始想法。默认情况下，dispatcher 会对此处的任务自动运行**分解器**（orchestrator 驱动的扇出）：它读取你的 profile 名册和描述，生成一张子任务图，将任务路由给最合适的专家，同时保持原始任务作为父任务存活，以便在所有子任务完成后 orchestrator 重新唤醒来判断完成情况。点击 kanban 页面顶部的 **Orchestration: Auto/Manual** 切换按钮来切换模式。在 Manual 模式下（或没有 orchestrator profile 的配置中），点击卡片上的 **⚗ Decompose**，或运行 `atlaz kanban decompose <id>` / `/kanban decompose <id>`。对于不需要扇出的单个任务，**✨ Specify** 会进行一次性规格重写（目标、方法、验收标准）并将任务提升到 `todo`。在 `config.yaml` 的 `auxiliary.kanban_decomposer` 和 `auxiliary.triage_specifier` 下配置相关模型。参见主 Kanban 指南中的[自动与手动编排](./kanban#auto-vs-manual-orchestration)。
 - **Todo（待办）** — 已创建但等待依赖项，或尚未分配。
 - **Ready（就绪）** — 已分配，等待 dispatcher 认领。
 - **In progress（进行中）** — worker 正在主动执行任务。开启"Lanes by profile"（默认开启）时，此列按负责人分组，让你一眼看出每个 worker 正在做什么。
@@ -291,7 +291,7 @@ Run 1 — `crashed`，错误为 `OOM kill at row 2.3M (process 99999 gone)`。Ru
 
 这取代了平面 kanban 系统中"翻查评论和工作输出"的繁琐流程。PM 在规格说明的 metadata 中编写验收标准，工程师的 worker 在父任务交接中以结构化形式看到它们。工程师记录运行了哪些测试以及通过了多少，审查者的 worker 在打开 diff 之前就已掌握该列表。
 
-批量关闭保护的存在正是因为这些数据是按 run 存储的。`hermes kanban complete a b c --summary X`（你，从 CLI 执行）会被拒绝——将相同的 summary 复制粘贴到三个任务几乎总是错误的。不带交接标志的批量关闭仍然适用于常见的"我完成了一堆行政任务"场景。工具界面根本不提供批量变体；`kanban_complete` 始终是单任务操作，原因相同。
+批量关闭保护的存在正是因为这些数据是按 run 存储的。`atlaz kanban complete a b c --summary X`（你，从 CLI 执行）会被拒绝——将相同的 summary 复制粘贴到三个任务几乎总是错误的。不带交接标志的批量关闭仍然适用于常见的"我完成了一堆行政任务"场景。工具界面根本不提供批量变体；`kanban_complete` 始终是单任务操作，原因相同。
 
 ## 检查当前正在运行的任务
 
@@ -304,6 +304,6 @@ Run 1 — `crashed`，错误为 `OOM kill at row 2.3M (process 99999 gone)`。Ru
 ## 后续步骤
 
 - [Kanban 概述](./kanban) — 完整的数据模型、事件词汇表和 CLI 参考。
-- `hermes kanban --help` — 所有子命令，所有标志。
-- `hermes kanban watch --kinds completed,gave_up,timed_out` — 在整个看板上实时流式输出终端事件。
-- `hermes kanban notify-subscribe <task> --platform telegram --chat-id <id>` — 当特定任务完成时通过 gateway 接收推送通知。
+- `atlaz kanban --help` — 所有子命令，所有标志。
+- `atlaz kanban watch --kinds completed,gave_up,timed_out` — 在整个看板上实时流式输出终端事件。
+- `atlaz kanban notify-subscribe <task> --platform telegram --chat-id <id>` — 当特定任务完成时通过 gateway 接收推送通知。

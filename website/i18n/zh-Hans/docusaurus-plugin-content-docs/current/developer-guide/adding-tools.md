@@ -1,7 +1,7 @@
 ---
 sidebar_position: 2
 title: "添加工具"
-description: "如何向 Hermes Agent 添加新工具——schema、handler、注册与 toolset"
+description: "如何向 ATLAZ 添加新工具——schema、handler、注册与 toolset"
 ---
 
 # 添加工具
@@ -206,4 +206,4 @@ OPTIONAL_ENV_VARS = {
 - [ ] Handler 返回 JSON 字符串，错误以 `{"error": "..."}` 形式返回
 - [ ] 可选：已将 API 密钥添加到 `atlaz_cli/config.py` 的 `OPTIONAL_ENV_VARS`
 - [ ] 可选：已添加到 `toolset_distributions.py` 以支持批量处理
-- [ ] 已通过 `hermes chat -q "Use the weather tool for London"` 测试
+- [ ] 已通过 `atlaz chat -q "Use the weather tool for London"` 测试

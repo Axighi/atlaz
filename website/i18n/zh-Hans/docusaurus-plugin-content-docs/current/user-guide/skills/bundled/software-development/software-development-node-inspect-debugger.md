@@ -17,7 +17,7 @@ description: "调试 Node"
 | 来源 | 内置（默认安装） |
 | 路径 | `skills/software-development/node-inspect-debugger` |
 | 版本 | `1.0.0` |
-| 作者 | Hermes Agent |
+| 作者 | ATLAZ |
 | 许可证 | MIT |
 | 平台 | linux, macos, windows |
 | 标签 | `debugging`, `nodejs`, `node-inspect`, `cdp`, `breakpoints`, `ui-tui` |
@@ -217,7 +217,7 @@ cont
 
 暂停后，进入 `repl` → 检查 `props`、state 引用、`useInput` 处理器的值等。
 
-### 调试运行中的 `hermes --tui`
+### 调试运行中的 `atlaz --tui`
 
 TUI 由 Python CLI 启动 Node。最简路径：
 

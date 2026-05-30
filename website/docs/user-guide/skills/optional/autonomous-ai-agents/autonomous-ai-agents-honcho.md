@@ -14,10 +14,10 @@ Configure and use Honcho memory with Hermes -- cross-session user modeling, mult
 
 | | |
 |---|---|
-| Source | Optional — install with `hermes skills install official/autonomous-ai-agents/honcho` |
+| Source | Optional — install with `atlaz skills install official/autonomous-ai-agents/honcho` |
 | Path | `optional-skills/autonomous-ai-agents/honcho` |
 | Version | `2.0.0` |
-| Author | Hermes Agent |
+| Author | ATLAZ |
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `Honcho`, `Memory`, `Profiles`, `Observation`, `Dialectic`, `User-Modeling`, `Session-Summary` |
@@ -138,7 +138,7 @@ Honcho sessions scope where messages and observations land. Strategy options:
 | `per-session` | New Honcho session each Hermes run |
 | `global` | Single session across all directories |
 
-Manual override: `hermes honcho map my-project-name`
+Manual override: `atlaz honcho map my-project-name`
 
 ### Recall Modes
 
@@ -404,13 +404,13 @@ This fix addresses edge cases where raw user conclusions containing markup or sp
 ## Troubleshooting
 
 ### "Honcho not configured"
-Run `hermes honcho setup`. Ensure `memory.provider: honcho` is in `~/.hermes/config.yaml`.
+Run `atlaz honcho setup`. Ensure `memory.provider: honcho` is in `~/.hermes/config.yaml`.
 
 ### Memory not persisting across sessions
-Check `hermes honcho status` -- verify `saveMessages: true` and `writeFrequency` isn't `session` (which only writes on exit).
+Check `atlaz honcho status` -- verify `saveMessages: true` and `writeFrequency` isn't `session` (which only writes on exit).
 
 ### Profile not getting its own peer
-Use `--clone` when creating: `hermes profile create <name> --clone`. For existing profiles: `hermes honcho sync`.
+Use `--clone` when creating: `atlaz profile create <name> --clone`. For existing profiles: `atlaz honcho sync`.
 
 ### Observation changes in dashboard not reflected
 Observation config is synced from the server on each session init. Start a new session after changing settings in the Honcho UI.
@@ -428,19 +428,19 @@ Session summary requires at least one prior turn in the current Honcho session. 
 
 | Command | Description |
 |---------|-------------|
-| `hermes honcho setup` | Interactive setup wizard (cloud/local, identity, observation, recall, sessions) |
-| `hermes honcho status` | Show resolved config, connection test, peer info for active profile |
-| `hermes honcho enable` | Enable Honcho for the active profile (creates host block if needed) |
-| `hermes honcho disable` | Disable Honcho for the active profile |
-| `hermes honcho peer` | Show or update peer names (`--user <name>`, `--ai <name>`, `--reasoning <level>`) |
-| `hermes honcho peers` | Show peer identities across all profiles |
-| `hermes honcho mode` | Show or set recall mode (`hybrid`, `context`, `tools`) |
-| `hermes honcho tokens` | Show or set token budgets (`--context <N>`, `--dialectic <N>`) |
-| `hermes honcho sessions` | List known directory-to-session-name mappings |
-| `hermes honcho map <name>` | Map current working directory to a Honcho session name |
-| `hermes honcho identity` | Seed AI peer identity or show both peer representations |
-| `hermes honcho sync` | Create host blocks for all Hermes profiles that don't have one yet |
-| `hermes honcho migrate` | Step-by-step migration guide from OpenClaw native memory to Hermes + Honcho |
-| `hermes memory setup` | Generic memory provider picker (selecting "honcho" runs the same wizard) |
-| `hermes memory status` | Show active memory provider and config |
-| `hermes memory off` | Disable external memory provider |
+| `atlaz honcho setup` | Interactive setup wizard (cloud/local, identity, observation, recall, sessions) |
+| `atlaz honcho status` | Show resolved config, connection test, peer info for active profile |
+| `atlaz honcho enable` | Enable Honcho for the active profile (creates host block if needed) |
+| `atlaz honcho disable` | Disable Honcho for the active profile |
+| `atlaz honcho peer` | Show or update peer names (`--user <name>`, `--ai <name>`, `--reasoning <level>`) |
+| `atlaz honcho peers` | Show peer identities across all profiles |
+| `atlaz honcho mode` | Show or set recall mode (`hybrid`, `context`, `tools`) |
+| `atlaz honcho tokens` | Show or set token budgets (`--context <N>`, `--dialectic <N>`) |
+| `atlaz honcho sessions` | List known directory-to-session-name mappings |
+| `atlaz honcho map <name>` | Map current working directory to a Honcho session name |
+| `atlaz honcho identity` | Seed AI peer identity or show both peer representations |
+| `atlaz honcho sync` | Create host blocks for all Hermes profiles that don't have one yet |
+| `atlaz honcho migrate` | Step-by-step migration guide from OpenClaw native memory to Hermes + Honcho |
+| `atlaz memory setup` | Generic memory provider picker (selecting "honcho" runs the same wizard) |
+| `atlaz memory status` | Show active memory provider and config |
+| `atlaz memory off` | Disable external memory provider |

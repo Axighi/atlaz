@@ -201,7 +201,7 @@ async def handle(event_type: str, context: dict):
 ```markdown
 # Startup Checklist
 
-1. Run `hermes cron list` and check if any scheduled jobs failed overnight.
+1. Run `atlaz cron list` and check if any scheduled jobs failed overnight.
 2. If any failed, send a summary to Discord #ops using the `send_message` tool.
 3. Check if `/opt/app/deploy.log` has any ERROR lines from the last 24 hours. If yes, summarize them and include in the same Discord message.
 4. If nothing went wrong, reply with only `[SILENT]` so no message is sent.
@@ -1301,22 +1301,22 @@ printf '{}\n'
 
 三种方式可绕过交互式提示——满足其一即可：
 
-1. CLI 上的 `--accept-hooks` 标志（如 `hermes --accept-hooks chat`）
+1. CLI 上的 `--accept-hooks` 标志（如 `atlaz --accept-hooks chat`）
 2. `HERMES_ACCEPT_HOOKS=1` 环境变量
 3. `cli-config.yaml` 中的 `hooks_auto_accept: true`
 
 非 TTY 运行（gateway、cron、CI）需要这三种方式之一——否则任何新添加的 hook 会静默保持未注册状态并记录警告。
 
-**脚本编辑被静默信任。** 允许列表以精确的命令字符串为键，而非脚本的哈希值，因此编辑磁盘上的脚本不会使授权失效。`hermes hooks doctor` 会标记 mtime 漂移，以便你发现编辑并决定是否重新审批。
+**脚本编辑被静默信任。** 允许列表以精确的命令字符串为键，而非脚本的哈希值，因此编辑磁盘上的脚本不会使授权失效。`atlaz hooks doctor` 会标记 mtime 漂移，以便你发现编辑并决定是否重新审批。
 
-### `hermes hooks` CLI
+### `atlaz hooks` CLI
 
 | 命令 | 功能 |
 |------|------|
-| `hermes hooks list` | 列出已配置的 hook，包含 matcher、超时和授权状态 |
-| `hermes hooks test <event> [--for-tool X] [--payload-file F]` | 对合成载荷触发所有匹配的 hook 并打印解析后的响应 |
-| `hermes hooks revoke <command>` | 删除所有匹配 `<command>` 的允许列表条目（下次重启后生效） |
-| `hermes hooks doctor` | 对每个已配置的 hook 检查：执行位、允许列表状态、mtime 漂移、JSON 输出有效性和大致执行时间 |
+| `atlaz hooks list` | 列出已配置的 hook，包含 matcher、超时和授权状态 |
+| `atlaz hooks test <event> [--for-tool X] [--payload-file F]` | 对合成载荷触发所有匹配的 hook 并打印解析后的响应 |
+| `atlaz hooks revoke <command>` | 删除所有匹配 `<command>` 的允许列表条目（下次重启后生效） |
+| `atlaz hooks doctor` | 对每个已配置的 hook 检查：执行位、允许列表状态、mtime 漂移、JSON 输出有效性和大致执行时间 |
 
 ### 安全性
 
@@ -1324,7 +1324,7 @@ Shell hooks 以**你的完整用户凭据**运行——与 cron 条目或 shell 
 
 - 只引用你自己编写或完整审查过的脚本。
 - 将脚本保存在 `~/.hermes/agent-hooks/` 内，便于审计路径。
-- 拉取共享配置后重新运行 `hermes hooks doctor`，在新添加的 hook 注册前发现它们。
+- 拉取共享配置后重新运行 `atlaz hooks doctor`，在新添加的 hook 注册前发现它们。
 - 如果你的 config.yaml 在团队中进行版本控制，审查修改 `hooks:` 部分的 PR 时应与审查 CI 配置一样严格。
 
 ### 顺序与优先级

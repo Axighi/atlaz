@@ -1,12 +1,12 @@
 ---
 sidebar_position: 3
 title: "Android / Termux"
-description: "通过 Termux 在 Android 手机上直接运行 Hermes Agent"
+description: "通过 Termux 在 Android 手机上直接运行 ATLAZ"
 ---
 
 # 在 Android 上通过 Termux 运行 Hermes
 
-这是在 Android 手机上通过 [Termux](https://termux.dev/) 直接运行 Hermes Agent 的已验证路径。
+这是在 Android 手机上通过 [Termux](https://termux.dev/) 直接运行 ATLAZ 的已验证路径。
 
 它为你提供手机上可用的本地 CLI，以及目前已知可在 Android 上干净安装的核心扩展功能。
 
@@ -80,7 +80,7 @@ pkg install -y git python clang rust make pkg-config libffi openssl nodejs ripgr
 ### 2. 克隆 Hermes
 
 ```bash
-git clone --recurse-submodules https://github.com/NousResearch/hermes-agent.git
+git clone --recurse-submodules https://github.com/Axighi/atlaz.git
 cd hermes-agent
 ```
 
@@ -203,7 +203,7 @@ export ANDROID_API_LEVEL="$(getprop ro.build.version.sdk)"
 python -m pip install -e '.[termux]' -c constraints-termux.txt
 ```
 
-### `hermes doctor` 提示缺少 ripgrep 或 Node
+### `atlaz doctor` 提示缺少 ripgrep 或 Node
 
 使用 Termux 包安装：
 
@@ -238,5 +238,5 @@ python -m pip install -e '.[termux]' -c constraints-termux.txt
 - 你的 Android 版本
 - `termux-info`
 - `python --version`
-- `hermes doctor`
+- `atlaz doctor`
 - 确切的安装命令及完整错误输出

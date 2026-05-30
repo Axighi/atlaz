@@ -14,7 +14,7 @@ description: "无需修改核心工具即可赋予 Hermes 电话能力"
 
 | | |
 |---|---|
-| 来源 | 可选 — 使用 `hermes skills install official/productivity/telephony` 安装 |
+| 来源 | 可选 — 使用 `atlaz skills install official/productivity/telephony` 安装 |
 | 路径 | `optional-skills/productivity/telephony` |
 | 版本 | `1.0.0` |
 | 作者 | Nous Research |

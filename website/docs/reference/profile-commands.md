@@ -6,13 +6,13 @@ sidebar_position: 7
 
 This page covers all commands related to [Hermes profiles](../user-guide/profiles.md). For general CLI commands, see [CLI Commands Reference](./cli-commands.md).
 
-## `hermes profile`
+## `atlaz profile`
 
 ```bash
 hermes profile <subcommand>
 ```
 
-Top-level command for managing profiles. Running `hermes profile` without a subcommand shows help.
+Top-level command for managing profiles. Running `atlaz profile` without a subcommand shows help.
 
 | Subcommand | Description |
 |------------|-------------|
@@ -29,7 +29,7 @@ Top-level command for managing profiles. Running `hermes profile` without a subc
 | `update` | Re-pull a distribution-managed profile and re-apply its bundle. |
 | `info` | Show distribution metadata for a profile (origin URL, commit, last update). |
 
-## `hermes profile list`
+## `atlaz profile list`
 
 ```bash
 hermes profile list
@@ -49,13 +49,13 @@ $ hermes profile list
 
 No options.
 
-## `hermes profile use`
+## `atlaz profile use`
 
 ```bash
 hermes profile use <name>
 ```
 
-Sets `<name>` as the active profile. All subsequent `hermes` commands (without `-p`) will use this profile.
+Sets `<name>` as the active profile. All subsequent `atlaz` commands (without `-p`) will use this profile.
 
 | Argument | Description |
 |----------|-------------|
@@ -68,7 +68,7 @@ hermes profile use work
 hermes profile use default
 ```
 
-## `hermes profile create`
+## `atlaz profile create`
 
 ```bash
 hermes profile create <name> [options]
@@ -83,8 +83,8 @@ Creates a new profile.
 | `--clone-all` | Copy everything (config, memories, skills, sessions, state) from the current profile. |
 | `--clone-from <profile>` | Clone from a specific profile instead of the current one. Used with `--clone` or `--clone-all`. |
 | `--no-alias` | Skip wrapper script creation. |
-| `--description "<text>"` | One- or two-sentence description of what this profile is good at. Used by the kanban orchestrator to route tasks based on role instead of profile name alone. Skip and add later via `hermes profile describe`. Persisted in `<profile_dir>/profile.yaml`. |
-| `--no-skills` | Create an **empty** profile with zero bundled skills enabled. Writes a `.no-skills` marker into the profile so future `hermes update` runs won't re-seed the bundled set, and refuses to combine with `--clone` / `--clone-all` (which would copy skills in anyway). Useful for narrow orchestrator profiles or sandbox profiles that should not inherit the full skill catalog. |
+| `--description "<text>"` | One- or two-sentence description of what this profile is good at. Used by the kanban orchestrator to route tasks based on role instead of profile name alone. Skip and add later via `atlaz profile describe`. Persisted in `<profile_dir>/profile.yaml`. |
+| `--no-skills` | Create an **empty** profile with zero bundled skills enabled. Writes a `.no-skills` marker into the profile so future `atlaz update` runs won't re-seed the bundled set, and refuses to combine with `--clone` / `--clone-all` (which would copy skills in anyway). Useful for narrow orchestrator profiles or sandbox profiles that should not inherit the full skill catalog. |
 
 Creating a profile does **not** make that profile directory the default project/workspace directory for terminal commands. If you want a profile to start in a specific project, set `terminal.cwd` in that profile's `config.yaml`.
 
@@ -104,7 +104,7 @@ hermes profile create backup --clone-all
 hermes profile create work2 --clone --clone-from work
 ```
 
-## `hermes profile describe`
+## `atlaz profile describe`
 
 ```bash
 hermes profile describe [<name>] [options]
@@ -138,7 +138,7 @@ hermes profile describe researcher --auto
 hermes profile describe --all --auto
 ```
 
-## `hermes profile delete`
+## `atlaz profile delete`
 
 ```bash
 hermes profile delete <name> [options]
@@ -162,7 +162,7 @@ hermes profile delete mybot --yes
 This permanently deletes the profile's entire directory including all config, memories, sessions, and skills. Cannot delete the currently active profile.
 :::
 
-## `hermes profile show`
+## `atlaz profile show`
 
 ```bash
 hermes profile show <name>
@@ -190,7 +190,7 @@ SOUL.md: exists
 Alias:   ~/.local/bin/work
 ```
 
-## `hermes profile alias`
+## `atlaz profile alias`
 
 ```bash
 hermes profile alias <name> [options]
@@ -217,7 +217,7 @@ hermes profile alias work --remove
 # Removes the wrapper script
 ```
 
-## `hermes profile rename`
+## `atlaz profile rename`
 
 ```bash
 hermes profile rename <old-name> <new-name>
@@ -238,7 +238,7 @@ hermes profile rename mybot assistant
 # ~/.local/bin/mybot → ~/.local/bin/assistant
 ```
 
-## `hermes profile export`
+## `atlaz profile export`
 
 ```bash
 hermes profile export <name> [options]
@@ -260,7 +260,7 @@ hermes profile export work
 hermes profile export work -o ./work-2026-03-29.tar.gz
 ```
 
-## `hermes profile import`
+## `atlaz profile import`
 
 ```bash
 hermes profile import <archive> [options]
@@ -301,13 +301,13 @@ The recipient's user data (memories, sessions, auth, their own edits to
 updates.
 
 :::info
-`hermes profile export` / `import` are still the right commands for
+`atlaz profile export` / `import` are still the right commands for
 **local backup and restore** of a profile on your own machine. Distribution
 (`install` / `update` / `info`) is a separate concept: ship a profile via
 git so someone else can install it.
 :::
 
-### `hermes profile install`
+### `atlaz profile install`
 
 ```bash
 hermes profile install <source> [--name <name>] [--alias] [--force] [--yes]
@@ -319,7 +319,7 @@ Installs a profile distribution from a git URL or a local directory.
 |--------|-------------|
 | `<source>` | Git URL (`github.com/user/repo`, `https://...`, `git@...`, `ssh://`, `git://`) or a local directory containing `distribution.yaml` at its root. |
 | `--name NAME` | Override the profile name from the manifest. |
-| `--alias` | Also create a shell wrapper (e.g. `telemetry` → `hermes -p telemetry`). |
+| `--alias` | Also create a shell wrapper (e.g. `telemetry` → `atlaz -p telemetry`). |
 | `--force` | Overwrite an existing profile of the same name. User data is still preserved. |
 | `-y`, `--yes` | Skip the manifest-preview confirmation prompt. |
 
@@ -343,7 +343,7 @@ hermes profile install git@github.com:kyle/telemetry-distribution.git
 hermes profile install ./telemetry/
 ```
 
-### `hermes profile update`
+### `atlaz profile update`
 
 ```bash
 hermes profile update <name> [--force-config] [--yes]
@@ -356,7 +356,7 @@ overwritten; user data (memories, sessions, auth, .env) is never touched.
 `config.yaml` is preserved by default to keep your local overrides.
 Pass `--force-config` to reset it to the distribution's shipped config.
 
-### `hermes profile info`
+### `atlaz profile info`
 
 ```bash
 hermes profile info <name>
@@ -369,8 +369,8 @@ the `Installed:` timestamp recorded when the distribution was last
 needs before installing it, and for spotting "this profile was installed
 6 months ago and hasn't been updated."
 
-`hermes profile list` also shows the distribution name and version in a
-`Distribution` column, and `hermes profile show <name>` / `delete <name>`
+`atlaz profile list` also shows the distribution name and version in a
+`Distribution` column, and `atlaz profile show <name>` / `delete <name>`
 surface the source URL so you can tell at a glance which profiles came
 from a git repo vs. were created locally.
 
@@ -436,12 +436,12 @@ Authoring a distribution is just a git push:
    and `version`.
 2. Initialize a git repo (or use an existing one) and push to GitHub /
    GitLab / any host Hermes can clone from.
-3. Tell recipients to run `hermes profile install <your-repo-url>`.
+3. Tell recipients to run `atlaz profile install <your-repo-url>`.
 
 Use git tags for versioned releases — recipients who clone `HEAD` get your
 latest state, and you can always bump `version:` in the manifest.
 
-## `hermes -p` / `hermes --profile`
+## `atlaz -p` / `atlaz --profile`
 
 ```bash
 hermes -p <name> <command> [options]
@@ -463,7 +463,7 @@ hermes -p personal skills list
 hermes -p work config edit
 ```
 
-## `hermes completion`
+## `atlaz completion`
 
 ```bash
 hermes completion <shell>
@@ -488,9 +488,9 @@ source ~/.bashrc
 ```
 
 After installation, tab completion works for:
-- `hermes profile <TAB>` — subcommands (list, use, create, etc.)
-- `hermes profile use <TAB>` — profile names
-- `hermes -p <TAB>` — profile names
+- `atlaz profile <TAB>` — subcommands (list, use, create, etc.)
+- `atlaz profile use <TAB>` — profile names
+- `atlaz -p <TAB>` — profile names
 
 ## See also
 

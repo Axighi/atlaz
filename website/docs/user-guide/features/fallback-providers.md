@@ -7,7 +7,7 @@ sidebar_position: 8
 
 # Fallback Providers
 
-Hermes Agent has three layers of resilience that keep your sessions running when providers hit issues:
+ATLAZ has three layers of resilience that keep your sessions running when providers hit issues:
 
 1. **[Credential pools](./credential-pools.md)** — rotate across multiple API keys for the *same* provider (tried first)
 2. **Primary model fallback** — automatically switches to a *different* provider:model when your main model fails
@@ -27,7 +27,7 @@ The easiest path is the interactive manager:
 hermes fallback
 ```
 
-`hermes fallback` reuses the provider picker from `hermes model` — same provider list, same credential prompts, same validation. Use the subcommands `add`, `list` (alias `ls`), `remove` (alias `rm`), and `clear` to manage the chain. Changes persist under the top-level `fallback_providers:` list in `config.yaml`.
+`atlaz fallback` reuses the provider picker from `atlaz model` — same provider list, same credential prompts, same validation. Use the subcommands `add`, `list` (alias `ls`), `remove` (alias `rm`), and `clear` to manage the chain. Changes persist under the top-level `fallback_providers:` list in `config.yaml`.
 
 If you'd rather edit the YAML directly, add a `fallback_model` section to `~/.hermes/config.yaml`:
 
@@ -40,7 +40,7 @@ fallback_model:
 Both `provider` and `model` are **required**. If either is missing, the fallback is disabled.
 
 :::note `fallback_model` vs `fallback_providers`
-`fallback_model` (singular) is the legacy single-fallback key — Hermes still honors it for back-compat. `fallback_providers` (plural, list) supports multiple fallbacks tried in order; `hermes fallback` writes to this key. When both are set, Hermes merges them with `fallback_providers` taking priority.
+`fallback_model` (singular) is the legacy single-fallback key — Hermes still honors it for back-compat. `fallback_providers` (plural, list) supports multiple fallbacks tried in order; `atlaz fallback` writes to this key. When both are set, Hermes merges them with `fallback_providers` taking priority.
 :::
 
 ### Supported Providers
@@ -48,8 +48,8 @@ Both `provider` and `model` are **required**. If either is missing, the fallback
 | Provider | Value | Requirements |
 |----------|-------|-------------|
 | OpenRouter | `openrouter` | `OPENROUTER_API_KEY` |
-| Nous Portal | `nous` | `hermes setup --portal` (fresh) or `hermes auth add nous` (OAuth) |
-| OpenAI Codex | `openai-codex` | `hermes model` (ChatGPT OAuth) |
+| Nous Portal | `nous` | `atlaz setup --portal` (fresh) or `atlaz auth add nous` (OAuth) |
+| OpenAI Codex | `openai-codex` | `atlaz model` (ChatGPT OAuth) |
 | GitHub Copilot | `copilot` | `COPILOT_GITHUB_TOKEN`, `GH_TOKEN`, or `GITHUB_TOKEN` |
 | GitHub Copilot ACP | `copilot-acp` | External process (editor integration) |
 | Anthropic | `anthropic` | `ANTHROPIC_API_KEY` or Claude Code credentials |
@@ -62,13 +62,13 @@ Both `provider` and `model` are **required**. If either is missing, the fallback
 | GMI Cloud | `gmi` | `GMI_API_KEY` (optional: `GMI_BASE_URL`) |
 | StepFun | `stepfun` | `STEPFUN_API_KEY` (optional: `STEPFUN_BASE_URL`) |
 | Ollama Cloud | `ollama-cloud` | `OLLAMA_API_KEY` |
-| Google Gemini (OAuth) | `google-gemini-cli` | `hermes model` (Google OAuth; optional: `HERMES_GEMINI_PROJECT_ID`) |
+| Google Gemini (OAuth) | `google-gemini-cli` | `atlaz model` (Google OAuth; optional: `HERMES_GEMINI_PROJECT_ID`) |
 | Google AI Studio | `gemini` | `GOOGLE_API_KEY` (alias: `GEMINI_API_KEY`) |
 | xAI (Grok) | `xai` (alias `grok`) | `XAI_API_KEY` (optional: `XAI_BASE_URL`) |
-| xAI Grok OAuth (SuperGrok) | `xai-oauth` (alias `grok-oauth`) | `hermes model` → xAI Grok OAuth (browser login; SuperGrok subscription) |
+| xAI Grok OAuth (SuperGrok) | `xai-oauth` (alias `grok-oauth`) | `atlaz model` → xAI Grok OAuth (browser login; SuperGrok subscription) |
 | AWS Bedrock | `bedrock` | Standard boto3 auth (`AWS_REGION` + `AWS_PROFILE` or `AWS_ACCESS_KEY_ID`) |
-| Qwen Portal (OAuth) | `qwen-oauth` | `hermes model` (Qwen Portal OAuth; optional: `HERMES_QWEN_BASE_URL`) |
-| MiniMax (OAuth) | `minimax-oauth` | `hermes model` (MiniMax portal OAuth) |
+| Qwen Portal (OAuth) | `qwen-oauth` | `atlaz model` (Qwen Portal OAuth; optional: `HERMES_QWEN_BASE_URL`) |
+| MiniMax (OAuth) | `minimax-oauth` | `atlaz model` (MiniMax portal OAuth) |
 | OpenCode Zen | `opencode-zen` | `OPENCODE_ZEN_API_KEY` |
 | OpenCode Go | `opencode-go` | `OPENCODE_GO_API_KEY` |
 | Kilo Code | `kilocode` | `KILOCODE_API_KEY` |
@@ -191,7 +191,7 @@ Hermes uses separate lightweight models for side tasks. Each task has its own pr
 | MCP | MCP helper operations | `auxiliary.mcp` |
 | Approval | Smart command-approval classification | `auxiliary.approval` |
 | Title Generation | Session title summaries | `auxiliary.title_generation` |
-| Triage Specifier | `hermes kanban specify` / dashboard ✨ button — fleshes out a one-liner triage task into a real spec | `auxiliary.triage_specifier` |
+| Triage Specifier | `atlaz kanban specify` / dashboard ✨ button — fleshes out a one-liner triage task into a real spec | `auxiliary.triage_specifier` |
 
 ### Auto-Detection Chain
 
@@ -271,8 +271,8 @@ These options apply to `auxiliary:`, `compression:`, and `fallback_model:` confi
 |----------|-------------|-------------|
 | `"auto"` | Try providers in order until one works (default) | At least one provider configured |
 | `"openrouter"` | Force OpenRouter | `OPENROUTER_API_KEY` |
-| `"nous"` | Force Nous Portal | `hermes auth` |
-| `"codex"` | Force Codex OAuth | `hermes model` → Codex |
+| `"nous"` | Force Nous Portal | `atlaz auth` |
+| `"codex"` | Force Codex OAuth | `atlaz model` → Codex |
 | `"main"` | Use whatever provider the main agent uses (auxiliary tasks only) | Active main provider configured |
 | `"anthropic"` | Force Anthropic native | `ANTHROPIC_API_KEY` or Claude Code credentials |
 

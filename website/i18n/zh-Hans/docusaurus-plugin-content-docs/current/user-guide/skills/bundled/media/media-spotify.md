@@ -17,7 +17,7 @@ Spotify：播放、搜索、队列、管理播放列表和设备。
 | 来源 | 内置（默认安装） |
 | 路径 | `skills/media/spotify` |
 | 版本 | `1.0.0` |
-| 作者 | Hermes Agent |
+| 作者 | ATLAZ |
 | 许可证 | MIT |
 | 平台 | linux, macos, windows |
 | 标签 | `spotify`, `music`, `playback`, `playlists`, `media` |
@@ -31,7 +31,7 @@ Spotify：播放、搜索、队列、管理播放列表和设备。
 
 # Spotify
 
-通过 Hermes Spotify 工具集（7 个工具）控制用户的 Spotify 账户。设置指南：https://hermes-agent.nousresearch.com/docs/user-guide/features/spotify
+通过 Hermes Spotify 工具集（7 个工具）控制用户的 Spotify 账户。设置指南：https://atlaz.nousresearch.com/docs/user-guide/features/spotify
 
 ## 何时使用此 skill
 
@@ -128,7 +128,7 @@ spotify_devices({"action": "transfer", "device_id": "<id>", "play": true})
 
 **`429 Too Many Requests`** = 速率限制。等待后重试一次。如果持续发生，说明你在循环——停止。
 
-**`401 Unauthorized` 重试后仍出现** — 刷新令牌已被撤销。告知用户重新运行 `hermes auth spotify`。
+**`401 Unauthorized` 重试后仍出现** — 刷新令牌已被撤销。告知用户重新运行 `atlaz auth spotify`。
 
 ## URI 和 ID 格式
 

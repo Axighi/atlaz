@@ -150,7 +150,7 @@ hermes gateway status --system         # 仅 Linux：显式检查系统服务
 | `/rollback [number]` | 列出或恢复文件系统检查点 |
 | `/background <prompt>` | 在独立后台会话中运行 prompt（提示词） |
 | `/reload-mcp` | 从配置重新加载 MCP 服务器 |
-| `/update` | 将 Hermes Agent 更新至最新版本 |
+| `/update` | 将 ATLAZ 更新至最新版本 |
 | `/help` | 显示可用命令 |
 | `/<skill-name>` | 调用任意已安装的技能 |
 
@@ -387,7 +387,7 @@ journalctl -u hermes-gateway -f
 除非你确实有此需要，否则避免同时安装用户和系统网关单元。Hermes 检测到两者同时存在时会发出警告，因为 start/stop/status 行为会变得不明确。
 
 :::info 多个安装
-如果你在同一台机器上运行多个 Hermes 安装（使用不同的 `HERMES_HOME` 目录），每个安装都有自己的 systemd 服务名称。默认的 `~/.hermes` 使用 `hermes-gateway`；其他安装使用 `hermes-gateway-<hash>`。`hermes gateway` 命令会自动针对当前 `HERMES_HOME` 对应的正确服务。
+如果你在同一台机器上运行多个 Hermes 安装（使用不同的 `HERMES_HOME` 目录），每个安装都有自己的 systemd 服务名称。默认的 `~/.hermes` 使用 `hermes-gateway`；其他安装使用 `hermes-gateway-<hash>`。`atlaz gateway` 命令会自动针对当前 `HERMES_HOME` 对应的正确服务。
 :::
 
 ### macOS（launchd）
@@ -407,7 +407,7 @@ tail -f ~/.hermes/logs/gateway.log   # 查看日志
 - **HERMES_HOME** — 将网关限定到你的 Hermes 安装。
 
 :::tip 安装后 PATH 变更
-launchd plist 是静态的——如果你在配置网关后安装了新工具（例如通过 nvm 安装新版 Node.js，或通过 Homebrew 安装 ffmpeg），请重新运行 `hermes gateway install` 以捕获更新后的 PATH。网关会检测到过时的 plist 并自动重新加载。
+launchd plist 是静态的——如果你在配置网关后安装了新工具（例如通过 nvm 安装新版 Node.js，或通过 Homebrew 安装 ffmpeg），请重新运行 `atlaz gateway install` 以捕获更新后的 PATH。网关会检测到过时的 plist 并自动重新加载。
 :::
 
 :::info 多个安装

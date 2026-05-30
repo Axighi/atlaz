@@ -172,7 +172,7 @@ required_environment_variables:
     required_for: full functionality
 ```
 
-When a missing value is encountered, Hermes asks for it securely only when the skill is actually loaded in the local CLI. You can skip setup and keep using the skill. Messaging surfaces never ask for secrets in chat — they tell you to use `hermes setup` or `~/.hermes/.env` locally instead.
+When a missing value is encountered, Hermes asks for it securely only when the skill is actually loaded in the local CLI. You can skip setup and keep using the skill. Messaging surfaces never ask for secrets in chat — they tell you to use `atlaz setup` or `~/.hermes/.env` locally instead.
 
 Once set, declared env vars are **automatically passed through** to `execute_code` and `terminal` sandboxes — the skill's scripts can use `$TENOR_API_KEY` directly. For non-skill env vars, use the `terminal.env_passthrough` config option. See [Environment Variable Passthrough](/user-guide/security#environment-variable-passthrough) for details.
 
@@ -190,7 +190,7 @@ metadata:
         prompt: Plugin data directory path
 ```
 
-Settings are stored under `skills.config` in your config.yaml. `hermes config migrate` prompts for unconfigured settings, and `hermes config show` displays them. When a skill loads, its resolved config values are injected into the context so the agent knows the configured values automatically.
+Settings are stored under `skills.config` in your config.yaml. `atlaz config migrate` prompts for unconfigured settings, and `atlaz config show` displays them. When a skill loads, its resolved config values are injected into the context so the agent knows the configured values automatically.
 
 See [Skill Settings](/user-guide/configuration#skill-settings) and [Creating Skills — Config Settings](/developer-guide/creating-skills#config-settings-configyaml) for details.
 
@@ -301,7 +301,7 @@ instruction: |
 
 Fields:
 - `name` (optional — defaults to the filename stem) — the bundle's display name. Normalized to a hyphen slug for the slash command (`Backend Dev` → `/backend-dev`).
-- `description` (optional) — short text shown in `/bundles` and `hermes bundles list`.
+- `description` (optional) — short text shown in `/bundles` and `atlaz bundles list`.
 - `skills` (required, non-empty list) — skill names or paths relative to your skills directory. Use the same identifier you'd pass to `/<skill-name>`.
 - `instruction` (optional) — extra guidance prepended to the loaded skill content. Useful for codifying "how we always use these together."
 
@@ -407,7 +407,7 @@ hermes skills tap add myorg/skills-repo           # Add a custom GitHub source
 | Source | Example | Notes |
 |--------|---------|-------|
 | `official` | `official/security/1password` | Optional skills shipped with Hermes. |
-| `skills-sh` | `skills-sh/vercel-labs/agent-skills/vercel-react-best-practices` | Searchable via `hermes skills search <query> --source skills-sh`. Hermes resolves alias-style skills when the skills.sh slug differs from the repo folder. |
+| `skills-sh` | `skills-sh/vercel-labs/agent-skills/vercel-react-best-practices` | Searchable via `atlaz skills search <query> --source skills-sh`. Hermes resolves alias-style skills when the skills.sh slug differs from the repo folder. |
 | `well-known` | `well-known:https://mintlify.com/docs/.well-known/skills/mintlify` | Skills served directly from `/.well-known/skills/index.json` on a website. Search using the site or docs URL. |
 | `url` | `https://sharethis.chat/SKILL.md` | Direct HTTP(S) URL to a single-file `SKILL.md`. Name resolution: frontmatter → URL slug → interactive prompt → `--name` flag. |
 | `github` | `openai/skills/k8s` | Direct GitHub repo/path installs and custom taps. |
@@ -546,13 +546,13 @@ hermes skills install https://example.com/SKILL.md --name sharethis-chat
 /skills install https://example.com/SKILL.md --name sharethis-chat
 ```
 
-Trust level is always `community` — the same security scan runs as for every other source. The URL is stored as the install identifier, so `hermes skills update` re-fetches from the same URL automatically when you want to refresh.
+Trust level is always `community` — the same security scan runs as for every other source. The URL is stored as the install identifier, so `atlaz skills update` re-fetches from the same URL automatically when you want to refresh.
 
 ### Security scanning and `--force`
 
 All hub-installed skills go through a **security scanner** that checks for data exfiltration, prompt injection, destructive commands, supply-chain signals, and other threats.
 
-`hermes skills inspect ...` now also surfaces upstream metadata when available:
+`atlaz skills inspect ...` now also surfaces upstream metadata when available:
 - repo URL
 - skills.sh detail page URL
 - install command
@@ -598,7 +598,7 @@ Skills hub operations use the GitHub API, which has a rate limit of 60 requests/
 
 ### Publishing a custom skill tap
 
-If you want to share a curated set of skills — for your team, your org, or publicly — you can publish them as a **tap**: a GitHub repository other Hermes users add with `hermes skills tap add <owner/repo>`. No server, no registry sign-up, no release pipeline. Just a directory of `SKILL.md` files.
+If you want to share a curated set of skills — for your team, your org, or publicly — you can publish them as a **tap**: a GitHub repository other Hermes users add with `atlaz skills tap add <owner/repo>`. No server, no registry sign-up, no release pipeline. Just a directory of `SKILL.md` files.
 
 #### Repo layout
 
@@ -675,7 +675,7 @@ If your skills don't live under `skills/` (common when you're adding a `skills/`
 }
 ```
 
-The `hermes skills tap add` CLI defaults new taps to `path: "skills/"`; edit the file directly if you need a different path. `hermes skills tap list` shows the effective path per tap.
+The `atlaz skills tap add` CLI defaults new taps to `path: "skills/"`; edit the file directly if you need a different path. `atlaz skills tap list` shows the effective path per tap.
 
 #### Installing individual skills directly (without adding a tap)
 
@@ -709,9 +709,9 @@ Inside a running session:
 
 Taps are stored in `~/.hermes/.hub/taps.json` (created on demand).
 
-## Bundled skill updates (`hermes skills reset`)
+## Bundled skill updates (`atlaz skills reset`)
 
-Hermes ships with a set of bundled skills in `skills/` inside the repo. On install and on every `hermes update`, a sync pass copies those into `~/.hermes/skills/` and records a manifest at `~/.hermes/skills/.bundled_manifest` mapping each skill name to the content hash at the time it was synced (the **origin hash**).
+Hermes ships with a set of bundled skills in `skills/` inside the repo. On install and on every `atlaz update`, a sync pass copies those into `~/.hermes/skills/` and records a manifest at `~/.hermes/skills/.bundled_manifest` mapping each skill name to the content hash at the time it was synced (the **origin hash**).
 
 On each sync, Hermes recomputes the hash of your local copy and compares it to the origin hash:
 
@@ -720,7 +720,7 @@ On each sync, Hermes recomputes the hash of your local copy and compares it to t
 
 The protection is good, but it has one sharp edge. If you edit a bundled skill and then later want to abandon your changes and go back to the bundled version by just copy-pasting from `~/.hermes/hermes-agent/skills/`, the manifest still holds the *old* origin hash from whenever the last successful sync ran. Your fresh copy-paste contents (current bundled hash) won't match that stale origin hash, so sync keeps flagging it as user-modified.
 
-`hermes skills reset` is the escape hatch:
+`atlaz skills reset` is the escape hatch:
 
 ```bash
 # Safe: clears the manifest entry for this skill. Your current copy is preserved,
@@ -743,7 +743,7 @@ The same command works in chat as a slash command:
 ```
 
 :::note Profiles
-Each profile has its own `.bundled_manifest` under its own `HERMES_HOME`, so `hermes -p coder skills reset <name>` only affects that profile.
+Each profile has its own `.bundled_manifest` under its own `HERMES_HOME`, so `atlaz -p coder skills reset <name>` only affects that profile.
 :::
 
 ### Slash commands (inside chat)
