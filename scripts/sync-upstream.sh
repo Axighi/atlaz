@@ -65,7 +65,7 @@ fi
 # ------------------------------------------------------------------
 if ! git remote get-url "$UPSTREAM_REMOTE" &>/dev/null; then
     err "Upstream remote '$UPSTREAM_REMOTE' not found."
-    info "Add it: git remote add upstream https://github.com/NousResearch/hermes-agent.git"
+    info "Add it: git remote add upstream https://github.com/Axighi/atlaz.git"
     exit 1
 fi
 

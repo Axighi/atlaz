@@ -48,7 +48,7 @@ description: "文章插图：类型 × 风格 × 调色板一致性"
 
 可自由组合：`type=infographic, style=vector-illustration, palette=macaron`。
 
-或使用预设：`edu-visual` → 一次性指定 type + style + palette。参见 [style-presets.md](https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-article-illustrator/references/style-presets.md)。
+或使用预设：`edu-visual` → 一次性指定 type + style + palette。参见 [style-presets.md](https://github.com/Axighi/atlaz/blob/main/skills/creative/baoyu-article-illustrator/references/style-presets.md)。
 
 ## 类型
 
@@ -63,7 +63,7 @@ description: "文章插图：类型 × 风格 × 调色板一致性"
 
 ## 风格
 
-参见 [references/styles.md](https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-article-illustrator/references/styles.md)，包含核心风格、完整图库及类型 × 风格兼容性说明。
+参见 [references/styles.md](https://github.com/Axighi/atlaz/blob/main/skills/creative/baoyu-article-illustrator/references/styles.md)，包含核心风格、完整图库及类型 × 风格兼容性说明。
 
 ## 输出结构
 
@@ -116,7 +116,7 @@ description: "文章插图：类型 × 风格 × 调色板一致性"
 2. **不要**尝试通过 `write_file` / `read_file` 复制二进制文件 — 这些工具仅支持文本。如需本地副本留存记录，使用 `terminal`（`cp "$src" "{output-dir}/references/NN-ref-{slug}.{ext}"`）。skill 本身无需读取二进制文件；它基于 vision 描述工作。
 3. 由于 `image_generate` 不接受图像输入，vision 描述将在步骤 5 中嵌入到 prompt 中。
 
-完整流程：[references/workflow.md](https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-article-illustrator/references/workflow.md#step-1-detect-reference-images)。
+完整流程：[references/workflow.md](https://github.com/Axighi/atlaz/blob/main/skills/creative/baoyu-article-illustrator/references/workflow.md#step-1-detect-reference-images)。
 
 ### 步骤 2：分析
 
@@ -129,7 +129,7 @@ description: "文章插图：类型 × 风格 × 调色板一致性"
 
 读取源文件（文件路径 → `read_file`，或粘贴文本），并使用 `write_file` 将分析结果写入 `{output-dir}/analysis.md`。
 
-完整流程：[references/workflow.md](https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-article-illustrator/references/workflow.md#step-2-analyze)。
+完整流程：[references/workflow.md](https://github.com/Axighi/atlaz/blob/main/skills/creative/baoyu-article-illustrator/references/workflow.md#step-2-analyze)。
 
 ### 步骤 3：确认设置
 
@@ -145,7 +145,7 @@ description: "文章插图：类型 × 风格 × 调色板一致性"
 
 连续 `clarify` 问题不超过 2-3 个。若用户在请求中已指定这些内容，则完全跳过。
 
-完整流程：[references/workflow.md](https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-article-illustrator/references/workflow.md#step-3-confirm-settings)。
+完整流程：[references/workflow.md](https://github.com/Axighi/atlaz/blob/main/skills/creative/baoyu-article-illustrator/references/workflow.md#step-3-confirm-settings)。
 
 ### 步骤 4：生成大纲 → `outline.md`
 
@@ -159,7 +159,7 @@ description: "文章插图：类型 × 风格 × 调色板一致性"
 **Filename**: 01-infographic-concept-name.png
 ```
 
-完整模板：[references/workflow.md](https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-article-illustrator/references/workflow.md#step-4-generate-outline)。
+完整模板：[references/workflow.md](https://github.com/Axighi/atlaz/blob/main/skills/creative/baoyu-article-illustrator/references/workflow.md#step-4-generate-outline)。
 
 ### 步骤 5：生成 Prompt
 
@@ -167,7 +167,7 @@ description: "文章插图：类型 × 风格 × 调色板一致性"
 
 对每张插图：
 
-1. 按照 [references/prompt-construction.md](https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-article-illustrator/references/prompt-construction.md) 创建 prompt 文件。
+1. 按照 [references/prompt-construction.md](https://github.com/Axighi/atlaz/blob/main/skills/creative/baoyu-article-illustrator/references/prompt-construction.md) 创建 prompt 文件。
 2. 使用 `write_file` 将文件保存到 `{output-dir}/prompts/NN-{type}-{slug}.md`，包含 YAML frontmatter。
 3. Prompt 必须使用特定类型的模板，包含结构化章节（ZONES / LABELS / COLORS / STYLE / ASPECT）。
 4. LABELS 必须包含文章特定数据：实际数字、术语、指标、引用。
@@ -186,7 +186,7 @@ description: "文章插图：类型 × 风格 × 调色板一致性"
 
 ### 步骤 7：收尾
 
-在对应段落后插入 `![描述](https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-article-illustrator/{relative-path}/NN-{type}-{slug}.png)`。Alt 文本：用文章语言简洁描述。
+在对应段落后插入 `![描述](https://github.com/Axighi/atlaz/blob/main/skills/creative/baoyu-article-illustrator/{relative-path}/NN-{type}-{slug}.png)`。Alt 文本：用文章语言简洁描述。
 
 报告：
 
@@ -208,11 +208,11 @@ Images: X/N generated
 
 | 文件 | 内容 |
 |------|---------|
-| [references/workflow.md](https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-article-illustrator/references/workflow.md) | 详细流程 |
-| [references/usage.md](https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-article-illustrator/references/usage.md) | 调用示例 |
-| [references/styles.md](https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-article-illustrator/references/styles.md) | 风格图库 + 调色板图库 |
-| [references/style-presets.md](https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-article-illustrator/references/style-presets.md) | 预设快捷方式（type + style + palette） |
-| [references/prompt-construction.md](https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-article-illustrator/references/prompt-construction.md) | Prompt 模板 |
+| [references/workflow.md](https://github.com/Axighi/atlaz/blob/main/skills/creative/baoyu-article-illustrator/references/workflow.md) | 详细流程 |
+| [references/usage.md](https://github.com/Axighi/atlaz/blob/main/skills/creative/baoyu-article-illustrator/references/usage.md) | 调用示例 |
+| [references/styles.md](https://github.com/Axighi/atlaz/blob/main/skills/creative/baoyu-article-illustrator/references/styles.md) | 风格图库 + 调色板图库 |
+| [references/style-presets.md](https://github.com/Axighi/atlaz/blob/main/skills/creative/baoyu-article-illustrator/references/style-presets.md) | 预设快捷方式（type + style + palette） |
+| [references/prompt-construction.md](https://github.com/Axighi/atlaz/blob/main/skills/creative/baoyu-article-illustrator/references/prompt-construction.md) | Prompt 模板 |
 
 ## 常见陷阱
 

@@ -8,7 +8,7 @@ sidebar_position: 3
 # Windows（原生）指南 — 早期 Beta
 
 :::warning 早期 BETA
-原生 Windows 支持处于**早期 beta** 阶段。它可以安装、运行，并通过了我们的 Windows 陷阱（footgun）lint 检查，但尚未像 Linux/macOS/WSL2 路径那样经过大规模实战验证。预计会有一些粗糙之处——尤其是子进程处理、路径怪癖和非 ASCII 控制台输出方面。遇到问题时，请[提交 issue](https://github.com/NousResearch/hermes-agent/issues) 并附上复现步骤。如果你今天想要一个经过充分验证的环境，请改用 [WSL2 下的 Linux/macOS 安装程序](./windows-wsl-quickstart.md)。
+原生 Windows 支持处于**早期 beta** 阶段。它可以安装、运行，并通过了我们的 Windows 陷阱（footgun）lint 检查，但尚未像 Linux/macOS/WSL2 路径那样经过大规模实战验证。预计会有一些粗糙之处——尤其是子进程处理、路径怪癖和非 ASCII 控制台输出方面。遇到问题时，请[提交 issue](https://github.com/Axighi/atlaz/issues) 并附上复现步骤。如果你今天想要一个经过充分验证的环境，请改用 [WSL2 下的 Linux/macOS 安装程序](./windows-wsl-quickstart.md)。
 :::
 
 Hermes 可在 Windows 10 和 Windows 11 上原生运行——无需 WSL、Cygwin 或 Docker。本页是深度指南：原生支持哪些功能、哪些仅限 WSL、安装程序实际做了什么，以及你可能需要调整的 Windows 专属配置项。
@@ -24,7 +24,7 @@ Hermes 可在 Windows 10 和 Windows 11 上原生运行——无需 WSL、Cygwin
 打开 **PowerShell**（或 Windows Terminal）并运行：
 
 ```powershell
-iex (irm https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1)
+iex (irm https://raw.githubusercontent.com/Axighi/atlaz/main/scripts/install.ps1)
 ```
 
 无需管理员权限。安装程序会写入 `%LOCALAPPDATA%\hermes\`，并将 `hermes` 添加到你的**用户 PATH**——安装完成后打开新终端即可使用。
@@ -32,7 +32,7 @@ iex (irm https://raw.githubusercontent.com/NousResearch/hermes-agent/main/script
 **安装程序选项**（需要使用 scriptblock 形式传递参数）：
 
 ```powershell
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1))) -NoVenv -SkipSetup -Branch main
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/Axighi/atlaz/main/scripts/install.ps1))) -NoVenv -SkipSetup -Branch main
 ```
 
 | 参数 | 默认值 | 用途 |

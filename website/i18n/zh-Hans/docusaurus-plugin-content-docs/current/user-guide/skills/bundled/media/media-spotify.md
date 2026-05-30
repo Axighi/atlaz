@@ -31,7 +31,7 @@ Spotify：播放、搜索、队列、管理播放列表和设备。
 
 # Spotify
 
-通过 Hermes Spotify 工具集（7 个工具）控制用户的 Spotify 账户。设置指南：https://hermes-agent.nousresearch.com/docs/user-guide/features/spotify
+通过 Hermes Spotify 工具集（7 个工具）控制用户的 Spotify 账户。设置指南：https://atlaz.nousresearch.com/docs/user-guide/features/spotify
 
 ## 何时使用此 skill
 

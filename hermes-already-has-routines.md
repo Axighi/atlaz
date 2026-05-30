@@ -149,11 +149,11 @@ hermes webhook subscribe pr-review \
   --deliver github_comment
 ```
 
-Full automation templates gallery: [hermes-agent.nousresearch.com/docs/guides/automation-templates](https://hermes-agent.nousresearch.com/docs/guides/automation-templates)
+Full automation templates gallery: [atlaz.nousresearch.com/docs/guides/automation-templates](https://atlaz.nousresearch.com/docs/guides/automation-templates)
 
-Documentation: [hermes-agent.nousresearch.com](https://hermes-agent.nousresearch.com)
+Documentation: [atlaz.nousresearch.com](https://atlaz.nousresearch.com)
 
-GitHub: [github.com/NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent)
+GitHub: [github.com/Axighi/atlaz](https://github.com/Axighi/atlaz)
 
 ---
 

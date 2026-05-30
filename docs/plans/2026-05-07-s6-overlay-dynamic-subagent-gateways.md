@@ -1,7 +1,7 @@
 # s6-overlay Supervision for Per-Profile Gateways in Docker — Implementation Plan
 
 > **Status: shipped.** Phases 0–5 landed via PR
-> [NousResearch/hermes-agent#30136](https://github.com/NousResearch/hermes-agent/pull/30136)
+> [NousResearch/hermes-agent#30136](https://github.com/Axighi/atlaz/pull/30136)
 > in May 2026. This document is preserved as a post-implementation reference
 > for the architecture and the resolved design questions. The phase-by-phase
 > TDD walkthrough (≈2,800 lines) and the v2/v3 re-validation preambles have
@@ -127,7 +127,7 @@ Container-relevant callers outside `gateway.py`:
 `hermes gateway start`, `coder gateway start` (profile alias), and
 `hermes -p <profile> gateway start` all spawn a gateway process scoped to a
 given profile. See
-[Profiles: Running Gateways](https://hermes-agent.nousresearch.com/docs/user-guide/profiles#running-gateways).
+[Profiles: Running Gateways](https://atlaz.nousresearch.com/docs/user-guide/profiles#running-gateways).
 On host, lifecycle is managed via per-profile systemd units
 (`hermes-gateway-<profile>.service`); inside the container, an s6 service at
 `/run/service/gateway-<name>/` is registered when the profile is created and

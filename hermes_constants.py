@@ -33,7 +33,7 @@ def get_hermes_home() -> Path:
     callers that import this at load time.  Subprocess spawners are
     expected to propagate ``HERMES_HOME`` explicitly (see the systemd
     template in ``atlaz_cli/gateway.py`` and the kanban dispatcher in
-    ``atlaz_cli/kanban_db.py``).  See https://github.com/NousResearch/hermes-agent/issues/18594.
+    ``atlaz_cli/kanban_db.py``).  See https://github.com/Axighi/atlaz/issues/18594.
     override = get_hermes_home_override()
     if override:
         return Path(override)
@@ -174,7 +174,7 @@ def secure_parent_dir(path: Path) -> None:
     fewer than 3 parts, i.e. ``/`` or any direct child like ``/usr``) to
     prevent catastrophic host bricking when ``HERMES_HOME`` or other path
     env vars resolve to an unexpected location.
-    See https://github.com/NousResearch/hermes-agent/issues/25821.
+    See https://github.com/Axighi/atlaz/issues/25821.
     parent = path.parent.resolve()
     # Refuse root and its direct children (/usr, /home, /var, /tmp, …).
     if parent == Path("/") or len(parent.parts) < 3:
