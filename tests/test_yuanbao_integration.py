@@ -114,7 +114,7 @@ class TestGatewayRunnerRegistration:
             "dotenv",
             "hermes_cli.env_loader",
             "hermes_cli.config",
-            "hermes_constants",
+            "atlaz_constants",
         ]
         _orig = {}
         for mod in stubs:

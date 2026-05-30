@@ -16,7 +16,7 @@ import time
 
 import pytest
 
-from hermes_state import SessionDB
+from atlaz_state import SessionDB
 
 
 class TestHandoffStateDB:

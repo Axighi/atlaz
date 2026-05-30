@@ -75,7 +75,7 @@ try:
 except ImportError:  # pragma: no cover
     fcntl = None  # type: ignore[assignment]
 
-from hermes_constants import get_hermes_home
+from atlaz_constants import get_hermes_home
 from utils import atomic_replace
 
 logger = logging.getLogger(__name__)

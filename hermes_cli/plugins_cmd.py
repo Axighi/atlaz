@@ -19,7 +19,7 @@ import sys
 from pathlib import Path
 from typing import Any, Optional
 
-from hermes_constants import get_hermes_home
+from atlaz_constants import get_hermes_home
 from hermes_cli.config import cfg_get
 from hermes_cli.secret_prompt import masked_secret_prompt
 
@@ -256,7 +256,7 @@ def _prompt_plugin_env_vars(manifest: dict, console) -> None:
         return
 
     from hermes_cli.config import get_env_value, save_env_value  # noqa: F811
-    from hermes_constants import display_hermes_home
+    from atlaz_constants import display_hermes_home
 
     # Normalise to list-of-dicts
     env_specs: list[dict] = []

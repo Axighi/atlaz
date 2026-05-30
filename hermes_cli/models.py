@@ -2084,7 +2084,7 @@ _PROVIDER_MODELS_CACHE_TTL = 3600  # 1h
 
 
 def _provider_models_cache_path() -> Path:
-    from hermes_constants import get_hermes_home
+    from atlaz_constants import get_hermes_home
     return get_hermes_home() / "provider_models_cache.json"
 
 
@@ -2121,7 +2121,7 @@ def _credential_fingerprint(provider: str) -> str:
 
     # OAuth / external-file mtimes that change on re-auth
     try:
-        from hermes_constants import get_hermes_home
+        from atlaz_constants import get_hermes_home
         for rel in ("auth.json", "credentials.json"):
             p = get_hermes_home() / rel
             try:
@@ -3124,7 +3124,7 @@ def _strip_ollama_cloud_suffix(model_id: str) -> str:
 
 def _ollama_cloud_cache_path() -> Path:
     """Return the path for the Ollama Cloud model cache."""
-    from hermes_constants import get_hermes_home
+    from atlaz_constants import get_hermes_home
     return get_hermes_home() / "ollama_cloud_models_cache.json"
 
 
