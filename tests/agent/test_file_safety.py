@@ -91,24 +91,24 @@ class TestCacheFileReadBlocking:
 
     def test_hub_index_cache_blocked(self, tmp_path):
         """Hub index-cache reads are blocked."""
-        hermes_home = tmp_path / ".hermes"
-        cache = hermes_home / "skills" / ".hub" / "index-cache" / "data.json"
+        atlaz_home = tmp_path / ".hermes"
+        cache = atlaz_home / "skills" / ".hub" / "index-cache" / "data.json"
         cache.parent.mkdir(parents=True)
         cache.write_text("{}")
 
-        with patch("agent.file_safety._hermes_home_path", return_value=hermes_home):
+        with patch("agent.file_safety._atlaz_home_path", return_value=atlaz_home):
             error = get_read_block_error(str(cache))
             assert error is not None
             assert "internal Hermes cache" in error
 
     def test_hub_directory_blocked(self, tmp_path):
         """Hub directory reads are blocked."""
-        hermes_home = tmp_path / ".hermes"
-        hub = hermes_home / "skills" / ".hub" / "metadata.json"
+        atlaz_home = tmp_path / ".hermes"
+        hub = atlaz_home / "skills" / ".hub" / "metadata.json"
         hub.parent.mkdir(parents=True)
         hub.write_text("{}")
 
-        with patch("agent.file_safety._hermes_home_path", return_value=hermes_home):
+        with patch("agent.file_safety._atlaz_home_path", return_value=atlaz_home):
             error = get_read_block_error(str(hub))
             assert error is not None
 
@@ -123,10 +123,10 @@ class TestCombinedGuards:
 
     def test_env_guard_works_regardless_of_hermes_home(self, tmp_path):
         """The env basename guard does not depend on HERMES_HOME resolution."""
-        hermes_home = tmp_path / ".hermes"
-        hermes_home.mkdir()
+        atlaz_home = tmp_path / ".hermes"
+        atlaz_home.mkdir()
 
-        with patch("agent.file_safety._hermes_home_path", return_value=hermes_home):
+        with patch("agent.file_safety._atlaz_home_path", return_value=atlaz_home):
             # Regular project .env should still be blocked
             error = get_read_block_error("/workspace/.env")
             assert error is not None
@@ -137,12 +137,12 @@ class TestCombinedGuards:
 
     def test_cache_guard_still_works_with_env_guard(self, tmp_path):
         """Cache file blocking still works when env guard is active."""
-        hermes_home = tmp_path / ".hermes"
-        cache = hermes_home / "skills" / ".hub" / "index-cache" / "x"
+        atlaz_home = tmp_path / ".hermes"
+        cache = atlaz_home / "skills" / ".hub" / "index-cache" / "x"
         cache.parent.mkdir(parents=True)
         cache.write_text("")
 
-        with patch("agent.file_safety._hermes_home_path", return_value=hermes_home):
+        with patch("agent.file_safety._atlaz_home_path", return_value=atlaz_home):
             error = get_read_block_error(str(cache))
             assert error is not None
             assert "internal Hermes cache" in error

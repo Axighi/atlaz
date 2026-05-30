@@ -22,19 +22,19 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 @pytest.fixture
 def cron_env(tmp_path, monkeypatch):
     """Isolated cron environment with temp HERMES_HOME."""
-    hermes_home = tmp_path / ".hermes"
-    hermes_home.mkdir()
-    (hermes_home / "cron").mkdir()
-    (hermes_home / "cron" / "output").mkdir()
-    monkeypatch.setenv("HERMES_HOME", str(hermes_home))
+    atlaz_home = tmp_path / ".hermes"
+    atlaz_home.mkdir()
+    (atlaz_home / "cron").mkdir()
+    (atlaz_home / "cron" / "output").mkdir()
+    monkeypatch.setenv("HERMES_HOME", str(atlaz_home))
 
     import cron.jobs as jobs_mod
-    monkeypatch.setattr(jobs_mod, "HERMES_DIR", hermes_home)
-    monkeypatch.setattr(jobs_mod, "CRON_DIR", hermes_home / "cron")
-    monkeypatch.setattr(jobs_mod, "JOBS_FILE", hermes_home / "cron" / "jobs.json")
-    monkeypatch.setattr(jobs_mod, "OUTPUT_DIR", hermes_home / "cron" / "output")
+    monkeypatch.setattr(jobs_mod, "HERMES_DIR", atlaz_home)
+    monkeypatch.setattr(jobs_mod, "CRON_DIR", atlaz_home / "cron")
+    monkeypatch.setattr(jobs_mod, "JOBS_FILE", atlaz_home / "cron" / "jobs.json")
+    monkeypatch.setattr(jobs_mod, "OUTPUT_DIR", atlaz_home / "cron" / "output")
 
-    return hermes_home
+    return atlaz_home
 
 
 class TestRewriteSkillRefsNoop:

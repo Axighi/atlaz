@@ -179,7 +179,7 @@ def check_env_vars():
         from atlaz_cli.env_loader import load_hermes_dotenv
 
         load_hermes_dotenv(
-            hermes_home=ENV_FILE.parent,
+            atlaz_home=ENV_FILE.parent,
             project_env=PROJECT_ROOT / ".env",
         )
     except ImportError:

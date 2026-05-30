@@ -211,7 +211,7 @@ def _sanitize_env_file_if_needed(path: Path) -> None:
 
 def load_hermes_dotenv(
     *,
-    hermes_home: str | os.PathLike | None = None,
+    atlaz_home: str | os.PathLike | None = None,
     project_env: str | os.PathLike | None = None,
 ) -> list[Path]:
     """Load Hermes environment files with user config taking precedence.
@@ -224,7 +224,7 @@ def load_hermes_dotenv(
     """
     loaded: list[Path] = []
 
-    home_path = Path(hermes_home or os.getenv("HERMES_HOME", Path.home() / ".hermes"))
+    home_path = Path(atlaz_home or os.getenv("HERMES_HOME", Path.home() / ".hermes"))
     user_env = home_path / ".env"
     project_env_path = Path(project_env) if project_env else None
 

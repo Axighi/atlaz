@@ -568,7 +568,7 @@ def _build_hermes_tools_mcp_entry() -> dict:
     env: dict[str, str] = {}
     # HERMES_HOME passes through IF SET so the MCP subprocess sees the same
     # config / auth / sessions DB as the parent CLI. Read from os.environ
-    # (not get_hermes_home()) on purpose: when the env var is unset we want
+    # (not get_atlaz_home()) on purpose: when the env var is unset we want
     # codex's subprocess to inherit whatever HERMES_HOME its launcher sets
     # at runtime (systemd unit, gateway, kanban dispatcher, custom shell),
     # rather than burning the migrate-time resolved default into config.toml
@@ -579,11 +579,11 @@ def _build_hermes_tools_mcp_entry() -> dict:
     # a sibling test's monkeypatch.setenv("HERMES_HOME", tmp_path) would
     # otherwise leak a transient pytest tempdir into the user's real
     # ~/.codex/config.toml and silently brick codex once the tempdir is GC'd.
-    hermes_home = os.environ.get("HERMES_HOME") or ""
-    if hermes_home and _looks_like_test_tempdir(hermes_home):
-        hermes_home = ""
-    if hermes_home:
-        env["HERMES_HOME"] = hermes_home
+    atlaz_home = os.environ.get("HERMES_HOME") or ""
+    if atlaz_home and _looks_like_test_tempdir(atlaz_home):
+        atlaz_home = ""
+    if atlaz_home:
+        env["HERMES_HOME"] = atlaz_home
     # PYTHONPATH passes through so a worktree-launched hermes finds the
     # branch's modules instead of the installed package.
     pythonpath = os.environ.get("PYTHONPATH")
