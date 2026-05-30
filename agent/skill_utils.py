@@ -177,8 +177,8 @@ def get_disabled_skill_names(platform: str | None = None) -> Set[str]:
 
     Args:
         platform: Explicit platform name (e.g. ``"telegram"``).  When
-            *None*, resolves from ``HERMES_PLATFORM`` or
-            ``HERMES_SESSION_PLATFORM`` env vars.  Falls back to the
+            *None*, resolves from ``ATLAZ_PLATFORM`` or
+            ``ATLAZ_SESSION_PLATFORM`` env vars.  Falls back to the
             global disabled list when no platform is determined.
 
     Reads the config file directly (no CLI config imports) to stay

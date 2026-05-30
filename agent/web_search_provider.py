@@ -84,7 +84,7 @@ class WebSearchProvider(abc.ABC):
 
     @property
     def display_name(self) -> str:
-        """Human-readable label shown in ``hermes tools``. Defaults to ``name``."""
+        """Human-readable label shown in ``atlaz tools``. Defaults to ``name``."""
         return self.name
 
     @abc.abstractmethod
@@ -93,7 +93,7 @@ class WebSearchProvider(abc.ABC):
 
         Typically a cheap check (env var present, optional Python dep
         importable, instance URL set). Must NOT make network calls — this
-        runs at tool-registration time and on every ``hermes tools`` paint.
+        runs at tool-registration time and on every ``atlaz tools`` paint.
         """
 
     def supports_search(self) -> bool:
@@ -158,7 +158,7 @@ class WebSearchProvider(abc.ABC):
         )
 
     def get_setup_schema(self) -> Dict[str, Any]:
-        """Return provider metadata for the ``hermes tools`` picker.
+        """Return provider metadata for the ``atlaz tools`` picker.
 
         Used by ``atlaz_cli/tools_config.py`` to inject this provider as a
         row in the Web Search / Web Extract picker. Shape::

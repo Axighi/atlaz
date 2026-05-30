@@ -268,7 +268,7 @@ def has_azure_identity_credentials(scope: Optional[str] = None,
 
     Runs ``credential.get_token(scope)`` under a thread-based timeout so
     a slow token service can't hang the caller. Returns False on any
-    error — never raises. Use for ``hermes doctor`` /
+    error — never raises. Use for ``atlaz doctor`` /
     ``hermes auth status`` / wizard preflight.
 
     ``allow_install``: when True (default) and ``azure-identity`` is not
@@ -321,7 +321,7 @@ def describe_active_credential(config: Optional[EntraIdentityConfig] = None,
     """Return diagnostic info about the active credential chain.
 
     Best-effort: runs ``get_token()`` and inspects what came back.
-    Designed for ``hermes doctor`` and the wizard preflight — never
+    Designed for ``atlaz doctor`` and the wizard preflight — never
     raises, returns ``{"ok": False, "error": ...}`` on failure.
 
     ``allow_install``: when True (default) and ``azure-identity`` is not
@@ -524,7 +524,7 @@ def build_bearer_http_client(token_provider: Callable[[], str], **httpx_kwargs: 
             logger.warning(
                 "Bearer hook: Entra ID token provider returned empty (%s) "
                 "— stripping Authorization headers. Azure will respond 401. "
-                "Run `hermes doctor` or `az login` to recover.",
+                "Run `atlaz doctor` or `az login` to recover.",
                 exc,
             )
             for header_name in ("Authorization", "authorization", "Api-Key", "api-key", "X-Api-Key", "x-api-key"):

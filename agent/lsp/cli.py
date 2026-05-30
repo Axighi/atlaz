@@ -1,4 +1,4 @@
-"""``hermes lsp`` CLI subcommand.
+"""``atlaz lsp`` CLI subcommand.
 
 Subcommands:
 
@@ -19,7 +19,7 @@ import sys
 
 
 def register_subparser(subparsers: argparse._SubParsersAction) -> None:
-    """Wire the ``hermes lsp`` subcommand tree into the main argparse."""
+    """Wire the ``atlaz lsp`` subcommand tree into the main argparse."""
     parser = subparsers.add_parser(
         "lsp",
         help="Language Server Protocol management",
