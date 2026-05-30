@@ -54,7 +54,7 @@ class ReconcileAction:
 
 def reconcile_profile_gateways(
     *,
-    hermes_home: Path,
+    atlaz_home: Path,
     scandir: Path,
     dry_run: bool = False,
 ) -> list[ReconcileAction]:
@@ -75,9 +75,9 @@ def reconcile_profile_gateways(
     same way as for named profiles.
 
     Args:
-        hermes_home: The container's HERMES_HOME (typically /opt/data).
-            Profiles live under ``<hermes_home>/profiles/<name>/``;
-            the default profile lives at ``<hermes_home>`` itself.
+        atlaz_home: The container's HERMES_HOME (typically /opt/data).
+            Profiles live under ``<atlaz_home>/profiles/<name>/``;
+            the default profile lives at ``<atlaz_home>`` itself.
         scandir: The s6 dynamic scandir (typically /run/service). Service
             directories are created at ``<scandir>/gateway-<profile>/``.
         dry_run: When True, walk and return the action list without
@@ -94,10 +94,10 @@ def reconcile_profile_gateways(
     # ``hermes gateway start`` (no ``-p``) has somewhere to land;
     # auto-up only when the prior state was "running" (same rule as
     # named profiles).
-    default_prior_state = _read_prior_state(hermes_home)
+    default_prior_state = _read_prior_state(atlaz_home)
     default_should_start = default_prior_state in _AUTOSTART_STATES
     if not dry_run:
-        _cleanup_stale_runtime_files(hermes_home)
+        _cleanup_stale_runtime_files(atlaz_home)
         _register_service(scandir, "default", start=default_should_start)
     actions.append(ReconcileAction(
         profile="default",
@@ -105,7 +105,7 @@ def reconcile_profile_gateways(
         action="started" if default_should_start else "registered",
     ))
 
-    profiles_root = hermes_home / "profiles"
+    profiles_root = atlaz_home / "profiles"
     if profiles_root.is_dir():
         for entry in sorted(profiles_root.iterdir()):
             if not entry.is_dir():
@@ -143,7 +143,7 @@ def reconcile_profile_gateways(
             ))
 
     if not dry_run:
-        _write_reconcile_log(hermes_home, actions)
+        _write_reconcile_log(atlaz_home, actions)
     return actions
 
 
@@ -257,7 +257,7 @@ def _register_service(scandir: Path, profile: str, *, start: bool) -> None:
 
 
 def _write_reconcile_log(
-    hermes_home: Path, actions: list[ReconcileAction],
+    atlaz_home: Path, actions: list[ReconcileAction],
 ) -> None:
     """Append one line per profile to $HERMES_HOME/logs/container-boot.log.
 
@@ -275,7 +275,7 @@ def _write_reconcile_log(
     one append-only file (PR #30136 review item O3).
     """
     import time
-    log_dir = hermes_home / "logs"
+    log_dir = atlaz_home / "logs"
     log_dir.mkdir(parents=True, exist_ok=True)
     log_path = log_dir / "container-boot.log"
 
@@ -308,10 +308,10 @@ _LOG_ROTATE_BYTES = 256 * 1024
 
 def main() -> int:
     """Entry point invoked from /etc/cont-init.d/02-reconcile-profiles."""
-    hermes_home = Path(os.environ.get("HERMES_HOME", "/opt/data"))
+    atlaz_home = Path(os.environ.get("HERMES_HOME", "/opt/data"))
     scandir = Path(os.environ.get("S6_PROFILE_GATEWAY_SCANDIR", "/run/service"))
     actions = reconcile_profile_gateways(
-        hermes_home=hermes_home, scandir=scandir,
+        atlaz_home=atlaz_home, scandir=scandir,
     )
     for a in actions:
         print(

@@ -102,11 +102,11 @@ def provider(tmp_path, monkeypatch):
     config_path.write_text(json.dumps(config))
 
     monkeypatch.setattr(
-        "plugins.memory.hindsight.get_hermes_home", lambda: tmp_path
+        "plugins.memory.hindsight.get_atlaz_home", lambda: tmp_path
     )
 
     p = HindsightMemoryProvider()
-    p.initialize(session_id="test-session", hermes_home=str(tmp_path), platform="cli")
+    p.initialize(session_id="test-session", atlaz_home=str(tmp_path), platform="cli")
     p._client = _make_mock_client()
     return p
 
@@ -129,11 +129,11 @@ def provider_with_config(tmp_path, monkeypatch):
         config_path.write_text(json.dumps(config))
 
         monkeypatch.setattr(
-            "plugins.memory.hindsight.get_hermes_home", lambda: tmp_path
+            "plugins.memory.hindsight.get_atlaz_home", lambda: tmp_path
         )
 
         p = HindsightMemoryProvider()
-        p.initialize(session_id="test-session", hermes_home=str(tmp_path), platform="cli")
+        p.initialize(session_id="test-session", atlaz_home=str(tmp_path), platform="cli")
         p._client = _make_mock_client()
         return p
     return _make
@@ -263,7 +263,7 @@ class TestConfig:
     def test_config_from_env_fallback(self, tmp_path, monkeypatch):
         """When no config file exists, falls back to env vars."""
         monkeypatch.setattr(
-            "plugins.memory.hindsight.get_hermes_home",
+            "plugins.memory.hindsight.get_atlaz_home",
             lambda: tmp_path / "nonexistent",
         )
         monkeypatch.setenv("HINDSIGHT_MODE", "cloud")
@@ -324,7 +324,7 @@ class TestConfig:
 
 class TestPostSetup:
     def test_local_embedded_setup_materializes_profile_env(self, tmp_path, monkeypatch):
-        hermes_home = tmp_path / "hermes-home"
+        atlaz_home = tmp_path / "hermes-home"
         user_home = tmp_path / "user-home"
         user_home.mkdir()
         monkeypatch.setenv("HOME", str(user_home))
@@ -339,10 +339,10 @@ class TestPostSetup:
         monkeypatch.setattr("atlaz_cli.config.save_config", lambda cfg: saved_configs.append(cfg.copy()))
 
         provider = HindsightMemoryProvider()
-        provider.post_setup(str(hermes_home), {"memory": {}})
+        provider.post_setup(str(atlaz_home), {"memory": {}})
 
         assert saved_configs[-1]["memory"]["provider"] == "hindsight"
-        env_text = (hermes_home / ".env").read_text()
+        env_text = (atlaz_home / ".env").read_text()
         assert "HINDSIGHT_LLM_API_KEY=sk-local-test\n" in env_text
         assert "HINDSIGHT_TIMEOUT=120\n" in env_text
         assert "HINDSIGHT_IDLE_TIMEOUT=300\n" in env_text
@@ -358,7 +358,7 @@ class TestPostSetup:
         )
 
     def test_local_embedded_setup_respects_existing_profile_name(self, tmp_path, monkeypatch):
-        hermes_home = tmp_path / "hermes-home"
+        atlaz_home = tmp_path / "hermes-home"
         user_home = tmp_path / "user-home"
         user_home.mkdir()
         monkeypatch.setenv("HOME", str(user_home))
@@ -372,8 +372,8 @@ class TestPostSetup:
         monkeypatch.setattr("atlaz_cli.config.save_config", lambda cfg: None)
 
         provider = HindsightMemoryProvider()
-        provider.save_config({"profile": "coder"}, str(hermes_home))
-        provider.post_setup(str(hermes_home), {"memory": {}})
+        provider.save_config({"profile": "coder"}, str(atlaz_home))
+        provider.post_setup(str(atlaz_home), {"memory": {}})
 
         coder_env = user_home / ".hindsight" / "profiles" / "coder.env"
         hermes_env = user_home / ".hindsight" / "profiles" / "hermes.env"
@@ -381,7 +381,7 @@ class TestPostSetup:
         assert not hermes_env.exists()
 
     def test_local_embedded_setup_preserves_existing_key_when_input_left_blank(self, tmp_path, monkeypatch):
-        hermes_home = tmp_path / "hermes-home"
+        atlaz_home = tmp_path / "hermes-home"
         user_home = tmp_path / "user-home"
         user_home.mkdir()
         monkeypatch.setenv("HOME", str(user_home))
@@ -394,12 +394,12 @@ class TestPostSetup:
         monkeypatch.setattr("getpass.getpass", lambda prompt="": "")
         monkeypatch.setattr("atlaz_cli.config.save_config", lambda cfg: None)
 
-        env_path = hermes_home / ".env"
+        env_path = atlaz_home / ".env"
         env_path.parent.mkdir(parents=True, exist_ok=True)
         env_path.write_text("HINDSIGHT_LLM_API_KEY=existing-key\n")
 
         provider = HindsightMemoryProvider()
-        provider.post_setup(str(hermes_home), {"memory": {}})
+        provider.post_setup(str(atlaz_home), {"memory": {}})
 
         profile_env = user_home / ".hindsight" / "profiles" / "hermes.env"
         assert profile_env.exists()
@@ -408,11 +408,11 @@ class TestPostSetup:
 
     def test_local_embedded_setup_blank_inputs_preserve_existing_config(self, tmp_path, monkeypatch):
         """Pressing Enter through setup should keep existing Hindsight values."""
-        hermes_home = tmp_path / "hermes-home"
+        atlaz_home = tmp_path / "hermes-home"
         user_home = tmp_path / "user-home"
         user_home.mkdir()
         monkeypatch.setenv("HOME", str(user_home))
-        monkeypatch.setattr("plugins.memory.hindsight.get_hermes_home", lambda: hermes_home)
+        monkeypatch.setattr("plugins.memory.hindsight.get_atlaz_home", lambda: atlaz_home)
 
         existing_config = {
             "mode": "local_embedded",
@@ -428,7 +428,7 @@ class TestPostSetup:
             "timeout": 120,
         }
         provider = HindsightMemoryProvider()
-        provider.save_config(existing_config, str(hermes_home))
+        provider.save_config(existing_config, str(atlaz_home))
 
         # Simulate pressing Enter at the mode and LLM-provider pickers, which
         # should select their current values, and pressing Enter at text prompts.
@@ -440,9 +440,9 @@ class TestPostSetup:
         monkeypatch.setattr("atlaz_cli.config.save_config", lambda cfg: None)
 
         provider = HindsightMemoryProvider()
-        provider.post_setup(str(hermes_home), {"memory": {}})
+        provider.post_setup(str(atlaz_home), {"memory": {}})
 
-        saved = json.loads((hermes_home / "hindsight" / "config.json").read_text())
+        saved = json.loads((atlaz_home / "hindsight" / "config.json").read_text())
         assert saved["mode"] == "local_embedded"
         assert saved["llm_provider"] == "openai_compatible"
         assert saved["llm_base_url"] == "http://192.168.1.161:8060/v1"
@@ -815,17 +815,17 @@ class TestSyncTurn:
         config_path = tmp_path / "hindsight" / "config.json"
         config_path.parent.mkdir(parents=True, exist_ok=True)
         config_path.write_text(json.dumps(config))
-        monkeypatch.setattr("plugins.memory.hindsight.get_hermes_home", lambda: tmp_path)
+        monkeypatch.setattr("plugins.memory.hindsight.get_atlaz_home", lambda: tmp_path)
 
         p1 = HindsightMemoryProvider()
-        p1.initialize(session_id="resumed-session", hermes_home=str(tmp_path), platform="cli")
+        p1.initialize(session_id="resumed-session", atlaz_home=str(tmp_path), platform="cli")
 
         # Sleep just enough that the microsecond timestamp differs
         import time
         time.sleep(0.001)
 
         p2 = HindsightMemoryProvider()
-        p2.initialize(session_id="resumed-session", hermes_home=str(tmp_path), platform="cli")
+        p2.initialize(session_id="resumed-session", atlaz_home=str(tmp_path), platform="cli")
 
         # Same session, but each process gets its own document_id
         assert p1._document_id != p2._document_id
@@ -845,12 +845,12 @@ class TestSyncTurn:
         config_path = tmp_path / "hindsight" / "config.json"
         config_path.parent.mkdir(parents=True, exist_ok=True)
         config_path.write_text(json.dumps(config))
-        monkeypatch.setattr("plugins.memory.hindsight.get_hermes_home", lambda: tmp_path)
+        monkeypatch.setattr("plugins.memory.hindsight.get_atlaz_home", lambda: tmp_path)
 
         p = HindsightMemoryProvider()
         p.initialize(
             session_id="child-session",
-            hermes_home=str(tmp_path),
+            atlaz_home=str(tmp_path),
             platform="cli",
             parent_session_id="parent-session",
         )
@@ -1337,12 +1337,12 @@ class TestBankIdTemplate:
         config_path = tmp_path / "hindsight" / "config.json"
         config_path.parent.mkdir(parents=True, exist_ok=True)
         config_path.write_text(json.dumps(config))
-        monkeypatch.setattr("plugins.memory.hindsight.get_hermes_home", lambda: tmp_path)
+        monkeypatch.setattr("plugins.memory.hindsight.get_atlaz_home", lambda: tmp_path)
 
         p = HindsightMemoryProvider()
         p.initialize(
             session_id="s1",
-            hermes_home=str(tmp_path),
+            atlaz_home=str(tmp_path),
             platform="cli",
             agent_identity="coder",
             agent_workspace="hermes",
@@ -1360,12 +1360,12 @@ class TestBankIdTemplate:
         config_path = tmp_path / "hindsight" / "config.json"
         config_path.parent.mkdir(parents=True, exist_ok=True)
         config_path.write_text(json.dumps(config))
-        monkeypatch.setattr("plugins.memory.hindsight.get_hermes_home", lambda: tmp_path)
+        monkeypatch.setattr("plugins.memory.hindsight.get_atlaz_home", lambda: tmp_path)
 
         p = HindsightMemoryProvider()
         p.initialize(
             session_id="s1",
-            hermes_home=str(tmp_path),
+            atlaz_home=str(tmp_path),
             platform="cli",
             agent_identity="coder",
         )
@@ -1382,11 +1382,11 @@ class TestBankIdTemplate:
         config_path = tmp_path / "hindsight" / "config.json"
         config_path.parent.mkdir(parents=True, exist_ok=True)
         config_path.write_text(json.dumps(config))
-        monkeypatch.setattr("plugins.memory.hindsight.get_hermes_home", lambda: tmp_path)
+        monkeypatch.setattr("plugins.memory.hindsight.get_atlaz_home", lambda: tmp_path)
 
         p = HindsightMemoryProvider()
         # No agent_identity passed — template renders to "hermes-" which collapses to "hermes"
-        p.initialize(session_id="s1", hermes_home=str(tmp_path), platform="cli")
+        p.initialize(session_id="s1", atlaz_home=str(tmp_path), platform="cli")
         assert p._bank_id == "hermes"
 
 
@@ -1398,7 +1398,7 @@ class TestBankIdTemplate:
 class TestAvailability:
     def test_available_with_api_key(self, tmp_path, monkeypatch):
         monkeypatch.setattr(
-            "plugins.memory.hindsight.get_hermes_home",
+            "plugins.memory.hindsight.get_atlaz_home",
             lambda: tmp_path / "nonexistent",
         )
         monkeypatch.setenv("HINDSIGHT_API_KEY", "test-key")
@@ -1407,7 +1407,7 @@ class TestAvailability:
 
     def test_not_available_without_config(self, tmp_path, monkeypatch):
         monkeypatch.setattr(
-            "plugins.memory.hindsight.get_hermes_home",
+            "plugins.memory.hindsight.get_atlaz_home",
             lambda: tmp_path / "nonexistent",
         )
         p = HindsightMemoryProvider()
@@ -1415,7 +1415,7 @@ class TestAvailability:
 
     def test_available_in_local_mode(self, tmp_path, monkeypatch):
         monkeypatch.setattr(
-            "plugins.memory.hindsight.get_hermes_home",
+            "plugins.memory.hindsight.get_atlaz_home",
             lambda: tmp_path / "nonexistent",
         )
         monkeypatch.setenv("HINDSIGHT_MODE", "local")
@@ -1434,7 +1434,7 @@ class TestAvailability:
             "api_key": "***",
         }))
         monkeypatch.setattr(
-            "plugins.memory.hindsight.get_hermes_home",
+            "plugins.memory.hindsight.get_atlaz_home",
             lambda: tmp_path,
         )
 
@@ -1444,7 +1444,7 @@ class TestAvailability:
 
     def test_local_mode_unavailable_when_runtime_import_fails(self, tmp_path, monkeypatch):
         monkeypatch.setattr(
-            "plugins.memory.hindsight.get_hermes_home",
+            "plugins.memory.hindsight.get_atlaz_home",
             lambda: tmp_path / "nonexistent",
         )
         monkeypatch.setenv("HINDSIGHT_MODE", "local")
@@ -1467,7 +1467,7 @@ class TestAvailability:
         config_path.parent.mkdir(parents=True, exist_ok=True)
         config_path.write_text(json.dumps(config))
         monkeypatch.setattr(
-            "plugins.memory.hindsight.get_hermes_home", lambda: tmp_path
+            "plugins.memory.hindsight.get_atlaz_home", lambda: tmp_path
         )
 
         def _raise(_name):
@@ -1479,7 +1479,7 @@ class TestAvailability:
         )
 
         p = HindsightMemoryProvider()
-        p.initialize(session_id="test-session", hermes_home=str(tmp_path), platform="cli")
+        p.initialize(session_id="test-session", atlaz_home=str(tmp_path), platform="cli")
         assert p._mode == "disabled"
 
 

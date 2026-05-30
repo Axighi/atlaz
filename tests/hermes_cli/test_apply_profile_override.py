@@ -18,7 +18,7 @@ from pathlib import Path
 
 
 def _run_apply_profile_override(
-    tmp_path, monkeypatch, *, hermes_home: str | None, active_profile: str | None,
+    tmp_path, monkeypatch, *, atlaz_home: str | None, active_profile: str | None,
     argv: list[str] | None = None,
 ):
     """Run _apply_profile_override in isolation.
@@ -36,8 +36,8 @@ def _run_apply_profile_override(
         (hermes_root / "profiles" / active_profile).mkdir(parents=True, exist_ok=True)
 
     monkeypatch.setattr(Path, "home", lambda: tmp_path)
-    if hermes_home is not None:
-        monkeypatch.setenv("HERMES_HOME", hermes_home)
+    if atlaz_home is not None:
+        monkeypatch.setenv("HERMES_HOME", atlaz_home)
     else:
         monkeypatch.delenv("HERMES_HOME", raising=False)
 
@@ -73,7 +73,7 @@ class TestApplyProfileOverrideHermesHomeGuard:
         result = _run_apply_profile_override(
             tmp_path,
             monkeypatch,
-            hermes_home=str(hermes_root),
+            atlaz_home=str(hermes_root),
             active_profile="coder",
         )
 
@@ -117,7 +117,7 @@ class TestApplyProfileOverrideHermesHomeGuard:
         result = _run_apply_profile_override(
             tmp_path,
             monkeypatch,
-            hermes_home=None,
+            atlaz_home=None,
             active_profile="coder",
         )
 

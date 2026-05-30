@@ -17,20 +17,20 @@
 
 set -eu
 
-HERMES_HOME="${HERMES_HOME:-/opt/data}"
+ATLAZ_HOME="${ATLAZ_HOME:-/opt/data}"
 INSTALL_DIR="/opt/hermes"
 
-# --- Bootstrap HERMES_HOME as root ---
+# --- Bootstrap ATLAZ_HOME as root ---
 # Create the directory (and any missing parents) while we still have root
 # privileges so the chown checks below see real metadata and the later
 # `s6-setuidgid hermes mkdir -p` block doesn't EACCES on root-owned
-# ancestors. Without this, custom HERMES_HOME paths whose parents only
-# root can create (e.g. `HERMES_HOME=/home/hermes/.hermes` in a Compose
+# ancestors. Without this, custom ATLAZ_HOME paths whose parents only
+# root can create (e.g. `ATLAZ_HOME=/home/hermes/.hermes` in a Compose
 # file, or any path under a fresh / not pre-populated by the image)
 # fail on first boot with `mkdir: cannot create directory '/...': Permission
 # denied` and the cont-init hook exits non-zero. Idempotent — `mkdir -p`
 # is a no-op if the dir already exists. (#18482, salvages #18488)
-mkdir -p "$HERMES_HOME"
+mkdir -p "$ATLAZ_HOME"
 
 # --- UID/GID remap ---
 # Accept PUID/PGID as aliases for HERMES_UID/HERMES_GID.  NAS users (UGOS,
@@ -110,9 +110,9 @@ for sock in /var/run/docker.sock /run/docker.sock; do
 done
 
 # --- Fix ownership of data volume ---
-# When HERMES_UID is remapped or the top-level $HERMES_HOME isn't owned by
+# When HERMES_UID is remapped or the top-level $ATLAZ_HOME isn't owned by
 # the runtime hermes UID, restore ownership to hermes — but ONLY for the
-# directories hermes actually writes to. The full $HERMES_HOME may be a
+# directories hermes actually writes to. The full $ATLAZ_HOME may be a
 # host-mounted bind containing unrelated user files; `chown -R` would
 # silently destroy host ownership of those (see issue #19788).
 #
@@ -122,27 +122,27 @@ actual_hermes_uid=$(id -u hermes)
 needs_chown=false
 if [ -n "${HERMES_UID:-}" ] && [ "$HERMES_UID" != "10000" ]; then
     needs_chown=true
-elif [ "$(stat -c %u "$HERMES_HOME" 2>/dev/null)" != "$actual_hermes_uid" ]; then
+elif [ "$(stat -c %u "$ATLAZ_HOME" 2>/dev/null)" != "$actual_hermes_uid" ]; then
     needs_chown=true
 fi
 if [ "$needs_chown" = true ]; then
-    echo "[stage2] Fixing ownership of $HERMES_HOME (targeted) to hermes ($actual_hermes_uid)"
+    echo "[stage2] Fixing ownership of $ATLAZ_HOME (targeted) to hermes ($actual_hermes_uid)"
     # In rootless Podman the container's "root" is mapped to an
     # unprivileged host UID — chown will fail. That's fine: the volume
     # is already owned by the mapped user on the host side.
     #
-    # Top-level $HERMES_HOME: chown the directory itself (not its contents)
+    # Top-level $ATLAZ_HOME: chown the directory itself (not its contents)
     # so hermes can mkdir new subdirs but bind-mounted host files keep
     # their existing ownership.
-    chown hermes:hermes "$HERMES_HOME" 2>/dev/null || \
-        echo "[stage2] Warning: chown $HERMES_HOME failed (rootless container?) — continuing"
+    chown hermes:hermes "$ATLAZ_HOME" 2>/dev/null || \
+        echo "[stage2] Warning: chown $ATLAZ_HOME failed (rootless container?) — continuing"
     # Hermes-owned subdirs: recursive chown is safe here because these are
     # created and managed exclusively by hermes (see the s6-setuidgid mkdir
     # -p block below for the canonical list).
     for sub in cron sessions logs hooks memories skills skins plans workspace home profiles; do
-        if [ -e "$HERMES_HOME/$sub" ]; then
-            chown -R hermes:hermes "$HERMES_HOME/$sub" 2>/dev/null || \
-                echo "[stage2] Warning: chown $HERMES_HOME/$sub failed (rootless container?) — continuing"
+        if [ -e "$ATLAZ_HOME/$sub" ]; then
+            chown -R hermes:hermes "$ATLAZ_HOME/$sub" 2>/dev/null || \
+                echo "[stage2] Warning: chown $ATLAZ_HOME/$sub failed (rootless container?) — continuing"
         fi
     done
     # Hermes-owned trees under $INSTALL_DIR must be re-chowned when the UID
@@ -157,7 +157,7 @@ if [ "$needs_chown" = true ]; then
     #     that runtime code may walk/update.
     # The set mirrors the build-time `chown -R hermes:hermes` line in the
     # Dockerfile — keep them in sync if the Dockerfile chown set changes.
-    # These are under $INSTALL_DIR (not $HERMES_HOME), so the bind-mount
+    # These are under $INSTALL_DIR (not $ATLAZ_HOME), so the bind-mount
     # concern doesn't apply — recursive is fine.
     chown -R hermes:hermes \
         "$INSTALL_DIR/.venv" \
@@ -167,23 +167,23 @@ if [ "$needs_chown" = true ]; then
         echo "[stage2] Warning: chown of build trees failed (rootless container?) — continuing"
 fi
 
-# Always reset ownership of $HERMES_HOME/profiles to hermes on every
+# Always reset ownership of $ATLAZ_HOME/profiles to hermes on every
 # boot. Profile dirs and files can land owned by root when commands
 # are invoked via `docker exec <container> hermes …` (which defaults
 # to root unless `-u` is passed), and that breaks the cont-init
 # reconciler (02-reconcile-profiles) which runs as hermes and walks
 # the profiles dir. Idempotent; skipped on rootless containers where
 # chown would fail.
-if [ -d "$HERMES_HOME/profiles" ]; then
-    chown -R hermes:hermes "$HERMES_HOME/profiles" 2>/dev/null || true
+if [ -d "$ATLAZ_HOME/profiles" ]; then
+    chown -R hermes:hermes "$ATLAZ_HOME/profiles" 2>/dev/null || true
 fi
 
 # --- config.yaml permissions ---
 # Ensure config.yaml is readable by the hermes runtime user even if it
 # was edited on the host after initial ownership setup.
-if [ -f "$HERMES_HOME/config.yaml" ]; then
-    chown hermes:hermes "$HERMES_HOME/config.yaml" 2>/dev/null || true
-    chmod 640 "$HERMES_HOME/config.yaml" 2>/dev/null || true
+if [ -f "$ATLAZ_HOME/config.yaml" ]; then
+    chown hermes:hermes "$ATLAZ_HOME/config.yaml" 2>/dev/null || true
+    chmod 640 "$ATLAZ_HOME/config.yaml" 2>/dev/null || true
 fi
 
 # --- Seed directory structure as hermes user ---
@@ -191,34 +191,34 @@ fi
 # under rootless Podman where chown back to root would fail).
 #
 # Use direct `mkdir -p` invocation (no `sh -c "..."` wrapper) so the
-# shell isn't a second interpreter — defends against $HERMES_HOME values
+# shell isn't a second interpreter — defends against $ATLAZ_HOME values
 # containing shell metacharacters. PR #30136 review item O2.
 s6-setuidgid hermes mkdir -p \
-    "$HERMES_HOME/cron" \
-    "$HERMES_HOME/sessions" \
-    "$HERMES_HOME/logs" \
-    "$HERMES_HOME/hooks" \
-    "$HERMES_HOME/memories" \
-    "$HERMES_HOME/skills" \
-    "$HERMES_HOME/skins" \
-    "$HERMES_HOME/plans" \
-    "$HERMES_HOME/workspace" \
-    "$HERMES_HOME/home"
+    "$ATLAZ_HOME/cron" \
+    "$ATLAZ_HOME/sessions" \
+    "$ATLAZ_HOME/logs" \
+    "$ATLAZ_HOME/hooks" \
+    "$ATLAZ_HOME/memories" \
+    "$ATLAZ_HOME/skills" \
+    "$ATLAZ_HOME/skins" \
+    "$ATLAZ_HOME/plans" \
+    "$ATLAZ_HOME/workspace" \
+    "$ATLAZ_HOME/home"
 
 # --- Install-method stamp (read by detect_install_method() in hermes status) ---
 # Preserved from the tini-era entrypoint (PR #27843). Must be written as
 # the hermes user so ownership matches the file's documented owner.
 # tee is invoked directly via s6-setuidgid (no `sh -c` wrapper) for the
 # same shell-metacharacter safety described above.
-printf 'docker\n' | s6-setuidgid hermes tee "$HERMES_HOME/.install_method" >/dev/null \
+printf 'docker\n' | s6-setuidgid hermes tee "$ATLAZ_HOME/.install_method" >/dev/null \
     || true
 
 # --- Seed config files (only on first boot) ---
 seed_one() {
     dest=$1
     src=$2
-    if [ ! -f "$HERMES_HOME/$dest" ] && [ -f "$INSTALL_DIR/$src" ]; then
-        s6-setuidgid hermes cp "$INSTALL_DIR/$src" "$HERMES_HOME/$dest"
+    if [ ! -f "$ATLAZ_HOME/$dest" ] && [ -f "$INSTALL_DIR/$src" ]; then
+        s6-setuidgid hermes cp "$INSTALL_DIR/$src" "$ATLAZ_HOME/$dest"
     fi
 }
 seed_one ".env" ".env.example"
@@ -228,18 +228,18 @@ seed_one "SOUL.md" "docker/SOUL.md"
 # .env holds API keys and secrets — restrict to owner-only access. Applied
 # unconditionally (not only on first-seed) so a host-mounted .env that was
 # created with a permissive umask gets tightened on every container start.
-if [ -f "$HERMES_HOME/.env" ]; then
-    chown hermes:hermes "$HERMES_HOME/.env" 2>/dev/null || true
-    chmod 600 "$HERMES_HOME/.env" 2>/dev/null || true
+if [ -f "$ATLAZ_HOME/.env" ]; then
+    chown hermes:hermes "$ATLAZ_HOME/.env" 2>/dev/null || true
+    chmod 600 "$ATLAZ_HOME/.env" 2>/dev/null || true
 fi
 
 # auth.json: bootstrap from env on first boot only. Same semantics as the
 # pre-s6 entrypoint — the [ ! -f ] guard is critical to avoid clobbering
 # rotated refresh tokens on container restart.
-if [ ! -f "$HERMES_HOME/auth.json" ] && [ -n "${HERMES_AUTH_JSON_BOOTSTRAP:-}" ]; then
-    printf '%s' "$HERMES_AUTH_JSON_BOOTSTRAP" > "$HERMES_HOME/auth.json"
-    chown hermes:hermes "$HERMES_HOME/auth.json" 2>/dev/null || true
-    chmod 600 "$HERMES_HOME/auth.json"
+if [ ! -f "$ATLAZ_HOME/auth.json" ] && [ -n "${HERMES_AUTH_JSON_BOOTSTRAP:-}" ]; then
+    printf '%s' "$HERMES_AUTH_JSON_BOOTSTRAP" > "$ATLAZ_HOME/auth.json"
+    chown hermes:hermes "$ATLAZ_HOME/auth.json" 2>/dev/null || true
+    chmod 600 "$ATLAZ_HOME/auth.json"
 fi
 
 # --- Sync bundled skills ---
