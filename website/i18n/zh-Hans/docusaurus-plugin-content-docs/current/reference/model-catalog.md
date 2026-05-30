@@ -13,7 +13,7 @@ Hermes 从托管于文档站点旁的 JSON 清单中获取 **OpenRouter** 和 **
 ## 线上清单 URL
 
 ```
-https://hermes-agent.nousresearch.com/docs/api/model-catalog.json
+https://atlaz.nousresearch.com/docs/api/model-catalog.json
 ```
 
 每次合并到 `main` 时，通过现有的 `deploy-site.yml` GitHub Pages 流水线发布。真实来源位于仓库的 `website/static/api/model-catalog.json`。
@@ -55,7 +55,7 @@ https://hermes-agent.nousresearch.com/docs/api/model-catalog.json
 
 | 时机 | 行为 |
 |---|---|
-| `/model` 或 `hermes model` | 若磁盘缓存已过期则重新获取，否则使用缓存 |
+| `/model` 或 `atlaz model` | 若磁盘缓存已过期则重新获取，否则使用缓存 |
 | 磁盘缓存新鲜（< TTL） | 不发起网络请求 |
 | 网络故障且有缓存 | 静默回退到缓存，输出一行日志 |
 | 网络故障且无缓存 | 静默回退到仓库内置快照 |
@@ -68,7 +68,7 @@ https://hermes-agent.nousresearch.com/docs/api/model-catalog.json
 ```yaml
 model_catalog:
   enabled: true
-  url: https://hermes-agent.nousresearch.com/docs/api/model-catalog.json
+  url: https://atlaz.nousresearch.com/docs/api/model-catalog.json
   ttl_hours: 24
   providers: {}
 ```

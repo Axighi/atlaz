@@ -1,12 +1,12 @@
 ---
 sidebar_position: 7
 title: "Docker"
-description: "在 Docker 中运行 Hermes Agent 以及将 Docker 用作终端后端"
+description: "在 Docker 中运行 ATLAZ 以及将 Docker 用作终端后端"
 ---
 
-# Hermes Agent — Docker
+# ATLAZ — Docker
 
-Docker 与 Hermes Agent 的交集有两种截然不同的方式：
+Docker 与 ATLAZ 的交集有两种截然不同的方式：
 
 1. **在 Docker 中运行 Hermes** — agent 本身在容器内运行（本页的主要内容）
 2. **Docker 作为终端后端** — agent 在宿主机上运行，但将每条命令在单个持久化 Docker 沙箱容器中执行，该容器在工具调用、`/new` 和子 agent 之间保持存活，直至 Hermes 进程结束（参见 [配置 → Docker 后端](./configuration.md#docker-backend)）
@@ -15,7 +15,7 @@ Docker 与 Hermes Agent 的交集有两种截然不同的方式：
 
 ## 快速开始
 
-如果这是你第一次运行 Hermes Agent，请在宿主机上创建一个数据目录，并以交互方式启动容器以运行设置向导：
+如果这是你第一次运行 ATLAZ，请在宿主机上创建一个数据目录，并以交互方式启动容器以运行设置向导：
 
 ```sh
 mkdir -p ~/.hermes
@@ -72,14 +72,14 @@ docker run -d \
   axighi/atlaz gateway run
 ```
 
-入口点在 `exec` 主命令之前，以非 root 用户 `hermes` 在后台启动 `hermes dashboard`。Dashboard 输出在 `docker logs` 中以 `[dashboard]` 为前缀，便于与 gateway 日志区分。
+入口点在 `exec` 主命令之前，以非 root 用户 `hermes` 在后台启动 `atlaz dashboard`。Dashboard 输出在 `docker logs` 中以 `[dashboard]` 为前缀，便于与 gateway 日志区分。
 
 | 环境变量 | 描述 | 默认值 |
 |---------------------|-------------|---------|
 | `HERMES_DASHBOARD` | 设为 `1`（或 `true` / `yes`）以在主命令旁启动 dashboard | *（未设置——不启动 dashboard）* |
 | `HERMES_DASHBOARD_HOST` | dashboard HTTP 服务器的绑定地址 | `127.0.0.1` |
 | `HERMES_DASHBOARD_PORT` | dashboard HTTP 服务器的端口 | `9119` |
-| `HERMES_DASHBOARD_TUI` | 设为 `1` 以启用浏览器内 Chat 标签页（通过 PTY/WebSocket 嵌入 `hermes --tui`） | *（未设置）* |
+| `HERMES_DASHBOARD_TUI` | 设为 `1` 以启用浏览器内 Chat 标签页（通过 PTY/WebSocket 嵌入 `atlaz --tui`） | *（未设置）* |
 | `HERMES_DASHBOARD_INSECURE` | 设为 `1`（或 `true` / `yes`）以在不启用 OAuth 鉴权门控的情况下绑定。仅在可信网络（且通过没有 OAuth 契约的反向代理时）使用——dashboard 会暴露 API 密钥与会话数据 | *（未设置——当注册了 `DashboardAuthProvider` 时启用门控）* |
 
 默认情况下，dashboard 保持在回环地址（`127.0.0.1`），以避免将
@@ -299,7 +299,7 @@ docker run -d \
 4. 将容器的 CMD 作为主程序 exec（`/opt/hermes/docker/main-wrapper.sh`），根据用户传给 `docker run` 的参数进行路由：
    - 无参数 → `hermes`（默认）
    - 第一个参数是 PATH 上的可执行文件（如 `sleep`、`bash`）→ 直接 exec
-   - 其他情况 → `hermes <args>`（子命令透传）
+   - 其他情况 → `atlaz <args>`（子命令透传）
    主程序退出时容器退出，并使用其退出码。
 
 :::warning 与 pre-s6 镜像的破坏性变更
@@ -307,12 +307,12 @@ docker run -d \
 :::
 
 :::warning 权限模型
-除非你在命令链中保留 `/init`（或等效的旧版 `docker/entrypoint.sh` shim，它会转发到 stage2 hook），否则不要覆盖镜像入口点。s6-overlay 的 `/init` 以 root 运行，以便在首次启动时对卷执行 chown，然后通过 `s6-setuidgid` 为每个受监管的服务**以及**主程序降权至 `hermes` 用户。在官方镜像内以 root 启动 `hermes gateway run` 默认会被拒绝，因为这可能在 `/opt/data` 中留下 root 所有的文件，导致后续 dashboard 或 gateway 启动失败。仅在你有意接受该风险时才设置 `HERMES_ALLOW_ROOT_GATEWAY=1`。
+除非你在命令链中保留 `/init`（或等效的旧版 `docker/entrypoint.sh` shim，它会转发到 stage2 hook），否则不要覆盖镜像入口点。s6-overlay 的 `/init` 以 root 运行，以便在首次启动时对卷执行 chown，然后通过 `s6-setuidgid` 为每个受监管的服务**以及**主程序降权至 `hermes` 用户。在官方镜像内以 root 启动 `atlaz gateway run` 默认会被拒绝，因为这可能在 `/opt/data` 中留下 root 所有的文件，导致后续 dashboard 或 gateway 启动失败。仅在你有意接受该风险时才设置 `HERMES_ALLOW_ROOT_GATEWAY=1`。
 :::
 
 ### Per-profile gateway 监管
 
-在容器内，每个通过 `hermes profile create <name>` 创建的 profile 都会自动在 `/run/service/gateway-<name>/` 注册一个受 s6 监管的 gateway 服务。你在宿主机上运行的生命周期命令在此同样适用：
+在容器内，每个通过 `atlaz profile create <name>` 创建的 profile 都会自动在 `/run/service/gateway-<name>/` 注册一个受 s6 监管的 gateway 服务。你在宿主机上运行的生命周期命令在此同样适用：
 
 ```sh
 hermes profile create coder            # 注册 gateway-coder s6 槽
@@ -329,7 +329,7 @@ hermes profile delete coder            # 拆除 s6 槽
 - `docker restart` 保留运行中的 gateway：cont-init 协调器读取 `$HERMES_HOME/profiles/<name>/gateway_state.json`，若上次记录状态为 `running` 则恢复该槽。已停止的 gateway 保持停止状态。
 - 各 profile 的 gateway 日志持久化于 `$HERMES_HOME/logs/gateways/<profile>/current`（由 `s6-log` 轮转），协调器的操作记录在每次启动时追加到 `$HERMES_HOME/logs/container-boot.log`。
 
-在容器内执行 `hermes status` 会显示 `Manager: s6 (container supervisor)`。使用 `/command/s6-svstat /run/service/gateway-<name>` 查看原始 supervisor 状态（注意 `/command/` 仅在监管树进程的 PATH 中；从 `docker exec` 调用时请传入绝对路径）。
+在容器内执行 `atlaz status` 会显示 `Manager: s6 (container supervisor)`。使用 `/command/s6-svstat /run/service/gateway-<name>` 查看原始 supervisor 状态（注意 `/command/` 仅在监管树进程的 PATH 中；从 `docker exec` 调用时请传入绝对路径）。
 
 ## 升级
 
@@ -436,7 +436,7 @@ networks:
 
 ### 广泛有用的工具——提交 issue 或 pull request
 
-如果某个工具可能对大多数 Hermes Agent 用户有用，考虑将其贡献到上游，而不是在私有派生镜像中维护。在 [hermes-agent 仓库](https://github.com/NousResearch/hermes-agent)提交 issue 或 pull request，描述该工具及其使用场景。被纳入官方镜像的工具惠及所有用户，并避免了维护下游 fork 的开销。
+如果某个工具可能对大多数 ATLAZ 用户有用，考虑将其贡献到上游，而不是在私有派生镜像中维护。在 [hermes-agent 仓库](https://github.com/Axighi/atlaz)提交 issue 或 pull request，描述该工具及其使用场景。被纳入官方镜像的工具惠及所有用户，并避免了维护下游 fork 的开销。
 
 ## 连接本地推理服务器（vLLM、Ollama 等）
 

@@ -67,12 +67,12 @@ From now on, every `hermes` invocation pulls fresh secrets at startup. You'll se
 
 | Command | What it does |
 |---|---|
-| `hermes secrets bitwarden setup` | Interactive wizard (install binary, prompt for token, pick project, test fetch) |
-| `hermes secrets bitwarden status` | Show config + binary version + token presence |
-| `hermes secrets bitwarden sync` | Dry-run: pull secrets now and show what would be applied |
-| `hermes secrets bitwarden sync --apply` | Pull and export into the current shell's environment |
-| `hermes secrets bitwarden install` | Just download the pinned `bws` binary (no auth required) |
-| `hermes secrets bitwarden disable` | Flip `enabled: false`; leaves token + project id in place |
+| `atlaz secrets bitwarden setup` | Interactive wizard (install binary, prompt for token, pick project, test fetch) |
+| `atlaz secrets bitwarden status` | Show config + binary version + token presence |
+| `atlaz secrets bitwarden sync` | Dry-run: pull secrets now and show what would be applied |
+| `atlaz secrets bitwarden sync --apply` | Pull and export into the current shell's environment |
+| `atlaz secrets bitwarden install` | Just download the pinned `bws` binary (no auth required) |
+| `atlaz secrets bitwarden disable` | Flip `enabled: false`; leaves token + project id in place |
 
 ## Configuration
 
@@ -106,7 +106,7 @@ Bitwarden never blocks Hermes startup. If anything goes wrong, you'll see a one-
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| `BWS_ACCESS_TOKEN is not set` | Enabled in config but token cleared from `.env` | Re-run `hermes secrets bitwarden setup` |
+| `BWS_ACCESS_TOKEN is not set` | Enabled in config but token cleared from `.env` | Re-run `atlaz secrets bitwarden setup` |
 | `bws exited 1: invalid access token` | Token revoked or wrong | Generate a new token, re-run setup |
 | `[400 Bad Request] {"error":"invalid_client"}` | Token is for a Bitwarden region other than the one `bws` is calling (e.g. EU token hitting the US identity endpoint) | Re-run setup and pick the right region, or set `secrets.bitwarden.server_url` to `https://vault.bitwarden.eu` (or your self-hosted URL) |
 | `bws timed out` | Network blocked or Bitwarden API slow | Check connectivity to `api.bitwarden.com` (or your `server_url`) |

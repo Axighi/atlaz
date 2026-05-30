@@ -1,16 +1,16 @@
 ---
 sidebar_position: 1
-title: "Run Hermes Agent with Nous Portal"
+title: "Run ATLAZ with Nous Portal"
 description: "Start-to-finish walkthrough: subscribe, set up, switch models, enable gateway tools, and verify routing"
 ---
 
-# Run Hermes Agent with Nous Portal
+# Run ATLAZ with Nous Portal
 
-This guide walks you through running Hermes Agent on a [Nous Portal](https://portal.nousresearch.com) subscription end to end — from signing up to verifying that every tool routes correctly. If you just want the overview of what the Portal is and what's in the subscription, see the [Nous Portal integration page](/integrations/nous-portal). This page is the task script.
+This guide walks you through running ATLAZ on a [Nous Portal](https://portal.nousresearch.com) subscription end to end — from signing up to verifying that every tool routes correctly. If you just want the overview of what the Portal is and what's in the subscription, see the [Nous Portal integration page](/integrations/nous-portal). This page is the task script.
 
 ## Prerequisites
 
-- Hermes Agent installed ([Quickstart](/getting-started/quickstart))
+- ATLAZ installed ([Quickstart](/getting-started/quickstart))
 - A web browser on the machine you're setting up (or SSH port forwarding — see [OAuth over SSH](/guides/oauth-over-ssh))
 - About 5 minutes
 
@@ -49,7 +49,7 @@ hermes setup --portal                              # on the remote, open the pri
 
 # Option B: manual paste (for Cloud Shell, Codespaces, EC2 Instance Connect)
 hermes auth add nous --type oauth --manual-paste
-# Then re-run `hermes setup --portal` to wire the provider + gateway
+# Then re-run `atlaz setup --portal` to wire the provider + gateway
 ```
 
 See [OAuth over SSH / Remote Hosts](/guides/oauth-over-ssh) for the full walkthrough including ProxyJump chains, mosh/tmux, and ControlMaster gotchas.
@@ -88,14 +88,14 @@ hermes chat
 Try something that exercises both the model and the Tool Gateway:
 
 ```
-Hey, search the web for "Hermes Agent release notes" and summarize the top 3 hits.
+Hey, search the web for "ATLAZ release notes" and summarize the top 3 hits.
 ```
 
 You should see Hermes call `web_search` (Firecrawl-backed, through the gateway) and respond with a summary. If the search runs and the response makes sense, you're done — the Portal is wired up end to end.
 
 ## 5. Pick the model you actually want
 
-The default after `hermes setup --portal` is a sensible general-purpose model, but the whole point of the subscription is access to the full catalog. Switch with `/model` mid-session:
+The default after `atlaz setup --portal` is a sensible general-purpose model, but the whole point of the subscription is access to the full catalog. Switch with `/model` mid-session:
 
 ```bash
 /model anthropic/claude-sonnet-4.6     # best general-purpose agentic
@@ -120,7 +120,7 @@ hermes config set model.default anthropic/claude-sonnet-4.6
 
 ### Don't pick Hermes-4 for agent work
 
-Hermes-4-70B and Hermes-4-405B are available on the Portal at deep discounts, but they're **chat/reasoning models**, not tool-call-tuned. They will struggle with multi-step agent loops. Use them via [Nous Chat](https://chat.nousresearch.com) for conversation/research work, or through the [subscription proxy](/user-guide/features/subscription-proxy) from non-agent tools. For Hermes Agent itself, stick to the frontier agentic models above.
+Hermes-4-70B and Hermes-4-405B are available on the Portal at deep discounts, but they're **chat/reasoning models**, not tool-call-tuned. They will struggle with multi-step agent loops. Use them via [Nous Chat](https://chat.nousresearch.com) for conversation/research work, or through the [subscription proxy](/user-guide/features/subscription-proxy) from non-agent tools. For ATLAZ itself, stick to the frontier agentic models above.
 
 The Portal's own [info page](https://portal.nousresearch.com/info) carries this warning too — it's the official Nous guidance, not just a Hermes-side opinion.
 
@@ -176,7 +176,7 @@ For team setups where multiple humans share a machine, each human has their own 
 
 ## Troubleshooting
 
-### `hermes portal status` shows "not logged in" after `hermes setup --portal`
+### `atlaz portal status` shows "not logged in" after `atlaz setup --portal`
 
 The OAuth flow didn't complete. Re-run it:
 
@@ -201,7 +201,7 @@ hermes model
 # pick Nous Portal
 ```
 
-Re-verify with `hermes portal status`.
+Re-verify with `atlaz portal status`.
 
 ### Tool Gateway tools showing partner names instead of "via Nous Portal"
 
@@ -233,15 +233,15 @@ The Portal catalog mirrors OpenRouter's model list (300+). If a model is missing
 /model openai/o1-2025-12-17
 ```
 
-If a model is genuinely unavailable, [open an issue](https://github.com/NousResearch/hermes-agent/issues) — most gaps are routing config we can update.
+If a model is genuinely unavailable, [open an issue](https://github.com/Axighi/atlaz/issues) — most gaps are routing config we can update.
 
 ### Billing not appearing on my Portal account
 
-`hermes portal status` will tell you whether you're actually routing through the Portal or some other provider. Common causes:
+`atlaz portal status` will tell you whether you're actually routing through the Portal or some other provider. Common causes:
 
 - `model.provider` set to `openrouter`/`anthropic`/etc. instead of `nous`
 - An OAuth refresh failure that fell back to a different configured provider
-- Multiple Hermes profiles where you're using the wrong one (check `hermes profile current`)
+- Multiple Hermes profiles where you're using the wrong one (check `atlaz profile current`)
 
 ### Want to revoke and start clean
 

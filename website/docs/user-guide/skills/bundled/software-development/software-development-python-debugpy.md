@@ -17,7 +17,7 @@ Debug Python: pdb REPL + debugpy remote (DAP).
 | Source | Bundled (installed by default) |
 | Path | `skills/software-development/python-debugpy` |
 | Version | `1.0.0` |
-| Author | Hermes Agent |
+| Author | ATLAZ |
 | License | MIT |
 | Platforms | linux, macos |
 | Tags | `debugging`, `python`, `pdb`, `debugpy`, `breakpoints`, `dap`, `post-mortem` |
@@ -299,7 +299,7 @@ See Recipe 3. Always add `-p no:xdist` or run single tests without xdist.
 ### `run_agent.py` / CLI — one-shot
 Easiest: add `breakpoint()` near the suspect line, then run `hermes` normally. Control returns to your terminal at the pause point.
 
-### `tui_gateway` subprocess (spawned by `hermes --tui`)
+### `tui_gateway` subprocess (spawned by `atlaz --tui`)
 The gateway runs as a child of the Node TUI. Options:
 
 **A. Source-edit the gateway:**
@@ -309,7 +309,7 @@ import debugpy
 debugpy.listen(("127.0.0.1", 5678))
 debugpy.wait_for_client()
 ```
-Start `hermes --tui`. The TUI will appear frozen (its backend is waiting). Attach a client; execution resumes when you `continue`.
+Start `atlaz --tui`. The TUI will appear frozen (its backend is waiting). Attach a client; execution resumes when you `continue`.
 
 **B. Use `remote-pdb` at a specific handler:**
 ```python

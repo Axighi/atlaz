@@ -40,7 +40,7 @@ MSGRAPH_WEBHOOK_CLIENT_STATE=<generate-with-openssl-rand-hex-32>
 MSGRAPH_WEBHOOK_ACCEPTED_RESOURCES=communications/onlineMeetings
 ```
 
-启动 gateway：`hermes gateway run`。监听器暴露以下端点：
+启动 gateway：`atlaz gateway run`。监听器暴露以下端点：
 
 - `POST /msgraph/webhook` — 来自 Graph 的变更通知
 - `GET /msgraph/webhook?validationToken=...` — Graph 订阅验证握手
@@ -126,7 +126,7 @@ MSGRAPH_WEBHOOK_ALLOWED_SOURCE_CIDRS="52.96.0.0/14,52.104.0.0/14"
 |------|--------|
 | Graph 订阅验证失败 | 公开 URL 可访问，`/msgraph/webhook` 路径匹配，带 `validationToken` 的 GET 在 10 秒内以 `text/plain` 原样回传 token。 |
 | 通知 POST 成功但无内容被摄取 | `client_state` 与订阅时注册的值一致。如值已漂移，重新运行 `openssl rand -hex 32` 并创建新订阅。检查 `accepted_resources` 是否包含 Graph 发送的资源路径。 |
-| 每条通知均返回 403 | `clientState` 不匹配（伪造，或订阅时使用了不同的值）。使用 `hermes teams-pipeline subscribe --client-state "$MSGRAPH_WEBHOOK_CLIENT_STATE" ...` 重新创建订阅（随流水线运行时 PR 一同发布）。 |
+| 每条通知均返回 403 | `clientState` 不匹配（伪造，或订阅时使用了不同的值）。使用 `atlaz teams-pipeline subscribe --client-state "$MSGRAPH_WEBHOOK_CLIENT_STATE" ...` 重新创建订阅（随流水线运行时 PR 一同发布）。 |
 | 监听器已启动，但 `curl http://localhost:8646/health` 挂起 | 端口绑定冲突。检查 `ss -tlnp \| grep 8646`，如有需要更改 `port:`。 |
 | 来自 Microsoft 的真实 Graph 请求返回 403 | 源 IP 白名单范围过窄。临时移除 `allowed_source_cidrs`，确认流量正常后，将列表扩展至包含当前 Microsoft 出口范围。 |
 

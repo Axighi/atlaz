@@ -1,12 +1,12 @@
 ---
 sidebar_position: 3
 title: "创建 Skill"
-description: "如何为 Hermes Agent 创建 skill——SKILL.md 格式、规范与发布"
+description: "如何为 ATLAZ 创建 skill——SKILL.md 格式、规范与发布"
 ---
 
 # 创建 Skill
 
-Skill 是为 Hermes Agent 添加新能力的首选方式。与 tool 相比，skill 更易于创建，无需修改 agent 代码，且可与社区共享。
+Skill 是为 ATLAZ 添加新能力的首选方式。与 tool 相比，skill 更易于创建，无需修改 agent 代码，且可与社区共享。
 
 ## 应该创建 Skill 还是 Tool？
 
@@ -200,7 +200,7 @@ metadata:
 - `key`（必需）——配置项的点路径（例如 `myplugin.path`）
 - `description`（必需）——说明该配置项的作用
 - `default`（可选）——用户未配置时的默认值
-- `prompt`（可选）——`hermes config migrate` 时显示的提示文本；若未设置则回退到 `description`
+- `prompt`（可选）——`atlaz config migrate` 时显示的提示文本；若未设置则回退到 `description`
 
 **工作原理：**
 
@@ -212,7 +212,7 @@ metadata:
          path: ~/my-data
    ```
 
-2. **发现：** `hermes config migrate` 扫描所有已启用的 skill，找出未配置的项并提示用户。配置项也会在 `hermes config show` 的"Skill Settings"部分显示。
+2. **发现：** `atlaz config migrate` 扫描所有已启用的 skill，找出未配置的项并提示用户。配置项也会在 `atlaz config show` 的"Skill Settings"部分显示。
 
 3. **运行时注入：** Skill 加载时，其 config 值会被解析并追加到 skill 消息中：
    ```
@@ -330,9 +330,9 @@ hermes chat --toolsets skills -q "Use the X skill to do Y"
 - 文档处理、网页研究、常见开发工作流、系统管理
 - 被广泛人群定期使用
 
-如果你的 skill 是官方的且有用，但并非所有人都需要（例如付费服务集成、重量级依赖），请放入 **`optional-skills/`**——它随仓库一起发布，可通过 `hermes skills browse` 发现（标记为"official"），并以内置信任级别安装。
+如果你的 skill 是官方的且有用，但并非所有人都需要（例如付费服务集成、重量级依赖），请放入 **`optional-skills/`**——它随仓库一起发布，可通过 `atlaz skills browse` 发现（标记为"official"），并以内置信任级别安装。
 
-如果你的 skill 是专业化的、社区贡献的或小众的，更适合放在 **Skills Hub**——将其上传到注册表并通过 `hermes skills install` 分享。
+如果你的 skill 是专业化的、社区贡献的或小众的，更适合放在 **Skills Hub**——将其上传到注册表并通过 `atlaz skills install` 分享。
 
 ## 发布 Skill
 

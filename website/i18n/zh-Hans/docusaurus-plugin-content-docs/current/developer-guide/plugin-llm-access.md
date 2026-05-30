@@ -281,7 +281,7 @@ plugins:
       llm:
         # 允许此 plugin 选择不同的 Hermes provider
         # （必须是 Hermes 已知的 provider——与
-        # `hermes model` 和 config.yaml model.provider 中的名称相同）
+        # `atlaz model` 和 config.yaml model.provider 中的名称相同）
         allow_provider_override: true
 
         # 可选：限制允许的 provider。使用 ["*"] 表示任意。
@@ -362,8 +362,8 @@ Plugin id 对于扁平 plugin 是 manifest 中的 `name:` 字段，对于嵌套 
 
 ## 参考资料
 
-* 实现：[`agent/plugin_llm.py`](https://github.com/NousResearch/hermes-agent/blob/main/agent/plugin_llm.py)
-* 测试：[`tests/agent/test_plugin_llm.py`](https://github.com/NousResearch/hermes-agent/blob/main/tests/agent/test_plugin_llm.py)
+* 实现：[`agent/plugin_llm.py`](https://github.com/Axighi/atlaz/blob/main/agent/plugin_llm.py)
+* 测试：[`tests/agent/test_plugin_llm.py`](https://github.com/Axighi/atlaz/blob/main/tests/agent/test_plugin_llm.py)
 * 参考 plugin（配套仓库）：
   * [`plugin-llm-example`](https://github.com/NousResearch/hermes-example-plugins/tree/main/plugin-llm-example) — 带图像输入的同步结构化提取
   * [`plugin-llm-async-example`](https://github.com/NousResearch/hermes-example-plugins/tree/main/plugin-llm-async-example) — 使用 `asyncio.gather()` 的异步示例

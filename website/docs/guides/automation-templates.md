@@ -14,8 +14,8 @@ Every template works with **any model** — not locked to a single provider.
 | Trigger | How | Tool |
 |---------|-----|------|
 | **Schedule** | Runs on a cadence (hourly, nightly, weekly) | `cronjob` tool or `/cron` slash command |
-| **GitHub Event** | Fires on PR opens, pushes, issues, CI results | Webhook platform (`hermes webhook subscribe`) |
-| **API Call** | External service POSTs JSON to your endpoint | Webhook platform (config.yaml routes or `hermes webhook subscribe`) |
+| **GitHub Event** | Fires on PR opens, pushes, issues, CI results | Webhook platform (`atlaz webhook subscribe`) |
+| **API Call** | External service POSTs JSON to your endpoint | Webhook platform (config.yaml routes or `atlaz webhook subscribe`) |
 
 All three support delivery to Telegram, Discord, Slack, SMS, email, GitHub comments, or local files.
 :::
@@ -334,7 +334,7 @@ Daily arXiv scan that saves summaries to your note-taking system.
 
 ```bash
 hermes cron create "0 8 * * *" \
-  "Search arXiv for the 3 most interesting papers on 'language model reasoning' OR 'tool-use agents' from the past day. For each paper, create an Obsidian note with the title, authors, abstract summary, key contribution, and potential relevance to Hermes Agent development." \
+  "Search arXiv for the 3 most interesting papers on 'language model reasoning' OR 'tool-use agents' from the past day. For each paper, create an Obsidian note with the title, authors, abstract summary, key contribution, and potential relevance to ATLAZ development." \
   --skill arxiv --skill obsidian \
   --name "Paper digest" \
   --deliver local

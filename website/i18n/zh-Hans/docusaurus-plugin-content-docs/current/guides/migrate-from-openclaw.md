@@ -1,12 +1,12 @@
 ---
 sidebar_position: 10
 title: "从 OpenClaw 迁移"
-description: "将 OpenClaw / Clawdbot 配置迁移到 Hermes Agent 的完整指南——包括迁移内容、配置键映射及迁移后的检查事项。"
+description: "将 OpenClaw / Clawdbot 配置迁移到 ATLAZ 的完整指南——包括迁移内容、配置键映射及迁移后的检查事项。"
 ---
 
 # 从 OpenClaw 迁移
 
-`hermes claw migrate` 将你的 OpenClaw（或旧版 Clawdbot/Moldbot）配置导入 Hermes。本指南详细说明迁移内容、配置键映射以及迁移后的验证步骤。
+`atlaz claw migrate` 将你的 OpenClaw（或旧版 Clawdbot/Moldbot）配置导入 Hermes。本指南详细说明迁移内容、配置键映射以及迁移后的验证步骤。
 
 ## 快速开始
 
@@ -33,7 +33,7 @@ hermes claw migrate --preset full --migrate-secrets --yes
 | `--preset <name>` | `full`（所有兼容设置）或 `user-data`（排除基础设施配置）。两种预设默认均不导入密钥——需显式传入 `--migrate-secrets`。 |
 | `--overwrite` | 冲突时覆盖已有 Hermes 文件（默认：计划存在冲突时拒绝执行）。 |
 | `--migrate-secrets` | 包含 API 密钥。即使使用 `--preset full` 也需要显式指定——没有任何预设会静默导入密钥。 |
-| `--no-backup` | 跳过迁移前对 `~/.hermes/` 的 zip 快照备份（默认在执行前写入单个还原点归档，位于 `~/.hermes/backups/pre-migration-*.zip`；可通过 `hermes import` 还原）。 |
+| `--no-backup` | 跳过迁移前对 `~/.hermes/` 的 zip 快照备份（默认在执行前写入单个还原点归档，位于 `~/.hermes/backups/pre-migration-*.zip`；可通过 `atlaz import` 还原）。 |
 | `--source <path>` | 自定义 OpenClaw 目录。 |
 | `--workspace-target <path>` | `AGENTS.md` 的放置位置。 |
 | `--skill-conflict <mode>` | `skip`（默认）、`overwrite` 或 `rename`。 |
@@ -168,11 +168,11 @@ TTS 设置从 OpenClaw 配置的**两个**位置读取，优先级如下：
 | `TOOLS.md` | `archive/workspace/TOOLS.md` | Hermes 内置工具说明 |
 | `HEARTBEAT.md` | `archive/workspace/HEARTBEAT.md` | 使用 cron 作业执行周期性任务 |
 | `BOOTSTRAP.md` | `archive/workspace/BOOTSTRAP.md` | 使用上下文文件或 skills |
-| Cron 作业 | `archive/cron-config.json` | 通过 `hermes cron create` 重建 |
+| Cron 作业 | `archive/cron-config.json` | 通过 `atlaz cron create` 重建 |
 | 插件 | `archive/plugins-config.json` | 参见 [插件指南](/user-guide/features/hooks) |
-| Hooks/webhooks | `archive/hooks-config.json` | 使用 `hermes webhook` 或 gateway hooks |
-| 记忆后端 | `archive/memory-backend-config.json` | 通过 `hermes honcho` 配置 |
-| Skills 注册表 | `archive/skills-registry-config.json` | 使用 `hermes skills config` |
+| Hooks/webhooks | `archive/hooks-config.json` | 使用 `atlaz webhook` 或 gateway hooks |
+| 记忆后端 | `archive/memory-backend-config.json` | 通过 `atlaz honcho` 配置 |
+| Skills 注册表 | `archive/skills-registry-config.json` | 使用 `atlaz skills config` |
 | UI/身份 | `archive/ui-identity-config.json` | 使用 `/skin` 命令 |
 | 日志 | `archive/logging-diagnostics-config.json` | 在 `config.yaml` 日志部分设置 |
 | 多 Agent 列表 | `archive/agents-list.json` | 使用 Hermes profiles |
@@ -211,7 +211,7 @@ OpenClaw 配置中 token 和 API 密钥的值支持三种格式：
 "channels": { "telegram": { "botToken": { "source": "env", "id": "TELEGRAM_BOT_TOKEN" } } }
 ```
 
-迁移会解析所有三种格式。对于环境变量模板和 `source: "env"` 的 SecretRef 对象，会从 `~/.openclaw/.env` 和 `openclaw.json` 的 env 子对象中查找值。`source: "file"` 或 `source: "exec"` 的 SecretRef 对象无法自动解析——迁移会对此发出警告，相关值需通过 `hermes config set` 手动添加至 Hermes。
+迁移会解析所有三种格式。对于环境变量模板和 `source: "env"` 的 SecretRef 对象，会从 `~/.openclaw/.env` 和 `openclaw.json` 的 env 子对象中查找值。`source: "file"` 或 `source: "exec"` 的 SecretRef 对象无法自动解析——迁移会对此发出警告，相关值需通过 `atlaz config set` 手动添加至 Hermes。
 
 ## 迁移后
 
@@ -221,15 +221,15 @@ OpenClaw 配置中 token 和 API 密钥的值支持三种格式：
 
 3. **开启新会话** — 导入的 skills 和记忆条目在新会话中生效，当前会话不受影响。
 
-4. **验证 API 密钥** — 运行 `hermes status` 检查 provider 认证状态。
+4. **验证 API 密钥** — 运行 `atlaz status` 检查 provider 认证状态。
 
 5. **测试消息平台** — 若迁移了平台 token，重启 gateway：`systemctl --user restart hermes-gateway`
 
-6. **检查会话策略** — 验证 `hermes config get session_reset` 是否符合预期。
+6. **检查会话策略** — 验证 `atlaz config get session_reset` 是否符合预期。
 
-7. **重新配对 WhatsApp** — WhatsApp 使用二维码配对（Baileys），不支持 token 迁移。运行 `hermes whatsapp` 进行配对。
+7. **重新配对 WhatsApp** — WhatsApp 使用二维码配对（Baileys），不支持 token 迁移。运行 `atlaz whatsapp` 进行配对。
 
-8. **清理归档** — 确认一切正常后，运行 `hermes claw cleanup` 将残留的 OpenClaw 目录重命名为 `.pre-migration/`（防止状态混淆）。
+8. **清理归档** — 确认一切正常后，运行 `atlaz claw cleanup` 将残留的 OpenClaw 目录重命名为 `.pre-migration/`（防止状态混淆）。
 
 ## 故障排查
 
@@ -239,7 +239,7 @@ OpenClaw 配置中 token 和 API 密钥的值支持三种格式：
 
 ### "No provider API keys found"
 
-根据 OpenClaw 版本不同，密钥可能存储在多个位置：`openclaw.json` 中 `models.providers.*.apiKey` 内联、`~/.openclaw/.env`、`openclaw.json` 的 `"env"` 子对象，或 `agents/main/agent/auth-profiles.json`。迁移会检查所有四个位置。若密钥使用 `source: "file"` 或 `source: "exec"` 的 SecretRef，则无法自动解析——请通过 `hermes config set` 手动添加。
+根据 OpenClaw 版本不同，密钥可能存储在多个位置：`openclaw.json` 中 `models.providers.*.apiKey` 内联、`~/.openclaw/.env`、`openclaw.json` 的 `"env"` 子对象，或 `agents/main/agent/auth-profiles.json`。迁移会检查所有四个位置。若密钥使用 `source: "file"` 或 `source: "exec"` 的 SecretRef，则无法自动解析——请通过 `atlaz config set` 手动添加。
 
 ### 迁移后 skills 未出现
 
@@ -247,4 +247,4 @@ OpenClaw 配置中 token 和 API 密钥的值支持三种格式：
 
 ### TTS 语音未迁移
 
-OpenClaw 在两处存储 TTS 设置：`messages.tts.providers.*` 和顶层 `talk` 配置。迁移会检查两处。若你的 voice ID 是通过 OpenClaw UI 设置的（存储路径不同），可能需要手动设置：`hermes config set tts.elevenlabs.voice_id YOUR_VOICE_ID`。
+OpenClaw 在两处存储 TTS 设置：`messages.tts.providers.*` 和顶层 `talk` 配置。迁移会检查两处。若你的 voice ID 是通过 OpenClaw UI 设置的（存储路径不同），可能需要手动设置：`atlaz config set tts.elevenlabs.voice_id YOUR_VOICE_ID`。

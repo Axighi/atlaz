@@ -1,7 +1,7 @@
 ---
 sidebar_position: 7
 title: "Email"
-description: "Set up Hermes Agent as an email assistant via IMAP/SMTP"
+description: "Set up ATLAZ as an email assistant via IMAP/SMTP"
 ---
 
 # Email Setup
@@ -162,7 +162,7 @@ Email access follows the same pattern as all other Hermes platforms:
 | **"SMTP connection failed"** at startup | Verify `EMAIL_SMTP_HOST` and `EMAIL_SMTP_PORT`. Check that your password is correct (use App Password for Gmail). |
 | **Messages not received** | Check `EMAIL_ALLOWED_USERS` includes the sender's email. Check spam folder — some providers flag automated replies. |
 | **"Authentication failed"** | For Gmail, you must use an App Password, not your regular password. Ensure 2FA is enabled first. |
-| **Duplicate replies** | Ensure only one gateway instance is running. Check `hermes gateway status`. |
+| **Duplicate replies** | Ensure only one gateway instance is running. Check `atlaz gateway status`. |
 | **Slow response** | The default poll interval is 15 seconds. Reduce with `EMAIL_POLL_INTERVAL=5` for faster response (but more IMAP connections). |
 | **Replies not threading** | The adapter uses In-Reply-To headers. Some email clients (especially web-based) may not thread correctly with automated messages. |
 

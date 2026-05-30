@@ -47,7 +47,7 @@ When someone messages your iMessage, Hermes automatically sends them a pairing c
 ```bash
 hermes pairing approve bluebubbles <CODE>
 ```
-Use `hermes pairing list` to see pending codes and approved users.
+Use `atlaz pairing list` to see pending codes and approved users.
 
 **Pre-authorize specific users** (in `~/.hermes/.env`):
 ```bash
@@ -136,7 +136,7 @@ Without the Private API, basic text messaging and media still work.
 ### Messages not arriving
 - Check that the webhook is registered in BlueBubbles Server → Settings → API → Webhooks
 - Verify the webhook URL is reachable from the Mac
-- Check `hermes logs gateway` for webhook errors (or `hermes logs -f` to follow in real-time)
+- Check `atlaz logs gateway` for webhook errors (or `atlaz logs -f` to follow in real-time)
 
 ### "Private API helper not connected"
 - Install the Private API helper: [docs.bluebubbles.app](https://docs.bluebubbles.app/helper-bundle/installation)

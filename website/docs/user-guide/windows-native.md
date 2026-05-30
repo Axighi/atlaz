@@ -1,6 +1,6 @@
 ---
 title: "Windows (Native) Guide — Early Beta"
-description: "Early BETA: run Hermes Agent natively on Windows 10 / 11 — install, feature matrix, UTF-8 console, Git Bash, gateway as a Scheduled Task, editor handling, PATH, uninstall, and common pitfalls"
+description: "Early BETA: run ATLAZ natively on Windows 10 / 11 — install, feature matrix, UTF-8 console, Git Bash, gateway as a Scheduled Task, editor handling, PATH, uninstall, and common pitfalls"
 sidebar_label: "Windows (Native) — Beta"
 sidebar_position: 3
 ---
@@ -8,7 +8,7 @@ sidebar_position: 3
 # Windows (Native) Guide — Early Beta
 
 :::warning Early BETA
-Native Windows support is **early beta**. It installs, runs, and passes our Windows-footgun lint, but it hasn't been road-tested at the scale our Linux/macOS/WSL2 paths have. Expect rough edges — especially around subprocess handling, path quirks, and non-ASCII console output. Please [file issues](https://github.com/NousResearch/hermes-agent/issues) with repro steps when you hit something. If you want a battle-tested setup today, use the [Linux/macOS installer under WSL2](./windows-wsl-quickstart.md) instead.
+Native Windows support is **early beta**. It installs, runs, and passes our Windows-footgun lint, but it hasn't been road-tested at the scale our Linux/macOS/WSL2 paths have. Expect rough edges — especially around subprocess handling, path quirks, and non-ASCII console output. Please [file issues](https://github.com/Axighi/atlaz/issues) with repro steps when you hit something. If you want a battle-tested setup today, use the [Linux/macOS installer under WSL2](./windows-wsl-quickstart.md) instead.
 :::
 
 Hermes runs natively on Windows 10 and Windows 11 — no WSL, no Cygwin, no Docker. This page is the deep dive: what works natively, what's WSL-only, what the installer actually does, and the Windows-specific knobs you might need to touch.
@@ -27,7 +27,7 @@ Open **PowerShell** (or Windows Terminal) and run:
 iex (irm https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1)
 ```
 
-No admin rights required. The installer goes to `%LOCALAPPDATA%\hermes\` and adds `hermes` to your **User PATH** — open a new terminal after it finishes.
+No admin rights required. The installer goes to `%LOCALAPPDATA%\hermes\` and adds `atlaz` to your **User PATH** — open a new terminal after it finishes.
 
 **Installer options** (requires the scriptblock form to pass parameters):
 
@@ -41,7 +41,7 @@ No admin rights required. The installer goes to `%LOCALAPPDATA%\hermes\` and add
 | `-Commit` | unset | Pin install to a specific commit SHA (overrides `-Branch`) |
 | `-Tag` | unset | Pin install to a specific git tag (e.g. `v0.14.0`) |
 | `-NoVenv` | off | Skip venv creation (advanced — you manage Python yourself) |
-| `-SkipSetup` | off | Skip the post-install `hermes setup` wizard |
+| `-SkipSetup` | off | Skip the post-install `atlaz setup` wizard |
 | `-HermesHome` | `%LOCALAPPDATA%\hermes` | Override data directory |
 | `-InstallDir` | `%LOCALAPPDATA%\hermes\hermes-agent` | Override code location |
 
@@ -49,7 +49,7 @@ The installer auto-retries flaky git fetches and strips BOM from any downloaded 
 
 ### Desktop installer (alternative)
 
-A thin GUI installer is also available — useful if you'd rather double-click an `.exe` than open PowerShell. Download Hermes Desktop, run the installer, and on first launch the GUI calls `install.ps1` under the hood to provision Python (via `uv`), Node, PortableGit, and the rest of the dependency bootstrap described below. After the first run, the desktop app and the PowerShell-installed `hermes` CLI share the same `%LOCALAPPDATA%\hermes\hermes-agent` install and `%USERPROFILE%\.hermes` data directory — switch between the GUI and the CLI freely.
+A thin GUI installer is also available — useful if you'd rather double-click an `.exe` than open PowerShell. Download Hermes Desktop, run the installer, and on first launch the GUI calls `install.ps1` under the hood to provision Python (via `uv`), Node, PortableGit, and the rest of the dependency bootstrap described below. After the first run, the desktop app and the PowerShell-installed `atlaz` CLI share the same `%LOCALAPPDATA%\hermes\hermes-agent` install and `%USERPROFILE%\.hermes` data directory — switch between the GUI and the CLI freely.
 
 Use the desktop installer when you want a familiar Windows install experience or you're handing Hermes to a non-developer; use the PowerShell one-liner when you're already in a terminal.
 
@@ -79,11 +79,11 @@ Top-to-bottom, in order:
 6. **Tiered `uv pip install`** — tries `.[all]` first, falls back to progressively smaller sets (`[messaging,dashboard,ext]` → `[messaging]` → `.`) if a `git+https` dep flakes on rate-limited GitHub. Prevents "single flake drops you to a bare install" failure mode.
 7. **Auto-installs messaging SDKs** keyed off `.env` — if `TELEGRAM_BOT_TOKEN` / `DISCORD_BOT_TOKEN` / `SLACK_BOT_TOKEN` / `SLACK_APP_TOKEN` / `WHATSAPP_ENABLED` are present, runs `python -m ensurepip --upgrade` and targeted `pip install` calls so each platform's SDK is actually importable.
 8. **Sets `HERMES_GIT_BASH_PATH`** to the resolved `bash.exe` so Hermes finds it deterministically in fresh shells.
-9. **Adds `%LOCALAPPDATA%\hermes\bin` to User PATH** — exposes the `hermes` command after you open a new terminal.
-10. **Runs `hermes setup`** — the normal first-run wizard (model, provider, toolsets). Skip with `-SkipSetup`.
+9. **Adds `%LOCALAPPDATA%\hermes\bin` to User PATH** — exposes the `atlaz` command after you open a new terminal.
+10. **Runs `atlaz setup`** — the normal first-run wizard (model, provider, toolsets). Skip with `-SkipSetup`.
 
 :::tip Skip provider hunting on Windows
-Native Windows is still early beta, and per-tool API key setup (Firecrawl, FAL, Browser Use, OpenAI TTS) is the highest-friction part of getting a useful agent. A [Nous Portal](/user-guide/features/tool-gateway) subscription covers the model **and** all of those tools through one OAuth login. After the installer finishes, run `hermes setup --portal` to wire everything up.
+Native Windows is still early beta, and per-tool API key setup (Firecrawl, FAL, Browser Use, OpenAI TTS) is the highest-friction part of getting a useful agent. A [Nous Portal](/user-guide/features/tool-gateway) subscription covers the model **and** all of those tools through one OAuth login. After the installer finishes, run `atlaz setup --portal` to wire everything up.
 :::
 
 ## Feature matrix
@@ -92,8 +92,8 @@ Everything except the dashboard's embedded terminal pane runs natively on Window
 
 | Feature | Native Windows | WSL2 |
 |---|---|---|
-| CLI (`hermes chat`, `hermes setup`, `hermes gateway`, …) | ✓ | ✓ |
-| Interactive TUI (`hermes --tui`) | ✓ | ✓ |
+| CLI (`atlaz chat`, `atlaz setup`, `atlaz gateway`, …) | ✓ | ✓ |
+| Interactive TUI (`atlaz --tui`) | ✓ | ✓ |
 | Messaging gateway (Telegram, Discord, Slack, WhatsApp, 15+ platforms) | ✓ | ✓ |
 | Cron scheduler | ✓ | ✓ |
 | Browser tool (Chromium via Node) | ✓ | ✓ |
@@ -170,7 +170,7 @@ On legacy `cmd.exe` consoles `Ctrl+Enter` collapses to plain `Enter` — use `Es
 
 ## Running the gateway at Windows login
 
-`hermes gateway install` on Windows uses **Scheduled Tasks** with a Startup-folder fallback — no admin required.
+`atlaz gateway install` on Windows uses **Scheduled Tasks** with a Startup-folder fallback — no admin required.
 
 ### Install
 
@@ -196,7 +196,7 @@ hermes gateway restart
 hermes gateway uninstall   # Removes schtasks entry, Startup shortcut, pid file
 ```
 
-`hermes gateway status` is idempotent — call it a thousand times in a row and it will never accidentally kill the gateway. (Pre-PR #21561 it silently did, via `os.kill(pid, 0)` colliding with `CTRL_C_EVENT` at the C level — see "process management internals" below if you care about the story.)
+`atlaz gateway status` is idempotent — call it a thousand times in a row and it will never accidentally kill the gateway. (Pre-PR #21561 it silently did, via `os.kill(pid, 0)` colliding with `CTRL_C_EVENT` at the C level — see "process management internals" below if you care about the story.)
 
 ### Why not a Windows Service?
 
@@ -222,7 +222,7 @@ The browser tool uses `agent-browser` (a Node helper) to drive Chromium. On Wind
 
 - The installer puts `agent-browser` on PATH via npm.
 - `shutil.which("agent-browser", path=...)` picks up the `.cmd` shim automatically — `CreateProcessW` can't execute an extensionless shebang, so Hermes always resolves to the `.CMD` wrapper. Don't manually invoke the shebang script; always go through the `.cmd`.
-- Playwright Chromium is auto-installed on first run (`npx playwright install chromium`). If installation fails, `hermes doctor` surfaces it with a fix-it hint.
+- Playwright Chromium is auto-installed on first run (`npx playwright install chromium`). If installation fails, `atlaz doctor` surfaces it with a fix-it hint.
 
 ## Running Hermes on Windows — practical notes
 
@@ -276,7 +276,7 @@ Remove-Item -Recurse -Force "$env:USERPROFILE\.hermes"
 Remove-Item -Recurse -Force "$env:LOCALAPPDATA\hermes"
 ```
 
-The `hermes uninstall` CLI subcommand also handles the case where the schtasks entry was registered under a different task name (older installs) — it searches by install path rather than by hardcoded task name.
+The `atlaz uninstall` CLI subcommand also handles the case where the schtasks entry was registered under a different task name (older installs) — it searches by install path rather than by hardcoded task name.
 
 ## Process management internals
 
@@ -300,13 +300,13 @@ You hit a shebang-script invocation that bypassed the `.cmd` shim. Hermes resolv
 Your download of `install.ps1` picked up a UTF-8 BOM. The `irm | iex` form strips BOMs automatically; `[scriptblock]::Create((irm ...))` does not. Re-run with the simple `irm | iex` form, or download the script manually and save it without a BOM via `[IO.File]::WriteAllText($path, $text, (New-Object Text.UTF8Encoding $false))`.
 
 **Gateway won't stay running after restart.**
-Check `hermes gateway status` — it merges the schtasks entry, the Startup-folder shortcut (if used), and the live PID. If schtasks is registered but not running, group policy may be blocking `ONLOGON` triggers. Run `schtasks /Query /TN HermesGateway /V /FO LIST` to see the task's failure reason, or fall back to the Startup-folder path by uninstalling and reinstalling with `HERMES_GATEWAY_FORCE_STARTUP=1`.
+Check `atlaz gateway status` — it merges the schtasks entry, the Startup-folder shortcut (if used), and the live PID. If schtasks is registered but not running, group policy may be blocking `ONLOGON` triggers. Run `schtasks /Query /TN HermesGateway /V /FO LIST` to see the task's failure reason, or fall back to the Startup-folder path by uninstalling and reinstalling with `HERMES_GATEWAY_FORCE_STARTUP=1`.
 
 **`/edit` still does nothing after setting `$env:EDITOR`.**
 You set it in the current process only; close and reopen the shell, or set it at User scope in System Properties → Environment Variables. Verify with `echo $env:EDITOR` in a new PowerShell window.
 
 **Browser tool launches but tools time out.**
-Chromium is auto-installed on first run. If the install failed (rate-limited GitHub, Playwright CDN hiccup), run `hermes doctor` — it will surface the missing Chromium and print the exact `npx playwright install chromium` command to fix it.
+Chromium is auto-installed on first run. If the install failed (rate-limited GitHub, Playwright CDN hiccup), run `atlaz doctor` — it will surface the missing Chromium and print the exact `npx playwright install chromium` command to fix it.
 
 **`agent-browser` fails with a weird Node version error.**
 The installer provisions Node 22 at `%LOCALAPPDATA%\hermes\node` but your PATH may have an older system Node 18 first. Either move Hermes's node dir earlier on PATH, or delete the system install if you don't use Node elsewhere.
@@ -324,6 +324,6 @@ If you edited Hermes config or a skill on Windows using a non-UTF-8 editor (Note
 
 - **[Installation](../getting-started/installation.md)** — the full install page, including Linux/macOS/WSL2/Termux.
 - **[Windows (WSL2) Guide](./windows-wsl-quickstart.md)** — if you want POSIX semantics or the dashboard terminal pane.
-- **[CLI Reference](../reference/cli-commands.md)** — every `hermes` subcommand.
+- **[CLI Reference](../reference/cli-commands.md)** — every `atlaz` subcommand.
 - **[FAQ](../reference/faq.md)** — common non-Windows-specific questions.
 - **[Messaging Gateway](./messaging/index.md)** — running Telegram/Discord/Slack on Windows.

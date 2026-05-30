@@ -26,7 +26,7 @@ Hermes has several distinct pluggable interfaces — some use Python `register_*
 | **External tools via MCP** (filesystem, GitHub, Linear, any MCP server) | [MCP](/user-guide/features/mcp) — declare `mcp_servers.<name>` in `config.yaml` |
 | **Gateway event hooks** (fire on startup, session events, commands) | [Event Hooks](/user-guide/features/hooks#gateway-event-hooks) — drop `HOOK.yaml` + `handler.py` into `~/.hermes/hooks/<name>/` |
 | **Shell hooks** (run a shell command on events) | [Shell Hooks](/user-guide/features/hooks#shell-hooks) — declare under `hooks:` in `config.yaml` |
-| **Additional skill sources** (custom GitHub repos, private skill indexes) | [Skills](/user-guide/features/skills) — `hermes skills tap add <repo>` · [Publishing a tap](/user-guide/features/skills#publishing-a-custom-skill-tap) |
+| **Additional skill sources** (custom GitHub repos, private skill indexes) | [Skills](/user-guide/features/skills) — `atlaz skills tap add <repo>` · [Publishing a tap](/user-guide/features/skills#publishing-a-custom-skill-tap) |
 | A first-class **core** inference provider (not a plugin) | [Adding Providers](/developer-guide/adding-providers) |
 
 See the full [Pluggable interfaces table](/user-guide/features/plugins#pluggable-interfaces--where-to-go-for-each) for a consolidated view of every extension surface including config-driven (TTS, STT, MCP, shell hooks) and drop-in directory (gateway hooks) styles.
@@ -264,7 +264,7 @@ def register(ctx):
 - Called exactly once at startup
 - `ctx.register_tool()` puts your tool in the registry — the model sees it immediately
 - `ctx.register_hook()` subscribes to lifecycle events
-- `ctx.register_cli_command()` registers a CLI subcommand (e.g. `hermes my-plugin <subcommand>`)
+- `ctx.register_cli_command()` registers a CLI subcommand (e.g. `atlaz my-plugin <subcommand>`)
 - `ctx.register_command()` registers an in-session slash command (e.g. `/myplugin <args>` inside CLI / gateway chat) — see [Register slash commands](#register-slash-commands) below
 - `ctx.dispatch_tool(name, arguments)` — call any other tool (built-in or from another plugin) with the parent agent's context (approvals, credentials, task_id) wired up automatically. Useful from slash-command handlers that need to invoke `terminal`, `read_file`, or any other tool as if the model had called it directly.
 - If this function crashes, the plugin is disabled but Hermes continues fine
@@ -337,7 +337,7 @@ hermes logs --level WARNING | grep -i plugin
 
 Common reasons a plugin doesn't appear:
 
-- **Not enabled in config** — plugins are opt-in. Run `hermes plugins enable <name>` (the name comes from the `plugins list` output, which can be `<category>/<plugin>` for nested layouts).
+- **Not enabled in config** — plugins are opt-in. Run `atlaz plugins enable <name>` (the name comes from the `plugins list` output, which can be `<category>/<plugin>` for nested layouts).
 - **Wrong directory layout** — must be `~/.hermes/plugins/<plugin-name>/plugin.yaml` (flat) or `~/.hermes/plugins/<category>/<plugin-name>/plugin.yaml` (one level of category nesting, max). Anything deeper is ignored.
 - **Missing `__init__.py`** — the plugin directory needs both `plugin.yaml` and `__init__.py` with a `register(ctx)` function.
 - **Wrong `kind`** — gateway adapters need `kind: platform` in their manifest. Memory providers are auto-detected as `kind: exclusive` and routed through the `memory.provider` config instead of `plugins.enabled`.
@@ -430,7 +430,7 @@ requires_env:
 
 If `WEATHER_API_KEY` isn't set, the plugin is disabled with a clear message. No crash, no error in the agent — just "Plugin weather disabled (missing: WEATHER_API_KEY)".
 
-When users run `hermes plugins install`, they're **prompted interactively** for any missing `requires_env` variables. Values are saved to `.env` automatically.
+When users run `atlaz plugins install`, they're **prompted interactively** for any missing `requires_env` variables. Values are saved to `.env` automatically.
 
 For a better install experience, use the rich format with descriptions and signup URLs:
 
@@ -649,7 +649,7 @@ When multiple plugins return context from `pre_llm_call`, their outputs are join
 
 ### Register CLI commands
 
-Plugins can add their own `hermes <plugin>` subcommand tree:
+Plugins can add their own `atlaz <plugin>` subcommand tree:
 
 ```python
 def _my_command(args):
@@ -679,7 +679,7 @@ def register(ctx):
     )
 ```
 
-After registration, users can run `hermes my-plugin status`, `hermes my-plugin config`, etc.
+After registration, users can run `atlaz my-plugin status`, `atlaz my-plugin config`, etc.
 
 **Memory provider plugins** use a convention-based approach instead: add a `register_cli(subparser)` function to your plugin's `cli.py` file. The memory plugin discovery system finds it automatically — no `ctx.register_cli_command()` call needed. See the [Memory Provider Plugin guide](/developer-guide/memory-provider-plugin#adding-cli-commands) for details.
 
@@ -718,7 +718,7 @@ After registration, users can type `/mystatus` in any session. The command appea
 
 | | `register_command()` | `register_cli_command()` |
 |---|---|---|
-| Invoked as | `/name` in a session | `hermes name` in a terminal |
+| Invoked as | `/name` in a session | `atlaz name` in a terminal |
 | Where it works | CLI sessions, Telegram, Discord, etc. | Terminal only |
 | Handler receives | Raw args string | argparse `Namespace` |
 | Use case | Diagnostics, status, quick actions | Complex subcommand trees, setup wizards |
@@ -848,7 +848,7 @@ def register(ctx):
         check_fn=check_requirements,
         required_env=["MYPLATFORM_TOKEN"],
         # Auto-populate PlatformConfig.extra from env so env-only setups
-        # show up in `hermes gateway status` without SDK instantiation.
+        # show up in `atlaz gateway status` without SDK instantiation.
         env_enablement_fn=_env_enablement,
         # Opt in to cron delivery: `deliver=myplatform` routes to this var.
         cron_deliver_env_var="MYPLATFORM_HOME_CHANNEL",

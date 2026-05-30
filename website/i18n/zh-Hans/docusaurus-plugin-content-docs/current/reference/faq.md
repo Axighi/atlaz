@@ -1,7 +1,7 @@
 ---
 sidebar_position: 3
 title: "常见问题与故障排查"
-description: "Hermes Agent 常见问题解答及常见问题解决方案"
+description: "ATLAZ 常见问题解答及常见问题解决方案"
 ---
 
 # 常见问题与故障排查
@@ -14,23 +14,23 @@ description: "Hermes Agent 常见问题解答及常见问题解决方案"
 
 ### Hermes 支持哪些 LLM 提供商？
 
-Hermes Agent 可与任何兼容 OpenAI 的 API 配合使用。支持的提供商包括：
+ATLAZ 可与任何兼容 OpenAI 的 API 配合使用。支持的提供商包括：
 
 - **[OpenRouter](https://openrouter.ai/)** — 通过一个 API key 访问数百个模型（推荐，灵活性强）
 - **Nous Portal** — Nous Research 自有推理端点
 - **OpenAI** — GPT-5.4、GPT-5-codex、GPT-4.1、GPT-4o 等
-- **Anthropic** — Claude 模型（直接 API、通过 `hermes auth add anthropic` 进行 OAuth、OpenRouter 或任何兼容代理）
+- **Anthropic** — Claude 模型（直接 API、通过 `atlaz auth add anthropic` 进行 OAuth、OpenRouter 或任何兼容代理）
 - **Google** — Gemini 模型（通过 `gemini` 提供商直接调用 API、`google-gemini-cli` OAuth 提供商、OpenRouter 或兼容代理）
 - **z.ai / ZhipuAI** — GLM 模型
 - **Kimi / Moonshot AI** — Kimi 模型
 - **MiniMax** — 全球及中国区端点
 - **本地模型** — 通过 [Ollama](https://ollama.com/)、[vLLM](https://docs.vllm.ai/)、[llama.cpp](https://github.com/ggerganov/llama.cpp)、[SGLang](https://github.com/sgl-project/sglang) 或任何兼容 OpenAI 的服务器
 
-使用 `hermes model` 设置提供商，或直接编辑 `~/.hermes/.env`。所有提供商 key 请参阅[环境变量](./environment-variables.md)参考文档。
+使用 `atlaz model` 设置提供商，或直接编辑 `~/.hermes/.env`。所有提供商 key 请参阅[环境变量](./environment-variables.md)参考文档。
 
 ### 支持 Windows 吗？
 
-**原生不支持。** Hermes Agent 需要类 Unix 环境。在 Windows 上，请安装 [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install) 并在其中运行 Hermes。标准安装命令在 WSL2 中可完美运行：
+**原生不支持。** ATLAZ 需要类 Unix 环境。在 Windows 上，请安装 [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install) 并在其中运行 Hermes。标准安装命令在 WSL2 中可完美运行：
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
@@ -70,11 +70,11 @@ curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scri
 
 ### 我的数据会被发送到哪里？
 
-API 调用**仅发送至您配置的 LLM 提供商**（例如 OpenRouter、您本地的 Ollama 实例）。Hermes Agent 不收集遥测数据、使用数据或分析数据。您的对话、记忆和技能均存储在本地 `~/.hermes/` 目录中。
+API 调用**仅发送至您配置的 LLM 提供商**（例如 OpenRouter、您本地的 Ollama 实例）。ATLAZ 不收集遥测数据、使用数据或分析数据。您的对话、记忆和技能均存储在本地 `~/.hermes/` 目录中。
 
 ### 可以离线使用 / 使用本地模型吗？
 
-可以。运行 `hermes model`，选择**自定义端点**，然后输入您服务器的 URL：
+可以。运行 `atlaz model`，选择**自定义端点**，然后输入您服务器的 URL：
 
 ```bash
 hermes model
@@ -108,11 +108,11 @@ Hermes 会自动检测本地端点并放宽流式传输超时（读取超时从 
 
 ### 费用是多少？
 
-Hermes Agent 本身**免费且开源**（MIT 许可证）。您只需为所选提供商的 LLM API 用量付费。本地模型完全免费运行。
+ATLAZ 本身**免费且开源**（MIT 许可证）。您只需为所选提供商的 LLM API 用量付费。本地模型完全免费运行。
 
 ### 多人可以使用同一个实例吗？
 
-可以。[消息网关](../user-guide/messaging/index.md)允许多个用户通过 Telegram、Discord、Slack、WhatsApp 或 Home Assistant 与同一个 Hermes Agent 实例交互。访问权限通过白名单（特定用户 ID）和私信配对（第一个发消息的用户获得访问权）来控制。
+可以。[消息网关](../user-guide/messaging/index.md)允许多个用户通过 Telegram、Discord、Slack、WhatsApp 或 Home Assistant 与同一个 ATLAZ 实例交互。访问权限通过白名单（特定用户 ID）和私信配对（第一个发消息的用户获得访问权）来控制。
 
 ### 记忆（memory）和技能（skills）有什么区别？
 
@@ -236,7 +236,7 @@ curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scri
 
 **原因：** 会话内的 `/model` 只能在您**已配置**的提供商之间切换。如果您只设置了 OpenRouter，`/model` 就只会显示 OpenRouter。
 
-**解决方案：** 退出当前会话，在终端中使用 `hermes model` 添加新提供商：
+**解决方案：** 退出当前会话，在终端中使用 `atlaz model` 添加新提供商：
 
 ```bash
 # 先退出 Hermes 聊天会话（Ctrl+C 或 /quit）
@@ -247,13 +247,13 @@ hermes model
 # 此命令可以：添加提供商、运行 OAuth、输入 API key、配置端点
 ```
 
-通过 `hermes model` 添加新提供商后，启动新的聊天会话 — `/model` 将显示所有已配置的提供商。
+通过 `atlaz model` 添加新提供商后，启动新的聊天会话 — `/model` 将显示所有已配置的提供商。
 
 :::tip 快速参考
 | 目标 | 使用方式 |
 |-----------|-----|
-| 添加新提供商 | `hermes model`（从终端） |
-| 输入/更改 API key | `hermes model`（从终端） |
+| 添加新提供商 | `atlaz model`（从终端） |
+| 输入/更改 API key | `atlaz model`（从终端） |
 | 会话中途切换模型 | `/model <name>`（会话内） |
 | 切换到其他已配置的提供商 | `/model provider:model`（会话内） |
 :::
@@ -301,7 +301,7 @@ hermes chat --model openrouter/meta-llama/llama-3.1-70b-instruct
 **解决方案：** 稍等片刻后重试。对于持续使用，请考虑：
 - 升级您的提供商套餐
 - 切换到其他模型或提供商
-- 使用 `hermes chat --provider <alternative>` 路由到其他后端
+- 使用 `atlaz chat --provider <alternative>` 路由到其他后端
 
 #### 上下文长度超限
 
@@ -368,7 +368,7 @@ custom_providers:
 **解决方案：**
 - 在消息中避免使用 `sudo` — 请智能体寻找替代方案
 - 如果必须使用 `sudo`，在 `/etc/sudoers` 中为特定命令配置免密 sudo
-- 或切换到终端界面执行管理任务：`hermes chat`
+- 或切换到终端界面执行管理任务：`atlaz chat`
 
 #### Docker 后端无法连接
 
@@ -412,7 +412,7 @@ cat ~/.hermes/logs/gateway.log | tail -50
 **原因：** 网络问题、bot token 已过期，或平台 webhook 配置错误。
 
 **解决方案：**
-- 使用 `hermes gateway setup` 验证您的 bot token 是否有效
+- 使用 `atlaz gateway setup` 验证您的 bot token 是否有效
 - 检查网关日志：`cat ~/.hermes/logs/gateway.log | tail -50`
 - 对于基于 webhook 的平台（Slack、WhatsApp），确保您的服务器可公开访问
 
@@ -446,7 +446,7 @@ lsof -i :8080
 hermes config show
 ```
 
-#### WSL：网关持续断开连接或 `hermes gateway start` 失败
+#### WSL：网关持续断开连接或 `atlaz gateway start` 失败
 
 **原因：** WSL 的 systemd 支持不稳定。许多 WSL2 安装未启用 systemd，即使启用，服务也可能在 WSL 重启或 Windows 空闲关机后无法存活。
 
@@ -486,7 +486,7 @@ nohup hermes gateway run > ~/.hermes/logs/gateway.log 2>&1 &
 
 **原因：** launchd 服务继承的是最小 PATH（`/usr/bin:/bin:/usr/sbin:/sbin`），不包含 Homebrew、nvm、cargo 或其他用户安装的工具目录。这通常会导致 WhatsApp bridge（`node not found`）或语音转录（`ffmpeg not found`）失败。
 
-**解决方案：** 网关在您运行 `hermes gateway install` 时会捕获您的 shell PATH。如果您在设置网关后安装了新工具，请重新运行 install 以捕获更新后的 PATH：
+**解决方案：** 网关在您运行 `atlaz gateway install` 时会捕获您的 shell PATH。如果您在设置网关后安装了新工具，请重新运行 install 以捕获更新后的 PATH：
 
 ```bash
 hermes gateway install    # 重新快照当前 PATH
@@ -508,8 +508,8 @@ hermes gateway start      # 检测到更新的 plist 并重新加载
 **原因：** 模型较大、API 服务器距离较远，或系统 prompt（提示词）包含过多工具。
 
 **解决方案：**
-- 尝试更快/更小的模型：`hermes chat --model openrouter/meta-llama/llama-3.1-8b-instruct`
-- 减少激活的工具集：`hermes chat -t "terminal"`
+- 尝试更快/更小的模型：`atlaz chat --model openrouter/meta-llama/llama-3.1-8b-instruct`
+- 减少激活的工具集：`atlaz chat -t "terminal"`
 - 检查到提供商的网络延迟
 - 对于本地模型，确保有足够的 GPU VRAM
 
@@ -626,11 +626,11 @@ Profiles 是构建在 `HERMES_HOME` 之上的托管层。您*可以*在每次命
 
 ### Profiles 共享记忆或会话吗？
 
-不共享。每个 profile 都有自己独立的记忆存储、会话数据库和技能目录，完全隔离。如果您想用现有的记忆和会话创建新 profile，请使用 `hermes profile create newname --clone-all` 从当前 profile 复制所有内容。
+不共享。每个 profile 都有自己独立的记忆存储、会话数据库和技能目录，完全隔离。如果您想用现有的记忆和会话创建新 profile，请使用 `atlaz profile create newname --clone-all` 从当前 profile 复制所有内容。
 
-### 运行 `hermes update` 时会发生什么？
+### 运行 `atlaz update` 时会发生什么？
 
-`hermes update` 拉取最新代码并重新安装依赖项**一次**（不是每个 profile 各一次）。然后自动将更新的技能同步到所有 profiles。您只需运行一次 `hermes update` — 它覆盖机器上的每个 profile。
+`atlaz update` 拉取最新代码并重新安装依赖项**一次**（不是每个 profile 各一次）。然后自动将更新的技能同步到所有 profiles。您只需运行一次 `atlaz update` — 它覆盖机器上的每个 profile。
 
 ### 可以运行多少个 profiles？
 
@@ -711,9 +711,9 @@ display:
 
 ### 在 Telegram 上管理技能（slash 命令限制）
 
-**场景：** Telegram 有 100 个 slash 命令的限制，您的技能数量已超过此限制。您想禁用 Telegram 上不需要的技能，但 `hermes skills config` 设置似乎没有生效。
+**场景：** Telegram 有 100 个 slash 命令的限制，您的技能数量已超过此限制。您想禁用 Telegram 上不需要的技能，但 `atlaz skills config` 设置似乎没有生效。
 
-**解决方案：** 使用 `hermes skills config` 按平台禁用技能。这会写入 `config.yaml`：
+**解决方案：** 使用 `atlaz skills config` 按平台禁用技能。这会写入 `config.yaml`：
 
 ```yaml
 skills:
@@ -722,7 +722,7 @@ skills:
     telegram: [skill-a, skill-b]  # 仅在 telegram 上禁用
 ```
 
-更改后，**重启网关**（`hermes gateway restart` 或终止并重新启动）。Telegram bot 命令菜单在启动时重建。
+更改后，**重启网关**（`atlaz gateway restart` 或终止并重新启动）。Telegram bot 命令菜单在启动时重建。
 
 :::tip
 描述过长的技能在 Telegram 菜单中会被截断为 40 个字符，以符合 payload 大小限制。如果技能未出现，可能是总 payload 大小问题而非 100 个命令数量限制 — 禁用未使用的技能对两者都有帮助。
@@ -748,7 +748,7 @@ skills:
 
 **解决方案：**
 
-1. 在新机器上安装 Hermes Agent：
+1. 在新机器上安装 ATLAZ：
    ```bash
    curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
    ```
@@ -768,7 +768,7 @@ skills:
    hermes import ~/hermes-backup-<timestamp>.zip
    ```
 
-4. 在新机器上运行 `hermes setup` 以验证 API key 和提供商配置是否正常工作。
+4. 在新机器上运行 `atlaz setup` 以验证 API key 和提供商配置是否正常工作。
 
 ### 将单个 profile 迁移到另一台机器
 
@@ -784,9 +784,9 @@ hermes profile import ./work-backup.tar.gz work
 
 导入的 profile 将包含导出时的所有配置、记忆、会话和技能。如果新机器的设置不同，您可能需要更新路径或重新向提供商进行身份验证。
 
-### `hermes backup` 与 `hermes profile export` 的对比
+### `atlaz backup` 与 `atlaz profile export` 的对比
 
-| 功能 | `hermes backup` | `hermes profile export` |
+| 功能 | `atlaz backup` | `atlaz profile export` |
 | :--- | :--- | :--- |
 | **使用场景** | **整机迁移** | **移植/共享特定 profile** |
 | **范围** | 全局（整个 `~/.hermes` 目录） | 局部（单个 profile 目录） |
@@ -800,7 +800,7 @@ rsync -av --exclude='hermes-agent' ~/.hermes/ newmachine:~/.hermes/
 ```
 
 :::tip
-`hermes backup` 即使在 Hermes 正在运行时也能生成一致的快照。还原的归档文件不包含机器本地的运行时文件，如 `gateway.pid` 和 `cron.pid`。
+`atlaz backup` 即使在 Hermes 正在运行时也能生成一致的快照。还原的归档文件不包含机器本地的运行时文件，如 `gateway.pid` 和 `cron.pid`。
 :::
 
 ### 安装后重新加载 shell 时出现权限拒绝
@@ -854,6 +854,6 @@ hermes chat -q "hello" --model anthropic/claude-opus-4.7
 
 如果您的问题未在此处涵盖：
 
-1. **搜索现有 issue：** [GitHub Issues](https://github.com/NousResearch/hermes-agent/issues)
+1. **搜索现有 issue：** [GitHub Issues](https://github.com/Axighi/atlaz/issues)
 2. **向社区提问：** [Nous Research Discord](https://discord.gg/nousresearch)
-3. **提交 bug 报告：** 请包含您的操作系统、Python 版本（`python3 --version`）、Hermes 版本（`hermes --version`）以及完整的错误信息
+3. **提交 bug 报告：** 请包含您的操作系统、Python 版本（`python3 --version`）、Hermes 版本（`atlaz --version`）以及完整的错误信息

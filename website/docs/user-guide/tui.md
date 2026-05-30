@@ -65,7 +65,7 @@ Click anywhere on a section header (or its chevron) to toggle it. The Tools list
 
 ## Requirements
 
-- **Node.js** ≥ 20 — the TUI runs as a subprocess launched from the Python CLI. `hermes doctor` verifies this.
+- **Node.js** ≥ 20 — the TUI runs as a subprocess launched from the Python CLI. `atlaz doctor` verifies this.
 - **TTY** — like the classic CLI, piping stdin or running in non-interactive environments falls back to single-query mode.
 
 On first launch Hermes installs the TUI's Node dependencies into `ui-tui/node_modules` (one-time, a few seconds). Subsequent launches are fast. If you pull a new Hermes version, the TUI bundle is rebuilt automatically when sources are newer than the dist.
@@ -112,7 +112,7 @@ Every other slash command (including installed skills, quick commands, and perso
 
 ## Live session switcher
 
-Use the live session switcher when you want one terminal to act as a dispatcher for several TUI sessions. It lists only sessions that are currently live in this TUI process; closed sessions remain saved transcripts and can still be reopened with `/resume` or `hermes --tui --resume <id-or-title>`.
+Use the live session switcher when you want one terminal to act as a dispatcher for several TUI sessions. It lists only sessions that are currently live in this TUI process; closed sessions remain saved transcripts and can still be reopened with `/resume` or `atlaz --tui --resume <id-or-title>`.
 
 Open it with any of these:
 
@@ -168,7 +168,7 @@ Or in-session: `/indicator emoji` (etc.). Styles ship with matched glyph widths 
 
 ## Auto-resume
 
-By default, `hermes --tui` starts a fresh session each launch. To re-attach to the most recent TUI session automatically (useful when your terminal or SSH connection drops unexpectedly), opt in:
+By default, `atlaz --tui` starts a fresh session each launch. To re-attach to the most recent TUI session automatically (useful when your terminal or SSH connection drops unexpectedly), opt in:
 
 ```bash
 export HERMES_TUI_RESUME=1          # most-recent TUI session
@@ -198,7 +198,7 @@ The status line also shows:
 - **Per-prompt elapsed time** — `⏱ 12s/3m 45s` while the turn is running (live), frozen to `⏲ 32s / 3m 45s` after the turn completes. First number is time since last user message; second is total session duration. Resets on every new prompt.
 - **`🗜️ N`** — number of times the running session has been auto-compressed. Appears once the first compression fires.
 - **`▶ N`** — number of `/background` tasks currently running in this session. Appears whenever at least one task is in flight.
-- **`⚠ YOLO`** — visible warning whenever YOLO mode is on (`hermes --yolo`, `/yolo`, or `HERMES_YOLO_MODE=1`). The same badge also appears in the startup banner so you cannot launch an auto-approving session without noticing.
+- **`⚠ YOLO`** — visible warning whenever YOLO mode is on (`atlaz --yolo`, `/yolo`, or `HERMES_YOLO_MODE=1`). The same badge also appears in the startup banner so you cannot launch an auto-approving session without noticing.
 
 ## Configuration
 
@@ -264,7 +264,7 @@ See [Sessions](sessions.md) for lifecycle, search, compression, and export.
 
 ## Attaching to a running gateway
 
-By default the TUI spawns its own in-process gateway, so each TUI instance is self-contained. If you already have a long-lived gateway running (e.g. `hermes gateway run` in tmux, or the systemd / launchd service), you can point the TUI at that gateway instead — the TUI then becomes a thin client and shares state with every other surface (messaging platforms, web dashboard, other TUI sessions) that's attached to the same gateway.
+By default the TUI spawns its own in-process gateway, so each TUI instance is self-contained. If you already have a long-lived gateway running (e.g. `atlaz gateway run` in tmux, or the systemd / launchd service), you can point the TUI at that gateway instead — the TUI then becomes a thin client and shares state with every other surface (messaging platforms, web dashboard, other TUI sessions) that's attached to the same gateway.
 
 Set the websocket URL via env before launching:
 
@@ -283,7 +283,7 @@ This is the same channel the web dashboard's embedded TUI uses (see [Web Dashboa
 
 ## Reverting to the classic CLI
 
-Launching `hermes` (without `--tui`) stays on the classic CLI. To make a machine prefer the TUI, set `HERMES_TUI=1` in your shell profile. To go back, unset it.
+Launching `atlaz` (without `--tui`) stays on the classic CLI. To make a machine prefer the TUI, set `HERMES_TUI=1` in your shell profile. To go back, unset it.
 
 If the TUI fails to launch (no Node, missing bundle, TTY issue), Hermes prints a diagnostic and falls back — rather than leaving you stuck.
 

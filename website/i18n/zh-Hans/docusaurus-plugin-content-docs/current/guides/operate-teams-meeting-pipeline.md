@@ -182,14 +182,14 @@ hermes teams-pipeline show <job-id>
 
 ### 每日或定期检查
 
-- 运行 `hermes teams-pipeline maintain-subscriptions --dry-run`
-- 检查 `hermes teams-pipeline list --status failed`
+- 运行 `atlaz teams-pipeline maintain-subscriptions --dry-run`
+- 检查 `atlaz teams-pipeline list --status failed`
 - 确认 Teams 投递目标仍为正确的聊天或频道
 
 ### 变更 webhook URL 或投递目标前
 
 - 更新公共通知 URL 或 Teams 目标配置
-- 运行 `hermes teams-pipeline validate`
+- 运行 `atlaz teams-pipeline validate`
 - 续期或重新创建受影响的订阅
 - 确认新事件落入预期的接收端
 
@@ -223,7 +223,7 @@ hermes teams-pipeline show <job-id>
 ### 重复或意外的重放
 
 检查：
-- 是否手动通过 `hermes teams-pipeline run` 重放了任务
+- 是否手动通过 `atlaz teams-pipeline run` 重放了任务
 - 该会议的 sink 记录是否已存在
 - 是否在本地配置中有意启用了重发路径
 
@@ -237,8 +237,8 @@ hermes teams-pipeline show <job-id>
 - [ ] 若启用录制回退，`ffmpeg` 已安装
 - [ ] Teams 出站投递目标已配置并验证
 - [ ] Notion 和 Linear 接收端仅在实际需要时配置
-- [ ] `hermes teams-pipeline validate` 返回 OK 快照
-- [ ] `hermes teams-pipeline token-health --force-refresh` 执行成功
+- [ ] `atlaz teams-pipeline validate` 返回 OK 快照
+- [ ] `atlaz teams-pipeline token-health --force-refresh` 执行成功
 - [ ] **`maintain-subscriptions` 已配置计划任务**（Hermes cron、systemd timer 或 crontab——参见[自动化订阅续期](#automating-subscription-renewal-required-for-production)）。若未配置，Graph 订阅将在 72 小时内静默过期。
 - [ ] 一个真实的端到端会议事件已生成存储任务
 - [ ] 至少一条摘要已到达预期的投递接收端

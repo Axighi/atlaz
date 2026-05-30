@@ -14,10 +14,10 @@ Delegate coding to OpenHands CLI (model-agnostic, LiteLLM).
 
 | | |
 |---|---|
-| Source | Optional — install with `hermes skills install official/autonomous-ai-agents/openhands` |
+| Source | Optional — install with `atlaz skills install official/autonomous-ai-agents/openhands` |
 | Path | `optional-skills/autonomous-ai-agents/openhands` |
 | Version | `0.1.0` |
-| Author | Tim Koepsel (xzessmedia), Hermes Agent |
+| Author | Tim Koepsel (xzessmedia), ATLAZ |
 | License | MIT |
 | Platforms | linux, macos |
 | Tags | `Coding-Agent`, `OpenHands`, `Model-Agnostic`, `LiteLLM` |

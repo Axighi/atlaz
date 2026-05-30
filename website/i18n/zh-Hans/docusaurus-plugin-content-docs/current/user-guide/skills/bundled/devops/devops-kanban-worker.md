@@ -67,7 +67,7 @@ kanban_complete(
 
 **需要人工审查的编码任务（review-required）：**
 
-对于大多数涉及代码变更的任务，在人工审查者过目之前，工作并未真正*完成*。应使用 block 而非 complete，并在 `reason` 前加 `review-required: ` 前缀，以便仪表板将该行标记为待审查。先将结构化元数据（变更文件、测试计数、diff/PR url）写入 comment，因为 `kanban_block` 只携带人类可读的原因——comment 是持久化注释的渠道。审查者可执行 `hermes kanban unblock <id>` 批准（这会携带 comment 线程重新派生你以处理后续事项），或通过另一条 comment 要求修改。
+对于大多数涉及代码变更的任务，在人工审查者过目之前，工作并未真正*完成*。应使用 block 而非 complete，并在 `reason` 前加 `review-required: ` 前缀，以便仪表板将该行标记为待审查。先将结构化元数据（变更文件、测试计数、diff/PR url）写入 comment，因为 `kanban_block` 只携带人类可读的原因——comment 是持久化注释的渠道。审查者可执行 `atlaz kanban unblock <id>` 批准（这会携带 comment 线程重新派生你以处理后续事项），或通过另一条 comment 要求修改。
 
 ```python
 import json
@@ -188,15 +188,15 @@ block 消息是仪表板/gateway 通知器中显示的内容。comment 是人类
 
 **工作区可能存在过期产物。** 尤其是 `dir:` 和 `worktree` 工作区可能包含来自先前运行的文件。阅读 comment 线程——它通常会解释你为何再次运行以及工作区处于何种状态。
 
-**当指导已可用时，不要依赖 CLI。** `kanban_*` 工具可在所有终端后端（Docker、Modal、SSH）上工作。从你的终端工具执行 `hermes kanban <verb>` 在容器化后端中会失败，因为 CLI 未安装在那里。如有疑问，使用工具。
+**当指导已可用时，不要依赖 CLI。** `kanban_*` 工具可在所有终端后端（Docker、Modal、SSH）上工作。从你的终端工具执行 `atlaz kanban <verb>` 在容器化后端中会失败，因为 CLI 未安装在那里。如有疑问，使用工具。
 
 ## CLI 回退（用于脚本）
 
 每个工具都有对应的 CLI 等价命令，供人工操作员和脚本使用：
-- `kanban_show` ↔ `hermes kanban show <id> --json`
-- `kanban_complete` ↔ `hermes kanban complete <id> --summary "..." --metadata '{...}'`
-- `kanban_block` ↔ `hermes kanban block <id> "reason"`
-- `kanban_create` ↔ `hermes kanban create "title" --assignee <profile> [--parent <id>]`
+- `kanban_show` ↔ `atlaz kanban show <id> --json`
+- `kanban_complete` ↔ `atlaz kanban complete <id> --summary "..." --metadata '{...}'`
+- `kanban_block` ↔ `atlaz kanban block <id> "reason"`
+- `kanban_create` ↔ `atlaz kanban create "title" --assignee <profile> [--parent <id>]`
 - 等等。
 
 在 agent 内部使用工具；CLI 供终端前的人类使用。

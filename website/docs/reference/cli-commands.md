@@ -21,7 +21,7 @@ hermes [global-options] <command> [subcommand/options]
 | Option | Description |
 |--------|-------------|
 | `--version`, `-V` | Show version and exit. |
-| `--profile <name>`, `-p <name>` | Select which Hermes profile to use for this invocation. Overrides the sticky default set by `hermes profile use`. |
+| `--profile <name>`, `-p <name>` | Select which Hermes profile to use for this invocation. Overrides the sticky default set by `atlaz profile use`. |
 | `--resume <session>`, `-r <session>` | Resume a previous session by ID or title. |
 | `--continue [name]`, `-c [name]` | Resume the most recent session, or the most recent session matching a title. |
 | `--worktree`, `-w` | Start in an isolated git worktree for parallel-agent workflows. |
@@ -36,56 +36,56 @@ hermes [global-options] <command> [subcommand/options]
 
 | Command | Purpose |
 |---------|---------|
-| `hermes chat` | Interactive or one-shot chat with the agent. |
-| `hermes model` | Interactively choose the default provider and model. |
-| `hermes fallback` | Manage fallback providers tried when the primary model errors. |
-| `hermes gateway` | Run or manage the messaging gateway service. |
-| `hermes proxy` | Local OpenAI-compatible proxy that attaches OAuth provider credentials. See [Subscription Proxy](../user-guide/features/subscription-proxy.md). |
-| `hermes lsp` | Manage Language Server Protocol integration (semantic diagnostics for write_file/patch). |
-| `hermes setup` | Interactive setup wizard for all or part of the configuration. |
-| `hermes whatsapp` | Configure and pair the WhatsApp bridge. |
-| `hermes slack` | Slack helpers (currently: generate the app manifest with every command as a native slash). |
-| `hermes auth` | Manage credentials — add, list, remove, reset, set strategy. Handles OAuth flows for Codex/Nous/Anthropic. |
-| `hermes login` / `logout` | **Deprecated** — use `hermes auth` instead. |
-| `hermes send` | Send a one-shot message to a configured messaging platform (Telegram, Discord, Slack, Signal, SMS, …). Useful from shell scripts, cron jobs, CI hooks, and monitoring daemons — no agent loop, no LLM. |
-| `hermes secrets` | Manage external secret sources (currently Bitwarden Secrets Manager) for pulling API keys at process startup instead of from `~/.hermes/.env`. |
-| `hermes migrate` | Diagnose and (optionally) rewrite `config.yaml` to replace references to retired models or deprecated settings (e.g. `migrate xai`). |
-| `hermes status` | Show agent, auth, and platform status. |
-| `hermes cron` | Inspect and tick the cron scheduler. |
-| `hermes kanban` | Multi-profile collaboration board (tasks, links, dispatcher). |
-| `hermes webhook` | Manage dynamic webhook subscriptions for event-driven activation. |
-| `hermes hooks` | Inspect, approve, or remove shell-script hooks declared in `config.yaml`. |
-| `hermes doctor` | Diagnose config and dependency issues. |
-| `hermes security audit` | On-demand supply-chain audit (OSV.dev) for the venv, plugin requirements, and pinned MCP servers. |
-| `hermes dump` | Copy-pasteable setup summary for support/debugging. |
-| `hermes debug` | Debug tools — upload logs and system info for support. |
-| `hermes backup` | Back up Hermes home directory to a zip file. |
-| `hermes checkpoints` | Inspect / prune / clear `~/.hermes/checkpoints/` (the shadow store used by `/rollback`). Run with no args for a status overview. |
-| `hermes import` | Restore a Hermes backup from a zip file. |
-| `hermes logs` | View, tail, and filter agent/gateway/error log files. |
-| `hermes config` | Show, edit, migrate, and query configuration files. |
-| `hermes pairing` | Approve or revoke messaging pairing codes. |
-| `hermes skills` | Browse, install, publish, audit, and configure skills. |
-| `hermes bundles` | Group several skills under a single `/<name>` slash command. See [Skill Bundles](../user-guide/features/skills.md#skill-bundles). |
-| `hermes curator` | Background skill maintenance — status, run, pause, pin. See [Curator](../user-guide/features/curator.md). |
-| `hermes memory` | Configure external memory provider. Plugin-specific subcommands (e.g. `hermes honcho`) register automatically when their provider is active. |
-| `hermes acp` | Run Hermes as an ACP server for editor integration. |
-| `hermes mcp` | Manage MCP server configurations and run Hermes as an MCP server. |
-| `hermes plugins` | Manage Hermes Agent plugins (install, enable, disable, remove). |
-| `hermes portal` | Nous Portal status, subscription link, and Tool Gateway routing. See [Tool Gateway](../user-guide/features/tool-gateway.md). |
-| `hermes tools` | Configure enabled tools per platform. |
-| `hermes computer-use` | Install or check the cua-driver backend (macOS Computer Use). |
-| `hermes sessions` | Browse, export, prune, rename, and delete sessions. |
-| `hermes insights` | Show token/cost/activity analytics. |
-| `hermes claw` | OpenClaw migration helpers. |
-| `hermes dashboard` | Launch the web dashboard for managing config, API keys, and sessions. |
-| `hermes profile` | Manage profiles — multiple isolated Hermes instances. |
-| `hermes completion` | Print shell completion scripts (bash/zsh/fish). |
-| `hermes version` | Show version information. |
-| `hermes update` | Pull latest code and reinstall dependencies (git installs), or check PyPI and `pip install --upgrade` (pip installs). `--check` previews without installing; `--backup` takes a pre-pull `HERMES_HOME` snapshot. |
-| `hermes uninstall` | Remove Hermes from the system. |
+| `atlaz chat` | Interactive or one-shot chat with the agent. |
+| `atlaz model` | Interactively choose the default provider and model. |
+| `atlaz fallback` | Manage fallback providers tried when the primary model errors. |
+| `atlaz gateway` | Run or manage the messaging gateway service. |
+| `atlaz proxy` | Local OpenAI-compatible proxy that attaches OAuth provider credentials. See [Subscription Proxy](../user-guide/features/subscription-proxy.md). |
+| `atlaz lsp` | Manage Language Server Protocol integration (semantic diagnostics for write_file/patch). |
+| `atlaz setup` | Interactive setup wizard for all or part of the configuration. |
+| `atlaz whatsapp` | Configure and pair the WhatsApp bridge. |
+| `atlaz slack` | Slack helpers (currently: generate the app manifest with every command as a native slash). |
+| `atlaz auth` | Manage credentials — add, list, remove, reset, set strategy. Handles OAuth flows for Codex/Nous/Anthropic. |
+| `atlaz login` / `logout` | **Deprecated** — use `atlaz auth` instead. |
+| `atlaz send` | Send a one-shot message to a configured messaging platform (Telegram, Discord, Slack, Signal, SMS, …). Useful from shell scripts, cron jobs, CI hooks, and monitoring daemons — no agent loop, no LLM. |
+| `atlaz secrets` | Manage external secret sources (currently Bitwarden Secrets Manager) for pulling API keys at process startup instead of from `~/.hermes/.env`. |
+| `atlaz migrate` | Diagnose and (optionally) rewrite `config.yaml` to replace references to retired models or deprecated settings (e.g. `migrate xai`). |
+| `atlaz status` | Show agent, auth, and platform status. |
+| `atlaz cron` | Inspect and tick the cron scheduler. |
+| `atlaz kanban` | Multi-profile collaboration board (tasks, links, dispatcher). |
+| `atlaz webhook` | Manage dynamic webhook subscriptions for event-driven activation. |
+| `atlaz hooks` | Inspect, approve, or remove shell-script hooks declared in `config.yaml`. |
+| `atlaz doctor` | Diagnose config and dependency issues. |
+| `atlaz security audit` | On-demand supply-chain audit (OSV.dev) for the venv, plugin requirements, and pinned MCP servers. |
+| `atlaz dump` | Copy-pasteable setup summary for support/debugging. |
+| `atlaz debug` | Debug tools — upload logs and system info for support. |
+| `atlaz backup` | Back up Hermes home directory to a zip file. |
+| `atlaz checkpoints` | Inspect / prune / clear `~/.hermes/checkpoints/` (the shadow store used by `/rollback`). Run with no args for a status overview. |
+| `atlaz import` | Restore a Hermes backup from a zip file. |
+| `atlaz logs` | View, tail, and filter agent/gateway/error log files. |
+| `atlaz config` | Show, edit, migrate, and query configuration files. |
+| `atlaz pairing` | Approve or revoke messaging pairing codes. |
+| `atlaz skills` | Browse, install, publish, audit, and configure skills. |
+| `atlaz bundles` | Group several skills under a single `/<name>` slash command. See [Skill Bundles](../user-guide/features/skills.md#skill-bundles). |
+| `atlaz curator` | Background skill maintenance — status, run, pause, pin. See [Curator](../user-guide/features/curator.md). |
+| `atlaz memory` | Configure external memory provider. Plugin-specific subcommands (e.g. `atlaz honcho`) register automatically when their provider is active. |
+| `atlaz acp` | Run Hermes as an ACP server for editor integration. |
+| `atlaz mcp` | Manage MCP server configurations and run Hermes as an MCP server. |
+| `atlaz plugins` | Manage ATLAZ plugins (install, enable, disable, remove). |
+| `atlaz portal` | Nous Portal status, subscription link, and Tool Gateway routing. See [Tool Gateway](../user-guide/features/tool-gateway.md). |
+| `atlaz tools` | Configure enabled tools per platform. |
+| `atlaz computer-use` | Install or check the cua-driver backend (macOS Computer Use). |
+| `atlaz sessions` | Browse, export, prune, rename, and delete sessions. |
+| `atlaz insights` | Show token/cost/activity analytics. |
+| `atlaz claw` | OpenClaw migration helpers. |
+| `atlaz dashboard` | Launch the web dashboard for managing config, API keys, and sessions. |
+| `atlaz profile` | Manage profiles — multiple isolated Hermes instances. |
+| `atlaz completion` | Print shell completion scripts (bash/zsh/fish). |
+| `atlaz version` | Show version information. |
+| `atlaz update` | Pull latest code and reinstall dependencies (git installs), or check PyPI and `pip install --upgrade` (pip installs). `--check` previews without installing; `--backup` takes a pre-pull `HERMES_HOME` snapshot. |
+| `atlaz uninstall` | Remove Hermes from the system. |
 
-## `hermes chat`
+## `atlaz chat`
 
 ```bash
 hermes chat [options]
@@ -125,9 +125,9 @@ hermes chat --worktree -q "Review this repo and open a PR"
 hermes chat --ignore-user-config --ignore-rules -q "Repro without my personal setup"
 ```
 
-### `hermes -z <prompt>` — scripted one-shot
+### `atlaz -z <prompt>` — scripted one-shot
 
-For programmatic callers (shell scripts, CI, cron, parent processes piping in a prompt), `hermes -z` is the purest one-shot entry point: **single prompt in, final response text out, nothing else on stdout or stderr.** No banner, no spinner, no tool previews, no `Session:` line — just the agent's final reply as plain text.
+For programmatic callers (shell scripts, CI, cron, parent processes piping in a prompt), `atlaz -z` is the purest one-shot entry point: **single prompt in, final response text out, nothing else on stdout or stderr.** No banner, no spinner, no tool previews, no `Session:` line — just the agent's final reply as plain text.
 
 ```bash
 hermes -z "What's the capital of France?"
@@ -150,9 +150,9 @@ hermes -z "…" --provider openrouter --model openai/gpt-5.5
 HERMES_INFERENCE_MODEL=anthropic/claude-sonnet-4.6 hermes -z "…"
 ```
 
-Same agent, same tools, same skills — just strips every interactive / cosmetic layer. If you need tool output in the transcript too, use `hermes chat -q` instead; `-z` is explicitly for "I only want the final answer".
+Same agent, same tools, same skills — just strips every interactive / cosmetic layer. If you need tool output in the transcript too, use `atlaz chat -q` instead; `-z` is explicitly for "I only want the final answer".
 
-## `hermes model`
+## `atlaz model`
 
 Interactive provider + model selector. **This is the command for adding new providers, setting up API keys, and running OAuth flows.** Run it from your terminal — not from inside an active Hermes chat session.
 
@@ -169,11 +169,11 @@ Use this when you want to:
 - save the new default into config
 
 :::warning hermes model vs /model — know the difference
-**`hermes model`** (run from your terminal, outside any Hermes session) is the **full provider setup wizard**. It can add new providers, run OAuth flows, prompt for API keys, and configure endpoints.
+**`atlaz model`** (run from your terminal, outside any Hermes session) is the **full provider setup wizard**. It can add new providers, run OAuth flows, prompt for API keys, and configure endpoints.
 
 **`/model`** (typed inside an active Hermes chat session) can only **switch between providers and models you've already set up**. It cannot add new providers, run OAuth, or prompt for API keys.
 
-**If you need to add a new provider:** Exit your Hermes session first (`Ctrl+C` or `/quit`), then run `hermes model` from your terminal prompt.
+**If you need to add a new provider:** Exit your Hermes session first (`Ctrl+C` or `/quit`), then run `atlaz model` from your terminal prompt.
 :::
 
 ### `/model` slash command (mid-session)
@@ -197,12 +197,12 @@ By default, `/model` changes apply **to the current session only**. Add `--globa
 ```
 
 :::info What if I only see OpenRouter models?
-If you've only configured OpenRouter, `/model` will only show OpenRouter models. To add another provider (Anthropic, DeepSeek, Copilot, etc.), exit your session and run `hermes model` from the terminal.
+If you've only configured OpenRouter, `/model` will only show OpenRouter models. To add another provider (Anthropic, DeepSeek, Copilot, etc.), exit your session and run `atlaz model` from the terminal.
 :::
 
 Provider and base URL changes are persisted to `config.yaml` automatically. When switching away from a custom endpoint, the stale base URL is cleared to prevent it leaking into other providers.
 
-## `hermes gateway`
+## `atlaz gateway`
 
 ```bash
 hermes gateway <subcommand>
@@ -226,14 +226,14 @@ Options:
 
 | Option | Description |
 |--------|-------------|
-| `--all` | On `start` / `restart` / `stop`: act on **every profile's** gateway, not just the active `HERMES_HOME`. Useful if you run multiple profiles side-by-side and want to restart them all after `hermes update`. |
+| `--all` | On `start` / `restart` / `stop`: act on **every profile's** gateway, not just the active `HERMES_HOME`. Useful if you run multiple profiles side-by-side and want to restart them all after `atlaz update`. |
 | `--no-supervise` | On `run`: inside the s6-overlay Docker image, opt out of auto-supervision and use pre-s6 foreground semantics — gateway runs as the container's main process with no auto-restart. No-op outside the s6 image. Equivalent to setting `HERMES_GATEWAY_NO_SUPERVISE=1`. |
 
 :::tip WSL users
-Use `hermes gateway run` instead of `hermes gateway start` — WSL's systemd support is unreliable. Wrap it in tmux for persistence: `tmux new -s hermes 'hermes gateway run'`. See [WSL FAQ](/reference/faq#wsl-gateway-keeps-disconnecting-or-hermes-gateway-start-fails) for details.
+Use `atlaz gateway run` instead of `atlaz gateway start` — WSL's systemd support is unreliable. Wrap it in tmux for persistence: `tmux new -s hermes 'hermes gateway run'`. See [WSL FAQ](/reference/faq#wsl-gateway-keeps-disconnecting-or-hermes-gateway-start-fails) for details.
 :::
 
-## `hermes lsp`
+## `atlaz lsp`
 
 ```bash
 hermes lsp <subcommand>
@@ -260,13 +260,13 @@ Subcommands:
 See [LSP — Semantic Diagnostics](/user-guide/features/lsp) for
 the full guide, supported languages, and configuration knobs.
 
-## `hermes setup`
+## `atlaz setup`
 
 ```bash
 hermes setup [model|tts|terminal|gateway|tools|agent] [--non-interactive] [--reset] [--quick] [--reconfigure] [--portal]
 ```
 
-**Easiest path:** `hermes setup --portal` — OAuth into Nous Portal and opt into the [Tool Gateway](../user-guide/features/tool-gateway.md) in one shot.
+**Easiest path:** `atlaz setup --portal` — OAuth into Nous Portal and opt into the [Tool Gateway](../user-guide/features/tool-gateway.md) in one shot.
 
 **First run:** launches the first-time wizard.
 
@@ -289,10 +289,10 @@ Options:
 | `--quick` | On returning-user runs: only prompt for items that are missing or unset. Skip items you already have configured. |
 | `--non-interactive` | Use defaults / environment values without prompts. |
 | `--reset` | Reset configuration to defaults before setup. |
-| `--reconfigure` | Backwards-compat alias — bare `hermes setup` on an existing install now does this by default. |
+| `--reconfigure` | Backwards-compat alias — bare `atlaz setup` on an existing install now does this by default. |
 | `--portal` | One-shot Nous Portal setup: log in via OAuth, set Nous as the inference provider, and opt into the [Tool Gateway](../user-guide/features/tool-gateway.md). Skips the rest of the wizard. |
 
-## `hermes portal`
+## `atlaz portal`
 
 ```bash
 hermes portal [status|open|tools]
@@ -306,9 +306,9 @@ Inspect Nous Portal auth, Tool Gateway routing, and reach the subscription page.
 | `open` | Open `portal.nousresearch.com/manage-subscription` in your default browser. |
 | `tools` | List every Tool Gateway partner (Firecrawl, FAL, OpenAI TTS, Browser Use, Modal) and which are routed via Nous. |
 
-For configuration of the gateway itself, see [Tool Gateway](../user-guide/features/tool-gateway.md). For the one-shot setup path, see `hermes setup --portal` above.
+For configuration of the gateway itself, see [Tool Gateway](../user-guide/features/tool-gateway.md). For the one-shot setup path, see `atlaz setup --portal` above.
 
-## `hermes whatsapp`
+## `atlaz whatsapp`
 
 ```bash
 hermes whatsapp
@@ -316,7 +316,7 @@ hermes whatsapp
 
 Runs the WhatsApp pairing/setup flow, including mode selection and QR-code pairing.
 
-## `hermes slack`
+## `atlaz slack`
 
 ```bash
 hermes slack manifest              # print manifest to stdout
@@ -339,11 +339,11 @@ reinstall if scopes or slash commands changed.
 | `--description DESC` | default blurb | Bot description shown in the Slack app directory. |
 | `--slashes-only` | off | Emit only `features.slash_commands` for merging into a manually-maintained manifest. |
 
-Run `hermes slack manifest --write` again after `hermes update` to pick
+Run `atlaz slack manifest --write` again after `atlaz update` to pick
 up any new commands.
 
 
-## `hermes send`
+## `atlaz send`
 
 ```bash
 hermes send --to <target> "message text"
@@ -354,7 +354,7 @@ hermes send --list [platform]
 
 Send a one-shot message to a configured messaging platform without spinning up an agent or gateway loop. Reuses the gateway's already-configured credentials (`~/.hermes/.env` + `~/.hermes/config.yaml`) so ops scripts, cron jobs, CI hooks, and monitoring daemons can post status updates without reimplementing each platform's REST client.
 
-For bot-token platforms (Telegram, Discord, Slack, Signal, SMS, WhatsApp-CloudAPI) no running gateway is required — `hermes send` talks directly to the platform's REST endpoint. Plugin platforms that need a persistent adapter still require a live gateway.
+For bot-token platforms (Telegram, Discord, Slack, Signal, SMS, WhatsApp-CloudAPI) no running gateway is required — `atlaz send` talks directly to the platform's REST endpoint. Plugin platforms that need a persistent adapter still require a live gateway.
 
 | Option | Description |
 |--------|-------------|
@@ -365,7 +365,7 @@ For bot-token platforms (Telegram, Discord, Slack, Signal, SMS, WhatsApp-CloudAP
 | `-q`, `--quiet` | Suppress stdout on success — useful in scripts (rely on exit code only). |
 | `--json` | Emit raw JSON result instead of human-readable output. |
 
-If neither a positional `message` argument nor `--file` is provided, `hermes send` reads from stdin when it is not a TTY. Exit codes: `0` on success, `1` on delivery/backend failure, `2` on usage errors.
+If neither a positional `message` argument nor `--file` is provided, `atlaz send` reads from stdin when it is not a TTY. Exit codes: `0` on success, `1` on delivery/backend failure, `2` on usage errors.
 
 Examples:
 
@@ -379,7 +379,7 @@ hermes send --list telegram         # filter by platform
 ```
 
 
-## `hermes secrets`
+## `atlaz secrets`
 
 ```bash
 hermes secrets bitwarden <subcommand>
@@ -399,7 +399,7 @@ Pull API keys from an external secret manager at process startup instead of stor
 | `disable` | Turn off the Bitwarden integration. |
 
 
-## `hermes migrate`
+## `atlaz migrate`
 
 ```bash
 hermes migrate <type>
@@ -418,10 +418,10 @@ Common flags for migration subcommands:
 | `--apply` | Rewrite `config.yaml` in-place (default: dry-run, no writes). |
 | `--no-backup` | Skip the timestamped backup of `config.yaml` when applying. |
 
-> Not to be confused with `hermes claw migrate` (one-shot import of OpenClaw configuration into Hermes) — `hermes migrate` is the top-level config-rewrite command.
+> Not to be confused with `atlaz claw migrate` (one-shot import of OpenClaw configuration into Hermes) — `atlaz migrate` is the top-level config-rewrite command.
 
 
-## `hermes proxy`
+## `atlaz proxy`
 
 ```bash
 hermes proxy <subcommand>
@@ -436,7 +436,7 @@ Run a local OpenAI-compatible HTTP server that forwards requests to an OAuth-aut
 | `providers` | List available proxy upstream providers. |
 
 
-## `hermes security`
+## `atlaz security`
 
 ```bash
 hermes security <subcommand>
@@ -459,13 +459,13 @@ On-demand vulnerability scan against [OSV.dev](https://osv.dev). Covers the Herm
 | `--skip-mcp` | off | Skip scanning pinned MCP servers in `config.yaml`. |
 
 
-## `hermes login` / `hermes logout` *(Deprecated)*
+## `atlaz login` / `atlaz logout` *(Deprecated)*
 
 :::caution
-`hermes login` has been removed. Use `hermes auth` to manage OAuth credentials, `hermes model` to select a provider, or `hermes setup` for full interactive setup.
+`atlaz login` has been removed. Use `atlaz auth` to manage OAuth credentials, `atlaz model` to select a provider, or `atlaz setup` for full interactive setup.
 :::
 
-## `hermes auth`
+## `atlaz auth`
 
 Manage credential pools for same-provider key rotation. See [Credential Pools](/user-guide/features/credential-pools) for full documentation.
 
@@ -484,7 +484,7 @@ hermes auth spotify                                      # Authenticate Hermes w
 
 Subcommands: `add`, `list`, `remove`, `reset`, `status`, `logout`, `spotify`. When called with no subcommand, launches the interactive management wizard.
 
-## `hermes status`
+## `atlaz status`
 
 ```bash
 hermes status [--all] [--deep]
@@ -495,7 +495,7 @@ hermes status [--all] [--deep]
 | `--all` | Show all details in a shareable redacted format. |
 | `--deep` | Run deeper checks that may take longer. |
 
-## `hermes cron`
+## `atlaz cron`
 
 ```bash
 hermes cron <list|create|edit|pause|resume|run|remove|status|tick>
@@ -513,7 +513,7 @@ hermes cron <list|create|edit|pause|resume|run|remove|status|tick>
 | `status` | Check whether the cron scheduler is running. |
 | `tick` | Run due jobs once and exit. |
 
-## `hermes kanban`
+## `atlaz kanban`
 
 ```bash
 hermes kanban [--board <slug>] <action> [options]
@@ -525,9 +525,9 @@ Multi-profile, multi-project collaboration board. Each install can host many boa
 
 | Flag | Purpose |
 |------|---------|
-| `--board <slug>` | Operate on a specific board. Defaults to the current board (set via `hermes kanban boards switch`, the `HERMES_KANBAN_BOARD` env var, or `default`). |
+| `--board <slug>` | Operate on a specific board. Defaults to the current board (set via `atlaz kanban boards switch`, the `HERMES_KANBAN_BOARD` env var, or `default`). |
 
-**This is the human / scripting surface.** Agent workers spawned by the dispatcher drive the board through a dedicated `kanban_*` [toolset](/user-guide/features/kanban#how-workers-interact-with-the-board) (`kanban_show`, `kanban_complete`, `kanban_block`, `kanban_create`, `kanban_link`, `kanban_comment`, `kanban_heartbeat`; orchestrator profiles also get `kanban_list` and `kanban_unblock`) instead of shelling to `hermes kanban`. Workers have `HERMES_KANBAN_BOARD` pinned in their env so they physically cannot see other boards.
+**This is the human / scripting surface.** Agent workers spawned by the dispatcher drive the board through a dedicated `kanban_*` [toolset](/user-guide/features/kanban#how-workers-interact-with-the-board) (`kanban_show`, `kanban_complete`, `kanban_block`, `kanban_create`, `kanban_link`, `kanban_comment`, `kanban_heartbeat`; orchestrator profiles also get `kanban_list` and `kanban_unblock`) instead of shelling to `atlaz kanban`. Workers have `HERMES_KANBAN_BOARD` pinned in their env so they physically cannot see other boards.
 
 | Action | Purpose |
 |--------|---------|
@@ -580,7 +580,7 @@ All actions are also available as a slash command in the gateway (`/kanban …`)
 
 For the full design — comparison with Cline Kanban / Paperclip / NanoClaw / Gemini Enterprise, eight collaboration patterns, four user stories, concurrency correctness proof — see `docs/hermes-kanban-v1-spec.pdf` in the repository or the [Kanban user guide](/user-guide/features/kanban).
 
-## `hermes webhook`
+## `atlaz webhook`
 
 ```bash
 hermes webhook <subscribe|list|remove|test>
@@ -595,7 +595,7 @@ Manage dynamic webhook subscriptions for event-driven agent activation. Requires
 | `remove` / `rm` | Delete a dynamic subscription. Static routes from config.yaml are not affected. |
 | `test` | Send a test POST to verify a subscription is working. |
 
-### `hermes webhook subscribe`
+### `atlaz webhook subscribe`
 
 ```bash
 hermes webhook subscribe <name> [options]
@@ -614,7 +614,7 @@ hermes webhook subscribe <name> [options]
 
 Subscriptions persist to `~/.hermes/webhook_subscriptions.json` and are hot-reloaded by the webhook adapter without a gateway restart.
 
-## `hermes doctor`
+## `atlaz doctor`
 
 ```bash
 hermes doctor [--fix]
@@ -624,7 +624,7 @@ hermes doctor [--fix]
 |--------|-------------|
 | `--fix` | Attempt automatic repairs where possible. |
 
-## `hermes dump`
+## `atlaz dump`
 
 ```bash
 hermes dump [--show-keys]
@@ -697,10 +697,10 @@ config_overrides:
 - Quick sanity check when something isn't working
 
 :::tip
-`hermes dump` is specifically designed for sharing. For interactive diagnostics, use `hermes doctor`. For a visual overview, use `hermes status`.
+`atlaz dump` is specifically designed for sharing. For interactive diagnostics, use `atlaz doctor`. For a visual overview, use `atlaz status`.
 :::
 
-## `hermes debug`
+## `atlaz debug`
 
 ```bash
 hermes debug share [options]
@@ -727,7 +727,7 @@ hermes debug share --expire 30  # Keep paste for 30 days
 hermes debug share --local      # Print report to terminal (no upload)
 ```
 
-## `hermes backup`
+## `atlaz backup`
 
 ```bash
 hermes backup [options]
@@ -758,7 +758,7 @@ hermes backup --quick                   # Quick state-only snapshot
 hermes backup --quick --label "pre-upgrade"  # Quick snapshot with label
 ```
 
-## `hermes checkpoints`
+## `atlaz checkpoints`
 
 ```bash
 hermes checkpoints [COMMAND]
@@ -768,7 +768,7 @@ Inspect and manage the shadow git store at `~/.hermes/checkpoints/` — the stor
 
 | Subcommand | Description |
 |------------|-------------|
-| `status` (default) | Show total size, project count, and per-project breakdown. Bare `hermes checkpoints` is equivalent. |
+| `status` (default) | Show total size, project count, and per-project breakdown. Bare `atlaz checkpoints` is equivalent. |
 | `list` | Alias for `status`. |
 | `prune` | Force a cleanup sweep — delete orphan and stale projects, GC the store, enforce the size cap. Ignores the 24h idempotency marker. |
 | `clear` | Delete the entire checkpoint base. Irreversible; asks for confirmation unless `-f`. |
@@ -796,7 +796,7 @@ hermes checkpoints clear -f                         # wipe everything
 
 See [Checkpoints and `/rollback`](../user-guide/checkpoints-and-rollback.md) for the full architecture and the in-session commands.
 
-## `hermes import`
+## `atlaz import`
 
 ```bash
 hermes import <zipfile> [options]
@@ -818,7 +818,7 @@ hermes import ~/hermes-backup-20260423.zip           # Prompts before overwritin
 hermes import ~/hermes-backup-20260423.zip --force   # Overwrite without prompting
 ```
 
-## `hermes logs`
+## `atlaz logs`
 
 ```bash
 hermes logs [log_name] [options]
@@ -884,9 +884,9 @@ Lines without a parseable timestamp are included when `--since` is active (they 
 
 ### Log rotation
 
-Hermes uses Python's `RotatingFileHandler`. Old logs are rotated automatically — look for `agent.log.1`, `agent.log.2`, etc. The `hermes logs list` subcommand shows all log files including rotated ones.
+Hermes uses Python's `RotatingFileHandler`. Old logs are rotated automatically — look for `agent.log.1`, `agent.log.2`, etc. The `atlaz logs list` subcommand shows all log files including rotated ones.
 
-## `hermes config`
+## `atlaz config`
 
 ```bash
 hermes config <subcommand>
@@ -904,7 +904,7 @@ Subcommands:
 | `check` | Check for missing or stale config. |
 | `migrate` | Add newly introduced options interactively. |
 
-## `hermes pairing`
+## `atlaz pairing`
 
 ```bash
 hermes pairing <list|approve|revoke|clear-pending>
@@ -917,7 +917,7 @@ hermes pairing <list|approve|revoke|clear-pending>
 | `revoke <platform> <user-id>` | Revoke a user's access. |
 | `clear-pending` | Clear pending pairing codes. |
 
-## `hermes skills`
+## `atlaz skills`
 
 ```bash
 hermes skills <subcommand>
@@ -970,7 +970,7 @@ Notes:
 - `--source browse-sh` searches [browse.sh](https://browse.sh)'s catalog of 200+ site-specific browser-automation skills. Identifiers look like `browse-sh/airbnb.com/search-listings-ddgioa`.
 - Passing an `http(s)://…/*.md` URL installs a single-file SKILL.md directly. When frontmatter has no `name:` and the URL slug isn't a valid identifier, an interactive terminal prompts for a name; non-interactive surfaces (`/skills install` inside the TUI, gateway platforms) require `--name <x>` instead.
 
-## `hermes bundles`
+## `atlaz bundles`
 
 ```bash
 hermes bundles <subcommand>
@@ -1004,7 +1004,7 @@ hermes bundles delete backend-dev
 
 In a chat session, `/bundles` lists installed bundles and `/<bundle-name>` loads one.
 
-## `hermes curator`
+## `atlaz curator`
 
 ```bash
 hermes curator <subcommand>
@@ -1032,11 +1032,11 @@ The curator is an auxiliary-model background task that periodically reviews agen
 | `prune` | Manually prune skills the curator would normally clean up |
 | `list-archived` | List archived skills (recoverable via `restore`) |
 
-On a fresh install the first scheduled pass is deferred by one full `interval_hours` (7 days by default) — the gateway will not curate immediately on the first tick after `hermes update`. Use `hermes curator run --dry-run` to preview before that happens.
+On a fresh install the first scheduled pass is deferred by one full `interval_hours` (7 days by default) — the gateway will not curate immediately on the first tick after `atlaz update`. Use `atlaz curator run --dry-run` to preview before that happens.
 
 See [Curator](../user-guide/features/curator.md) for behavior and config.
 
-## `hermes fallback`
+## `atlaz fallback`
 
 ```bash
 hermes fallback <subcommand>
@@ -1047,13 +1047,13 @@ Manage the fallback provider chain. Fallback providers are tried in order when t
 | Subcommand | Description |
 |------------|-------------|
 | `list` (alias: `ls`) | Show the current fallback chain (default when no subcommand) |
-| `add` | Pick a provider + model (same picker as `hermes model`) and append to the chain |
+| `add` | Pick a provider + model (same picker as `atlaz model`) and append to the chain |
 | `remove` (alias: `rm`) | Pick an entry to delete from the chain |
 | `clear` | Remove all fallback entries |
 
 See [Fallback Providers](../user-guide/features/fallback-providers.md).
 
-## `hermes hooks`
+## `atlaz hooks`
 
 ```bash
 hermes hooks <subcommand>
@@ -1070,7 +1070,7 @@ Inspect shell-script hooks declared in `~/.hermes/config.yaml`, test them agains
 
 See [Hooks](../user-guide/features/hooks.md) for event signatures and payload shapes.
 
-## `hermes memory`
+## `atlaz memory`
 
 ```bash
 hermes memory <subcommand>
@@ -1087,10 +1087,10 @@ Subcommands:
 | `off` | Disable external provider (built-in only). |
 
 :::info Provider-specific subcommands
-When an external memory provider is active, it may register its own top-level `hermes <provider>` command for provider-specific management (e.g. `hermes honcho` when Honcho is active). Inactive providers do not expose their subcommands. Run `hermes --help` to see what's currently wired in.
+When an external memory provider is active, it may register its own top-level `atlaz <provider>` command for provider-specific management (e.g. `atlaz honcho` when Honcho is active). Inactive providers do not expose their subcommands. Run `atlaz --help` to see what's currently wired in.
 :::
 
-## `hermes acp`
+## `atlaz acp`
 
 ```bash
 hermes acp
@@ -1113,7 +1113,7 @@ pip install -e '.[acp]'
 
 See [ACP Editor Integration](../user-guide/features/acp.md) and [ACP Internals](../developer-guide/acp-internals.md).
 
-## `hermes mcp`
+## `atlaz mcp`
 
 ```bash
 hermes mcp <subcommand>
@@ -1125,7 +1125,7 @@ Manage MCP (Model Context Protocol) server configurations and run Hermes as an M
 |------------|-------------|
 | *(none)* or `picker` | Interactive catalog picker — browse Nous-approved MCPs and install/enable/disable. |
 | `catalog` | List Nous-approved MCPs (plain text, scriptable). |
-| `install <name>` | Install a catalog entry (e.g. `hermes mcp install n8n`). |
+| `install <name>` | Install a catalog entry (e.g. `atlaz mcp install n8n`). |
 | `serve [-v\|--verbose]` | Run Hermes as an MCP server — expose conversations to other agents. |
 | `add <name> [--url URL] [--command CMD] [--args ...] [--auth oauth\|header]` | Add a custom MCP server with automatic tool discovery. |
 | `remove <name>` (alias: `rm`) | Remove an MCP server from config. |
@@ -1136,13 +1136,13 @@ Manage MCP (Model Context Protocol) server configurations and run Hermes as an M
 
 See [MCP Config Reference](./mcp-config-reference.md), [Use MCP with Hermes](../guides/use-mcp-with-hermes.md), and [MCP Server Mode](../user-guide/features/mcp.md#running-hermes-as-an-mcp-server).
 
-## `hermes plugins`
+## `atlaz plugins`
 
 ```bash
 hermes plugins [subcommand]
 ```
 
-Unified plugin management — general plugins, memory providers, and context engines in one place. Running `hermes plugins` with no subcommand opens a composite interactive screen with two sections:
+Unified plugin management — general plugins, memory providers, and context engines in one place. Running `atlaz plugins` with no subcommand opens a composite interactive screen with two sections:
 
 - **General Plugins** — multi-select checkboxes to enable/disable installed plugins
 - **Provider Plugins** — single-select configuration for Memory Provider and Context Engine. Press ENTER on a category to open a radio picker.
@@ -1165,7 +1165,7 @@ General plugin disabled list is stored in `config.yaml` under `plugins.disabled`
 
 See [Plugins](../user-guide/features/plugins.md) and [Build a Hermes Plugin](../guides/build-a-hermes-plugin.md).
 
-## `hermes tools`
+## `atlaz tools`
 
 ```bash
 hermes tools [--summary]
@@ -1177,7 +1177,7 @@ hermes tools [--summary]
 
 Without `--summary`, this launches the interactive per-platform tool configuration UI.
 
-## `hermes computer-use`
+## `atlaz computer-use`
 
 ```bash
 hermes computer-use <subcommand>
@@ -1191,19 +1191,19 @@ Subcommands:
 | `install --upgrade` | Re-run the installer even if cua-driver is already on PATH. The upstream script always pulls the latest release, so this performs an in-place upgrade. |
 | `status` | Print whether `cua-driver` is on `$PATH` and which version is installed. |
 
-`hermes computer-use install` is the stable entry point for installing the
+`atlaz computer-use install` is the stable entry point for installing the
 [cua-driver](https://github.com/trycua/cua) binary used by the
 `computer_use` toolset. It runs the same upstream installer that
-`hermes tools` invokes when you first enable Computer Use, so it's safe
+`atlaz tools` invokes when you first enable Computer Use, so it's safe
 to use for re-running the install if the toolset toggle didn't trigger
 it (for example, on returning-user setups).
 
-`hermes update` automatically re-runs the upstream installer at the end
+`atlaz update` automatically re-runs the upstream installer at the end
 of the update if cua-driver is on PATH, so most users will not need to
 call `--upgrade` manually. Use it when upstream ships a fix you want
 right now without waiting for the next Hermes update.
 
-## `hermes sessions`
+## `atlaz sessions`
 
 ```bash
 hermes sessions <subcommand>
@@ -1221,7 +1221,7 @@ Subcommands:
 | `stats` | Show session-store statistics. |
 | `rename <session-id> <title>` | Set or change a session title. |
 
-## `hermes insights`
+## `atlaz insights`
 
 ```bash
 hermes insights [--days N] [--source platform]
@@ -1232,7 +1232,7 @@ hermes insights [--days N] [--source platform]
 | `--days <n>` | Analyze the last `n` days (default: 30). |
 | `--source <platform>` | Filter by source such as `cli`, `telegram`, or `discord`. |
 
-## `hermes claw`
+## `atlaz claw`
 
 ```bash
 hermes claw migrate [options]
@@ -1246,7 +1246,7 @@ Migrate your OpenClaw setup to Hermes. Reads from `~/.openclaw` (or a custom pat
 | `--preset <name>` | Migration preset: `full` (all compatible settings) or `user-data` (excludes infrastructure config). Neither preset imports secrets — pass `--migrate-secrets` explicitly. |
 | `--overwrite` | Overwrite existing Hermes files on conflicts (default: refuse to apply when the plan has conflicts). |
 | `--migrate-secrets` | Include API keys in migration. Required even under `--preset full`. |
-| `--no-backup` | Skip the pre-migration zip snapshot of `~/.hermes/` (by default a single restore-point archive is written to `~/.hermes/backups/pre-migration-*.zip` before apply; restorable with `hermes import`). |
+| `--no-backup` | Skip the pre-migration zip snapshot of `~/.hermes/` (by default a single restore-point archive is written to `~/.hermes/backups/pre-migration-*.zip` before apply; restorable with `atlaz import`). |
 | `--source <path>` | Custom OpenClaw directory (default: `~/.openclaw`). |
 | `--workspace-target <path>` | Target directory for workspace instructions (AGENTS.md). |
 | `--skill-conflict <mode>` | Handle skill name collisions: `skip` (default), `overwrite`, or `rename`. |
@@ -1283,7 +1283,7 @@ hermes claw migrate --preset user-data --overwrite
 hermes claw migrate --source /home/user/old-openclaw
 ```
 
-## `hermes dashboard`
+## `atlaz dashboard`
 
 ```bash
 hermes dashboard [options]
@@ -1296,10 +1296,10 @@ Launch the web dashboard — a browser-based UI for managing configuration, API 
 | `--port` | `9119` | Port to run the web server on |
 | `--host` | `127.0.0.1` | Bind address |
 | `--no-open` | — | Don't auto-open the browser |
-| `--tui` | off | Enable the in-browser Chat tab by running `hermes --tui` behind a PTY/WebSocket bridge. Requires `pip install 'hermes-agent[web,pty]'` and a POSIX PTY environment such as Linux, macOS, or WSL2. |
+| `--tui` | off | Enable the in-browser Chat tab by running `atlaz --tui` behind a PTY/WebSocket bridge. Requires `pip install 'hermes-agent[web,pty]'` and a POSIX PTY environment such as Linux, macOS, or WSL2. |
 | `--insecure` | off | Allow binding to non-localhost hosts. Exposes dashboard credentials on the network; use only behind trusted network controls. |
-| `--stop` | — | Stop running `hermes dashboard` processes and exit. |
-| `--status` | — | List running `hermes dashboard` processes and exit. |
+| `--stop` | — | Stop running `atlaz dashboard` processes and exit. |
+| `--status` | — | List running `atlaz dashboard` processes and exit. |
 
 ```bash
 # Default — opens browser to http://127.0.0.1:9119
@@ -1312,7 +1312,7 @@ hermes dashboard --port 8080 --no-open
 hermes dashboard --tui
 ```
 
-## `hermes profile`
+## `atlaz profile`
 
 ```bash
 hermes profile <subcommand>
@@ -1349,7 +1349,7 @@ hermes profile update work
 hermes -p work chat -q "Hello from work profile"
 ```
 
-## `hermes completion`
+## `atlaz completion`
 
 ```bash
 hermes completion [bash|zsh|fish]
@@ -1370,7 +1370,7 @@ hermes completion zsh >> ~/.zshrc
 hermes completion fish > ~/.config/fish/completions/hermes.fish
 ```
 
-## `hermes update`
+## `atlaz update`
 
 ```bash
 hermes update [--check] [--backup] [--restart-gateway]
@@ -1378,7 +1378,7 @@ hermes update [--check] [--backup] [--restart-gateway]
 
 Pulls the latest `hermes-agent` code and reinstalls dependencies in your venv, then re-runs the post-install hooks (MCP servers, skills sync, completion install). Safe to run on a live install.
 
-**pip installs:** `hermes update` detects pip-based installations automatically — it queries PyPI for the latest release and runs `pip install --upgrade hermes-agent` instead of `git pull`. PyPI releases track tagged versions (major/minor releases), not every commit on `main`. Use `--check` to see if a newer PyPI release is available without installing.
+**pip installs:** `atlaz update` detects pip-based installations automatically — it queries PyPI for the latest release and runs `pip install --upgrade hermes-agent` instead of `git pull`. PyPI releases track tagged versions (major/minor releases), not every commit on `main`. Use `--check` to see if a newer PyPI release is available without installing.
 
 | Option | Description |
 |--------|-------------|
@@ -1388,7 +1388,7 @@ Pulls the latest `hermes-agent` code and reinstalls dependencies in your venv, t
 
 Additional behavior:
 
-- **Pairing data snapshot.** Even when `--backup` is off, `hermes update` takes a lightweight snapshot of `~/.hermes/pairing/` and the Feishu comment rules before `git pull`. You can roll it back with `hermes backup restore --state pre-update` if a pull rewrites a file you were editing.
+- **Pairing data snapshot.** Even when `--backup` is off, `atlaz update` takes a lightweight snapshot of `~/.hermes/pairing/` and the Feishu comment rules before `git pull`. You can roll it back with `atlaz backup restore --state pre-update` if a pull rewrites a file you were editing.
 - **Legacy `hermes.service` warning.** If Hermes detects a pre-rename `hermes.service` systemd unit (instead of the current `hermes-gateway.service`), it prints a one-time migration hint so you can avoid flap-loop issues.
 - **Exit codes.** `0` on success, `1` on pull/install/post-install errors, `2` on unexpected working-tree changes that block `git pull`.
 
@@ -1396,10 +1396,10 @@ Additional behavior:
 
 | Command | Description |
 |---------|-------------|
-| `hermes version` | Print version information. |
-| `hermes update` | Pull latest changes and reinstall dependencies. |
-| `hermes postinstall` | Internal bootstrap. Runs once after `pip install hermes-agent` (or `hermes update` on pip installs) to install non-Python dependencies that pip cannot provide — Node.js runtime, headless browser, ripgrep, ffmpeg — and then trigger `hermes setup` if the profile has not been configured yet. Safe to re-run idempotently. |
-| `hermes uninstall [--full] [--yes]` | Remove Hermes, optionally deleting all config/data. |
+| `atlaz version` | Print version information. |
+| `atlaz update` | Pull latest changes and reinstall dependencies. |
+| `atlaz postinstall` | Internal bootstrap. Runs once after `pip install hermes-agent` (or `atlaz update` on pip installs) to install non-Python dependencies that pip cannot provide — Node.js runtime, headless browser, ripgrep, ffmpeg — and then trigger `atlaz setup` if the profile has not been configured yet. Safe to re-run idempotently. |
+| `atlaz uninstall [--full] [--yes]` | Remove Hermes, optionally deleting all config/data. |
 
 ## See also
 

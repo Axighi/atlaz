@@ -14,10 +14,10 @@ Connect to a running NeuroSkill instance and incorporate the user's real-time co
 
 | | |
 |---|---|
-| Source | Optional — install with `hermes skills install official/health/neuroskill-bci` |
+| Source | Optional — install with `atlaz skills install official/health/neuroskill-bci` |
 | Path | `optional-skills/health/neuroskill-bci` |
 | Version | `1.0.0` |
-| Author | Hermes Agent + Nous Research |
+| Author | ATLAZ + Nous Research |
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `BCI`, `neurofeedback`, `health`, `focus`, `EEG`, `cognitive-state`, `biometrics`, `neuroskill` |

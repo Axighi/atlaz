@@ -1,12 +1,12 @@
 ---
 sidebar_position: 11
 title: "ACP Editor Integration"
-description: "Use Hermes Agent inside ACP-compatible editors such as VS Code, Zed, and JetBrains"
+description: "Use ATLAZ inside ACP-compatible editors such as VS Code, Zed, and JetBrains"
 ---
 
 # ACP Editor Integration
 
-Hermes Agent can run as an ACP server, letting ACP-compatible editors talk to Hermes over stdio and render:
+ATLAZ can run as an ACP server, letting ACP-compatible editors talk to Hermes over stdio and render:
 
 - chat messages
 - tool activity
@@ -41,7 +41,7 @@ pip install -e '.[acp]'
 
 This installs the `agent-client-protocol` dependency and enables:
 
-- `hermes acp`
+- `atlaz acp`
 - `hermes-acp`
 - `python -m acp_adapter`
 
@@ -89,7 +89,7 @@ hermes acp --setup-browser           # interactive (prompts before ~400 MB downl
 hermes acp --setup-browser --yes     # accept the download non-interactively
 ```
 
-This is the standalone command. The Zed registry's terminal-auth flow (`hermes acp --setup`) also offers the browser bootstrap as a follow-up question after model selection, so most users never need to run `--setup-browser` directly.
+This is the standalone command. The Zed registry's terminal-auth flow (`atlaz acp --setup`) also offers the browser bootstrap as a follow-up question after model selection, so most users never need to run `--setup-browser` directly.
 
 What it does:
 
@@ -108,7 +108,7 @@ Install the [ACP Client](https://marketplace.visualstudio.com/items?itemName=for
 To connect:
 
 1. Open the ACP Client panel from the Activity Bar.
-2. Select **Hermes Agent** from the built-in agent list.
+2. Select **ATLAZ** from the built-in agent list.
 3. Connect and start chatting.
 
 If you want to define Hermes manually, add it through VS Code settings under `acp.agents`:
@@ -116,7 +116,7 @@ If you want to define Hermes manually, add it through VS Code settings under `ac
 ```json
 {
   "acp.agents": {
-    "Hermes Agent": {
+    "ATLAZ": {
       "command": "hermes",
       "args": ["acp"]
     }
@@ -130,12 +130,12 @@ Zed v0.221.x and newer installs external agents through the official ACP Registr
 
 1. Open the Agent Panel.
 2. Click **Add Agent**, or run the `zed: acp registry` command.
-3. Search for **Hermes Agent**.
+3. Search for **ATLAZ**.
 4. Install it and start a new Hermes external-agent thread.
 
 Prerequisites:
 
-- Configure Hermes provider credentials first with `hermes model`, or set them in `~/.hermes/.env` / `~/.hermes/config.yaml`.
+- Configure Hermes provider credentials first with `atlaz model`, or set them in `~/.hermes/.env` / `~/.hermes/config.yaml`.
 - Install `uv` so the registry launcher can run `uvx --from 'hermes-agent[acp]==<version>' hermes-acp`.
 
 For local development before the registry entry is available, use a custom agent server in Zed settings:
@@ -239,8 +239,8 @@ The ACP bridge maps these options onto Hermes' internal approval semantics — `
 
 Check:
 
-- In Zed, open the ACP Registry with `zed: acp registry` and search for **Hermes Agent**.
-- For manual/local development, verify the custom `agent_servers` command points to `hermes acp`.
+- In Zed, open the ACP Registry with `zed: acp registry` and search for **ATLAZ**.
+- For manual/local development, verify the custom `agent_servers` command points to `atlaz acp`.
 - Hermes is installed and on your PATH.
 - The ACP extra is installed (`pip install -e '.[acp]'`).
 - `uv` is installed if launching from the official Zed registry entry.
@@ -268,7 +268,7 @@ or by editing `~/.hermes/.env`. Registry clients can also trigger Hermes' termin
 
 ### Zed registry launcher cannot find uv
 
-Install `uv` from the official uv installation docs, then retry the Hermes Agent thread from Zed.
+Install `uv` from the official uv installation docs, then retry the ATLAZ thread from Zed.
 
 ## See also
 

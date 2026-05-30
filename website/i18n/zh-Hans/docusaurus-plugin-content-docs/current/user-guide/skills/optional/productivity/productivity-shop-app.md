@@ -14,7 +14,7 @@ Shop.app：商品搜索、订单追踪、退货、重新下单。
 
 | | |
 |---|---|
-| 来源 | 可选 — 使用 `hermes skills install official/productivity/shop-app` 安装 |
+| 来源 | 可选 — 使用 `atlaz skills install official/productivity/shop-app` 安装 |
 | 路径 | `optional-skills/productivity/shop-app` |
 | 版本 | `0.0.28` |
 | 作者 | community |

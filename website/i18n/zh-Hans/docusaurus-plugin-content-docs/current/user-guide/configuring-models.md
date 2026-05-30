@@ -12,7 +12,7 @@ Hermes 使用两类模型槽位：
 本页介绍如何通过仪表板配置上述两类模型。如需使用配置文件或 CLI，请跳至底部的[其他方法](#alternative-methods)。
 
 :::tip 最快路径：Nous Portal
-[Nous Portal](/user-guide/features/tool-gateway) 在单一订阅下提供 300+ 个模型。全新安装后，运行 `hermes setup --portal` 即可登录并一键将 Nous 设为提供商。使用 `hermes portal status` 查看当前配置。
+[Nous Portal](/user-guide/features/tool-gateway) 在单一订阅下提供 300+ 个模型。全新安装后，运行 `atlaz setup --portal` 即可登录并一键将 Nous 设为提供商。使用 `atlaz portal status` 查看当前配置。
 :::
 
 ## Models 页面
@@ -58,7 +58,7 @@ Hermes 使用两类模型槽位：
 | **Compression（压缩）** | 当你在用 Opus/M2.7 的推理 token 来摘要上下文时。快速聊天模型以 1/50 的成本即可完成此工作。 |
 | **Approval（审批）** | 用于 `approval_mode: smart` — 由快速/廉价模型（haiku、flash、gpt-5-mini）决定是否自动批准低风险命令。此处使用昂贵模型是浪费。 |
 | **Web Extract（网页提取）** | 当你大量使用 `web_extract` 时。逻辑同压缩 — 摘要任务不需要推理能力。 |
-| **Skills Hub（技能中心）** | `hermes skills search` 使用此槽位。通常保持 `auto` 即可。 |
+| **Skills Hub（技能中心）** | `atlaz skills search` 使用此槽位。通常保持 `auto` 即可。 |
 | **MCP** | MCP 工具路由。通常保持 `auto` 即可。 |
 
 ### 单任务覆盖
@@ -123,8 +123,8 @@ auxiliary:
 
 ## 何时生效？
 
-- **CLI**（`hermes chat`）：下次执行 `hermes chat` 时生效。
-- **Gateway**（Telegram、Discord、Slack 等）：下一个*新*会话生效。现有会话保持原有模型。如需强制所有会话使用新配置，重启 gateway（`hermes gateway restart`）。
+- **CLI**（`atlaz chat`）：下次执行 `atlaz chat` 时生效。
+- **Gateway**（Telegram、Discord、Slack 等）：下一个*新*会话生效。现有会话保持原有模型。如需强制所有会话使用新配置，重启 gateway（`atlaz gateway restart`）。
 - **仪表板聊天标签页**（`/chat`）：下一个新 PTY 生效。当前打开的聊天保持原有模型 — 在聊天内使用 `/model` 进行热切换。
 
 更改不会使运行中会话的 prompt 缓存失效。这是有意为之：在会话内切换主模型需要重置缓存（系统 prompt 包含模型特定内容），该操作保留给聊天内的显式 `/model` 斜杠命令。
@@ -133,7 +133,7 @@ auxiliary:
 
 ### 选择器中显示"No authenticated providers"
 
-Hermes 仅列出具有有效凭据的提供商。检查侧边栏中的 **Keys** — 应存在以下之一：API key、成功的 OAuth 或自定义端点 URL。若所需提供商不在列表中，运行 `hermes setup` 进行配置，或前往 **Keys** 添加环境变量。
+Hermes 仅列出具有有效凭据的提供商。检查侧边栏中的 **Keys** — 应存在以下之一：API key、成功的 OAuth 或自定义端点 URL。若所需提供商不在列表中，运行 `atlaz setup` 进行配置，或前往 **Keys** 添加环境变量。
 
 ### 主模型在运行中的聊天里未发生变化
 
@@ -155,7 +155,7 @@ Hermes 仅列出具有有效凭据的提供商。检查侧边栏中的 **Keys** 
 
 ### CLI 斜杠命令
 
-在任意 `hermes chat` 会话内：
+在任意 `atlaz chat` 会话内：
 
 ```
 /model gpt-5.4 --provider openrouter             # 仅当前会话
@@ -188,15 +188,15 @@ hermes config set model.aliases.grok x-ai/grok-4
 
 然后在聊天中使用 `/model fav` 或 `/model grok`。用户别名会覆盖内置短名称（`sonnet`、`kimi`、`opus` 等）。完整参考请见[自定义模型别名](/reference/slash-commands#custom-model-aliases)。
 
-### `hermes model` 子命令
+### `atlaz model` 子命令
 
 ```bash
 hermes model            # 交互式提供商 + 模型选择器（切换默认值的标准方式）
 ```
 
-`hermes model` 引导你选择提供商、完成认证（OAuth 流程会打开浏览器；API key 提供商会提示输入密钥），然后从该提供商的精选目录中选择具体模型。选择结果写入 `~/.hermes/config.yaml` 的 `model.provider` 和 `model.model` 字段。
+`atlaz model` 引导你选择提供商、完成认证（OAuth 流程会打开浏览器；API key 提供商会提示输入密钥），然后从该提供商的精选目录中选择具体模型。选择结果写入 `~/.hermes/config.yaml` 的 `model.provider` 和 `model.model` 字段。
 
-如需在不启动选择器的情况下列出提供商/模型，请使用仪表板或下方的 REST 端点。查看 CLI 当前实际使用的配置：`hermes config get model` 和 `hermes status`。
+如需在不启动选择器的情况下列出提供商/模型，请使用仪表板或下方的 REST 端点。查看 CLI 当前实际使用的配置：`atlaz config get model` 和 `atlaz status`。
 
 ### 直接编辑配置文件
 

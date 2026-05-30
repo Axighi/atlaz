@@ -17,7 +17,7 @@ description: "调试 Hermes TUI slash 命令：Python、gateway、Ink UI"
 | 来源 | 内置（默认安装） |
 | 路径 | `skills/software-development/debugging-hermes-tui-commands` |
 | 版本 | `1.0.0` |
-| 作者 | Hermes Agent |
+| 作者 | ATLAZ |
 | 许可证 | MIT |
 | 平台 | linux, macos, windows |
 | 标签 | `debugging`, `hermes-agent`, `tui`, `slash-commands`, `typescript`, `python` |

@@ -1,12 +1,12 @@
 ---
 sidebar_position: 10
 title: "Voice Mode"
-description: "Real-time voice conversations with Hermes Agent — CLI, Telegram, Discord (DMs, text channels, and voice channels)"
+description: "Real-time voice conversations with ATLAZ — CLI, Telegram, Discord (DMs, text channels, and voice channels)"
 ---
 
 # Voice Mode
 
-Hermes Agent supports full voice interaction across CLI and messaging platforms. Talk to the agent using your microphone, hear spoken replies, and have live voice conversations in Discord voice channels.
+ATLAZ supports full voice interaction across CLI and messaging platforms. Talk to the agent using your microphone, hear spoken replies, and have live voice conversations in Discord voice channels.
 
 If you want a practical setup walkthrough with recommended configurations and real usage patterns, see [Use Voice Mode with Hermes](/guides/use-voice-mode-with-hermes).
 
@@ -14,8 +14,8 @@ If you want a practical setup walkthrough with recommended configurations and re
 
 Before using voice features, make sure you have:
 
-1. **Hermes Agent installed** — `pip install hermes-agent` (see [Installation](/getting-started/installation))
-2. **An LLM provider configured** — run `hermes model` or set your preferred provider credentials in `~/.hermes/.env`
+1. **ATLAZ installed** — `pip install hermes-agent` (see [Installation](/getting-started/installation))
+2. **An LLM provider configured** — run `atlaz model` or set your preferred provider credentials in `~/.hermes/.env`
 3. **A working base setup** — run `hermes` to verify the agent responds to text before enabling voice
 
 :::tip
@@ -23,7 +23,7 @@ The `~/.hermes/` directory and default `config.yaml` are created automatically t
 :::
 
 :::tip Nous Portal covers both
-A paid [Nous Portal](/user-guide/features/tool-gateway) subscription supplies the LLM (step 2) **and** OpenAI TTS via the Tool Gateway — no separate OpenAI key needed. On a fresh install, `hermes setup --portal` wires both up at once.
+A paid [Nous Portal](/user-guide/features/tool-gateway) subscription supplies the LLM (step 2) **and** OpenAI TTS via the Tool Gateway — no separate OpenAI key needed. On a fresh install, `atlaz setup --portal` wires both up at once.
 :::
 
 ## Overview
@@ -109,7 +109,7 @@ If `faster-whisper` is installed, voice mode works with **zero API keys** for ST
 
 ## CLI Voice Mode
 
-Voice mode is available in both the **classic CLI** (`hermes chat`) and the **TUI** (`hermes --tui`). Behavior is identical across both — same slash commands, same VAD silence detection, same streaming TTS, same hallucination filter. The TUI additionally forwards crash-forensic logs to `~/.hermes/logs/` so push-to-talk failures on exotic audio backends can be reported with a full stack trace rather than disappearing silently.
+Voice mode is available in both the **classic CLI** (`atlaz chat`) and the **TUI** (`atlaz --tui`). Behavior is identical across both — same slash commands, same VAD silence detection, same streaming TTS, same hallucination filter. The TUI additionally forwards crash-forensic logs to `~/.hermes/logs/` so push-to-talk failures on exotic audio backends can be reported with a full stack trace rather than disappearing silently.
 
 ### Quick Start
 

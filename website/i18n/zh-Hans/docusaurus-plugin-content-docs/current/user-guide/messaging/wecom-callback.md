@@ -63,7 +63,7 @@ WECOM_CALLBACK_ALLOWED_USERS=user1,user2
 hermes gateway
 ```
 
-（仅在通过 `hermes gateway install` 注册 systemd/launchd 服务后，才使用 `hermes gateway start`。）
+（仅在通过 `atlaz gateway install` 注册 systemd/launchd 服务后，才使用 `atlaz gateway start`。）
 
 回调适配器会在配置的端口上启动 HTTP 服务器。企业微信将通过 GET 请求验证回调 URL，随后开始通过 POST 发送消息。
 

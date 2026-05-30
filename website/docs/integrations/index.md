@@ -6,7 +6,7 @@ sidebar_position: 0
 
 # Integrations
 
-Hermes Agent connects to external systems for AI inference, tool servers, IDE workflows, programmatic access, and more. These integrations extend what Hermes can do and where it can run.
+ATLAZ connects to external systems for AI inference, tool servers, IDE workflows, programmatic access, and more. These integrations extend what Hermes can do and where it can run.
 
 :::tip Start here
 If you only have time to set up one integration, set up [Nous Portal](/integrations/nous-portal) — a single OAuth login covers 300+ models plus the four Tool Gateway tools (web search, image generation, TTS, and browser automation).
@@ -14,7 +14,7 @@ If you only have time to set up one integration, set up [Nous Portal](/integrati
 
 ## AI Providers & Routing
 
-Hermes supports multiple AI inference providers out of the box. Use `hermes model` to configure interactively, or set them in `config.yaml`.
+Hermes supports multiple AI inference providers out of the box. Use `atlaz model` to configure interactively, or set them in `config.yaml`.
 
 - **[AI Providers](/user-guide/features/provider-routing)** — OpenRouter, Anthropic, OpenAI, Google, and any OpenAI-compatible endpoint. Hermes auto-detects capabilities like vision, streaming, and tool use per provider.
 - **[Provider Routing](/user-guide/features/provider-routing)** — Fine-grained control over which underlying providers handle your OpenRouter requests. Optimize for cost, speed, or quality with sorting, whitelists, blacklists, and explicit priority ordering.
@@ -26,7 +26,7 @@ Hermes supports multiple AI inference providers out of the box. Use `hermes mode
 
 ## Web Search Backends
 
-The `web_search` and `web_extract` tools support four backend providers, configured via `config.yaml` or `hermes tools`:
+The `web_search` and `web_extract` tools support four backend providers, configured via `config.yaml` or `atlaz tools`:
 
 | Backend | Env Var | Search | Extract | Crawl |
 |---------|---------|--------|---------|-------|
@@ -72,7 +72,7 @@ Speech-to-text supports six providers: local faster-whisper (free, runs on-devic
 
 ## IDE & Editor Integration
 
-- **[IDE Integration (ACP)](/user-guide/features/acp)** — Use Hermes Agent inside ACP-compatible editors such as VS Code, Zed, and JetBrains. Hermes runs as an ACP server, rendering chat messages, tool activity, file diffs, and terminal commands inside your editor.
+- **[IDE Integration (ACP)](/user-guide/features/acp)** — Use ATLAZ inside ACP-compatible editors such as VS Code, Zed, and JetBrains. Hermes runs as an ACP server, rendering chat messages, tool activity, file diffs, and terminal commands inside your editor.
 
 ## Programmatic Access
 

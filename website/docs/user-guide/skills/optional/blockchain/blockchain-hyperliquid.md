@@ -14,10 +14,10 @@ Hyperliquid market data, account history, trade review.
 
 | | |
 |---|---|
-| Source | Optional — install with `hermes skills install official/blockchain/hyperliquid` |
+| Source | Optional — install with `atlaz skills install official/blockchain/hyperliquid` |
 | Path | `optional-skills/blockchain/hyperliquid` |
 | Version | `0.1.0` |
-| Author | Hugo Sequier (Hugo-SEQUIER), Hermes Agent |
+| Author | Hugo Sequier (Hugo-SEQUIER), ATLAZ |
 | License | MIT |
 | Platforms | linux, macos, windows |
 | Tags | `Hyperliquid`, `Blockchain`, `Crypto`, `Trading`, `Perpetuals`, `Spot`, `DeFi` |

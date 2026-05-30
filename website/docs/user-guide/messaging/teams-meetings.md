@@ -10,7 +10,7 @@ Use the Teams meeting pipeline when you want Hermes to ingest Microsoft Graph me
 
 Prerequisites: see [Microsoft Teams](./teams.md) for the underlying bot/credential setup.
 
-> Run `hermes gateway setup` and pick **Teams Meetings** for a guided walk-through.
+> Run `atlaz gateway setup` and pick **Teams Meetings** for a guided walk-through.
 
 This page focuses on setup and enablement:
 - Graph credentials
@@ -29,7 +29,7 @@ The pipeline:
 4. stores durable job state and sink records locally
 5. can write summaries to Notion, Linear, and Microsoft Teams
 
-Operator actions stay in the CLI (the `teams-pipeline` subcommand is registered by the `teams_pipeline` plugin — enable it via `hermes plugins enable teams_pipeline` or set `plugins.enabled: [teams_pipeline]` in `config.yaml`):
+Operator actions stay in the CLI (the `teams-pipeline` subcommand is registered by the `teams_pipeline` plugin — enable it via `atlaz plugins enable teams_pipeline` or set `plugins.enabled: [teams_pipeline]` in `config.yaml`):
 
 ```bash
 hermes teams-pipeline validate
@@ -204,7 +204,7 @@ hermes teams-pipeline subscribe \
 
 :::warning Graph subscriptions expire in 72 hours
 
-Microsoft Graph caps webhook subscriptions at 72 hours and will not auto-renew them. You MUST schedule `hermes teams-pipeline maintain-subscriptions` before going live, or notifications will silently stop three days after any manual subscription creation. See [Automating subscription renewal](/guides/operate-teams-meeting-pipeline#automating-subscription-renewal-required-for-production) in the operator runbook — three options (Hermes cron, systemd timer, plain crontab).
+Microsoft Graph caps webhook subscriptions at 72 hours and will not auto-renew them. You MUST schedule `atlaz teams-pipeline maintain-subscriptions` before going live, or notifications will silently stop three days after any manual subscription creation. See [Automating subscription renewal](/guides/operate-teams-meeting-pipeline#automating-subscription-renewal-required-for-production) in the operator runbook — three options (Hermes cron, systemd timer, plain crontab).
 
 :::
 
@@ -230,7 +230,7 @@ hermes teams-pipeline subscriptions
 | Problem | What to check |
 |---------|---------------|
 | Graph webhook validation fails | Confirm the public URL is correct and reachable, and that Graph is calling the exact `/msgraph/webhook` path |
-| Jobs do not appear in `hermes teams-pipeline list` | Confirm `msgraph_webhook` is enabled and that subscriptions point at the right notification URL |
+| Jobs do not appear in `atlaz teams-pipeline list` | Confirm `msgraph_webhook` is enabled and that subscriptions point at the right notification URL |
 | Transcript-first never succeeds | Check Graph permissions for transcript resources and whether the transcript artifact exists for that meeting |
 | Recording fallback fails | Confirm `ffmpeg` is installed and the Graph app can access recording artifacts |
 | Teams summary delivery fails | Re-check `delivery_mode`, target IDs, and Teams auth config |

@@ -1,12 +1,12 @@
 ---
 sidebar_position: 11
 title: "Feishu / Lark"
-description: "Set up Hermes Agent as a Feishu or Lark bot"
+description: "Set up ATLAZ as a Feishu or Lark bot"
 ---
 
 # Feishu / Lark Setup
 
-Hermes Agent integrates with Feishu and Lark as a full-featured bot. Once connected, you can chat with the agent in direct messages or group chats, receive cron job results in a home chat, and send text, images, audio, and file attachments through the normal gateway flow.
+ATLAZ integrates with Feishu and Lark as a full-featured bot. Once connected, you can chat with the agent in direct messages or group chats, receive cron job results in a home chat, and send text, images, audio, and file attachments through the normal gateway flow.
 
 The integration supports both connection modes:
 
@@ -49,7 +49,7 @@ If scan-to-create is not available, the wizard falls back to manual input:
 2. Create a new app.
 3. In **Credentials & Basic Info**, copy the **App ID** and **App Secret**.
 4. Enable the **Bot** capability for the app.
-5. Run `hermes gateway setup`, select **Feishu / Lark**, and enter the credentials when prompted.
+5. Run `atlaz gateway setup`, select **Feishu / Lark**, and enter the credentials when prompted.
 
 :::warning
 Keep the App Secret private. Anyone with it can impersonate your app.
@@ -283,7 +283,7 @@ When users click buttons or interact with interactive cards sent by the bot, the
 - The action's `value` payload from the card definition is included as JSON.
 - Card actions are deduplicated with a 15-minute window to prevent double processing.
 
-Gateway-driven update prompts use a native Feishu `Yes` / `No` card instead of falling back to plain text replies. When `hermes update --gateway` needs confirmation, the adapter records the selected answer in Hermes's `.update_response` file and replaces the card inline with a resolved state.
+Gateway-driven update prompts use a native Feishu `Yes` / `No` card instead of falling back to plain text replies. When `atlaz update --gateway` needs confirmation, the adapter records the selected answer in Hermes's `.update_response` file and replaces the card inline with a resolved state.
 
 Card action events are dispatched with `MessageType.COMMAND`, so they flow through the normal command processing pipeline.
 
@@ -549,7 +549,7 @@ WebSocket and per-group ACL settings are configured via `config.yaml` under `pla
 | `lark-oapi not installed` | Install the SDK: `pip install lark-oapi` |
 | `websockets not installed; websocket mode unavailable` | Install websockets: `pip install websockets` |
 | `aiohttp not installed; webhook mode unavailable` | Install aiohttp: `pip install aiohttp` |
-| `FEISHU_APP_ID or FEISHU_APP_SECRET not set` | Set both env vars or configure via `hermes gateway setup` |
+| `FEISHU_APP_ID or FEISHU_APP_SECRET not set` | Set both env vars or configure via `atlaz gateway setup` |
 | `Another local Hermes gateway is already using this Feishu app_id` | Only one Hermes instance can use the same app_id at a time. Stop the other gateway first. |
 | Bot doesn't respond in groups | Ensure the bot is @mentioned, check `FEISHU_GROUP_POLICY`, and verify the sender is in `FEISHU_ALLOWED_USERS` if policy is `allowlist` |
 | `Webhook rejected: invalid verification token` | Ensure `FEISHU_VERIFICATION_TOKEN` matches the token in your Feishu app's Event Subscriptions config |

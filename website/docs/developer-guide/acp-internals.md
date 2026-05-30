@@ -180,5 +180,5 @@ ACP temporarily installs an approval callback on the terminal tool during prompt
 
 - `tests/acp/` — ACP test suite
 - `toolsets.py` — `hermes-acp` toolset definition
-- `atlaz_cli/main.py` — `hermes acp` CLI subcommand
+- `atlaz_cli/main.py` — `atlaz acp` CLI subcommand
 - `pyproject.toml` — `[acp]` optional dependency + `hermes-acp` script

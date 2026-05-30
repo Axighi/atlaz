@@ -2,7 +2,7 @@
 
 [SimpleX Chat](https://simplex.chat/) is a private, decentralised messaging platform where users own their contacts and groups. Unlike other platforms, SimpleX assigns no persistent user IDs — every contact is identified by an opaque internal ID generated at connection time, which makes it one of the most private messengers available.
 
-> Run `hermes gateway setup` and pick **SimpleX** for a guided walk-through.
+> Run `atlaz gateway setup` and pick **SimpleX** for a guided walk-through.
 
 ## Prerequisites
 
@@ -59,14 +59,14 @@ SIMPLEX_HOME_CHANNEL=<contact-id>
 
 ## Find your contact ID
 
-After starting the daemon, open a conversation with your agent contact. The contact ID will appear in session logs or via `hermes send_message action=list`.
+After starting the daemon, open a conversation with your agent contact. The contact ID will appear in session logs or via `atlaz send_message action=list`.
 
 ## Authorization
 
 By default **all contacts are denied**. You must either:
 
 1. Set `SIMPLEX_ALLOWED_USERS` to a comma-separated list of contact IDs, or
-2. Use **DM pairing** — send any message to the bot and it will reply with a pairing code. Enter that code via `hermes gateway pair`.
+2. Use **DM pairing** — send any message to the bot and it will reply with a pairing code. Enter that code via `atlaz gateway pair`.
 
 ## Using SimpleX with cron jobs
 

@@ -17,7 +17,7 @@ MCP 客户端：连接服务器、注册工具（stdio/HTTP）。
 | 来源 | 内置（默认安装） |
 | 路径 | `skills/mcp/native-mcp` |
 | 版本 | `1.0.0` |
-| 作者 | Hermes Agent |
+| 作者 | ATLAZ |
 | 许可证 | MIT |
 | 平台 | linux, macos, windows |
 | 标签 | `MCP`, `Tools`, `Integrations` |
@@ -31,12 +31,12 @@ MCP 客户端：连接服务器、注册工具（stdio/HTTP）。
 
 # Native MCP 客户端
 
-Hermes Agent 内置了一个 MCP 客户端，它在启动时连接到 MCP 服务器，发现其工具，并将其作为一等工具直接提供给 agent 调用。无需桥接 CLI——来自 MCP 服务器的工具与 `terminal`、`read_file` 等内置工具并列显示。
+ATLAZ 内置了一个 MCP 客户端，它在启动时连接到 MCP 服务器，发现其工具，并将其作为一等工具直接提供给 agent 调用。无需桥接 CLI——来自 MCP 服务器的工具与 `terminal`、`read_file` 等内置工具并列显示。
 
 ## 使用场景
 
 在以下情况下使用此 skill：
-- 连接到 MCP 服务器并在 Hermes Agent 中使用其工具
+- 连接到 MCP 服务器并在 ATLAZ 中使用其工具
 - 通过 MCP 添加外部能力（文件系统访问、GitHub、数据库、API）
 - 运行基于 stdio 的本地 MCP 服务器（npx、uvx 或任意命令）
 - 连接到远程 HTTP/StreamableHTTP MCP 服务器
@@ -69,7 +69,7 @@ mcp_servers:
     args: ["mcp-server-time"]
 ```
 
-重启 Hermes Agent。启动时它将：
+重启 ATLAZ。启动时它将：
 1. 连接到服务器
 2. 发现可用工具
 3. 以 `mcp_time_*` 前缀注册它们
@@ -124,7 +124,7 @@ mcp_servers:
 
 ### 启动发现
 
-Hermes Agent 启动时，`discover_mcp_tools()` 在工具初始化期间被调用：
+ATLAZ 启动时，`discover_mcp_tools()` 在工具初始化期间被调用：
 
 1. 从 `~/.hermes/config.yaml` 读取 `mcp_servers`
 2. 对每个服务器，在专用后台事件循环中生成连接
@@ -254,7 +254,7 @@ pip install --upgrade mcp
 
 - 检查服务器是否列在 `mcp_servers` 下（而非 `mcp` 或 `servers`）
 - 确保 YAML 缩进正确
-- 查看 Hermes Agent 启动日志中的连接信息
+- 查看 ATLAZ 启动日志中的连接信息
 - 工具名称以 `mcp_{server}_{tool}` 为前缀——请查找该模式
 
 ### 连接持续断开

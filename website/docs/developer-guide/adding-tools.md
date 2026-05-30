@@ -1,7 +1,7 @@
 ---
 sidebar_position: 2
 title: "Adding Tools"
-description: "How to add a new tool to Hermes Agent — schemas, handlers, registration, and toolsets"
+description: "How to add a new tool to ATLAZ — schemas, handlers, registration, and toolsets"
 ---
 
 # Adding Tools
@@ -208,4 +208,4 @@ OPTIONAL_ENV_VARS = {
 - [ ] Handler returns JSON strings, errors returned as `{"error": "..."}`
 - [ ] Optional: API key added to `OPTIONAL_ENV_VARS` in `atlaz_cli/config.py`
 - [ ] Optional: Added to `toolset_distributions.py` for batch processing
-- [ ] Tested with `hermes chat -q "Use the weather tool for London"`
+- [ ] Tested with `atlaz chat -q "Use the weather tool for London"`

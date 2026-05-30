@@ -1,12 +1,12 @@
 ---
 sidebar_position: 16
 title: "Google Gemini"
-description: "Use Hermes Agent with Google Gemini — native AI Studio API, API-key setup, OAuth option, tool calling, streaming, and quota guidance"
+description: "Use ATLAZ with Google Gemini — native AI Studio API, API-key setup, OAuth option, tool calling, streaming, and quota guidance"
 ---
 
 # Google Gemini
 
-Hermes Agent supports Google Gemini as a native provider using the **Google AI Studio / Gemini API** — not the OpenAI-compatible endpoint. This lets Hermes translate its internal OpenAI-shaped message and tool loop into Gemini's native `generateContent` API while preserving tool calling, streaming, multimodal inputs, and Gemini-specific response metadata.
+ATLAZ supports Google Gemini as a native provider using the **Google AI Studio / Gemini API** — not the OpenAI-compatible endpoint. This lets Hermes translate its internal OpenAI-shaped message and tool loop into Gemini's native `generateContent` API while preserving tool calling, streaming, multimodal inputs, and Gemini-specific response metadata.
 
 Hermes also supports a separate **Google Gemini (OAuth)** provider that uses the same Cloud Code Assist backend as Google's Gemini CLI. Use the API-key provider (`gemini`) for the lowest-risk official API path.
 
@@ -47,7 +47,7 @@ model:
 
 ## Configuration
 
-After running `hermes model`, your `~/.hermes/config.yaml` will contain:
+After running `atlaz model`, your `~/.hermes/config.yaml` will contain:
 
 ```yaml
 model:
@@ -113,7 +113,7 @@ This uses browser PKCE login and the Cloud Code Assist backend. It can be useful
 
 ## Available Models
 
-The `hermes model` picker shows Gemini models maintained in Hermes' provider registry. Common choices include:
+The `atlaz model` picker shows Gemini models maintained in Hermes' provider registry. Common choices include:
 
 | Model | ID | Notes |
 |-------|----|-------|
@@ -122,7 +122,7 @@ The `hermes model` picker shows Gemini models maintained in Hermes' provider reg
 | Gemini 3 Flash Preview | `gemini-3-flash-preview` | Recommended default balance of speed and capability |
 | Gemini 3.1 Flash Lite Preview | `gemini-3.1-flash-lite-preview` | Fastest / lowest-cost option when available |
 
-Model availability changes over time. If a model disappears or is not enabled for your key, run `hermes model` again and pick one from the current list.
+Model availability changes over time. If a model disappears or is not enabled for your key, run `atlaz model` again and pick one from the current list.
 
 :::info Model IDs
 Use Gemini's native model IDs such as `gemini-3-flash-preview`, not OpenRouter-style IDs like `google/gemini-3-flash-preview`, when `provider: gemini`.
@@ -181,7 +181,7 @@ Use the `/model` command during a conversation:
 /model gemini-3.1-flash-lite-preview
 ```
 
-If you have not configured Gemini yet, exit the session and run `hermes model` first. `/model` switches among already-configured providers and models; it does not collect new API keys.
+If you have not configured Gemini yet, exit the session and run `atlaz model` first. `/model` switches among already-configured providers and models; it does not collect new API keys.
 
 ## Diagnostics
 
@@ -226,7 +226,7 @@ GOOGLE_API_KEY=...
 GEMINI_API_KEY=...
 ```
 
-Then run `hermes model` again.
+Then run `atlaz model` again.
 
 ### "This Google API key is on the free tier"
 
@@ -240,9 +240,9 @@ hermes model
 
 ### "404 model not found"
 
-The selected model is not available for your account, region, or key. Run `hermes model` again and pick another Gemini model from the current list.
+The selected model is not available for your account, region, or key. Run `atlaz model` again and pick another Gemini model from the current list.
 
-### Gemma model is not shown in `hermes model`
+### Gemma model is not shown in `atlaz model`
 
 Hermes may hide low-throughput Gemma models from the picker by default. If you intentionally want to evaluate one, set the model ID directly in `~/.hermes/config.yaml`.
 
@@ -270,7 +270,7 @@ The `google-gemini-cli` provider uses a Gemini CLI / Cloud Code Assist OAuth flo
 
 ### Tool calling fails with schema errors
 
-Upgrade Hermes and rerun `hermes model`. The native Gemini adapter sanitizes tool schemas for Gemini's stricter function-declaration format; older builds or custom endpoints may not.
+Upgrade Hermes and rerun `atlaz model`. The native Gemini adapter sanitizes tool schemas for Gemini's stricter function-declaration format; older builds or custom endpoints may not.
 
 ## Related
 

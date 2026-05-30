@@ -17,7 +17,7 @@ Linear：通过 GraphQL + curl 管理 issues、项目和团队。
 | 来源 | 内置（默认安装） |
 | 路径 | `skills/productivity/linear` |
 | 版本 | `1.0.0` |
-| 作者 | Hermes Agent |
+| 作者 | ATLAZ |
 | 许可证 | MIT |
 | 平台 | linux, macos, windows |
 | 标签 | `Linear`, `Project Management`, `Issues`, `GraphQL`, `API`, `Productivity` |
@@ -35,7 +35,7 @@ Linear：通过 GraphQL + curl 管理 issues、项目和团队。
 ## 配置
 
 1. 从 **Linear 设置 > Account > Security & access > Personal API keys** 获取个人 API key（URL：https://linear.app/settings/account/security）。注意：组织级别的 *Settings > API* 页面仅显示 OAuth 应用和工作区成员 key，不显示个人 key。
-2. 在环境中设置 `LINEAR_API_KEY`（通过 `hermes setup` 或你的环境配置）
+2. 在环境中设置 `LINEAR_API_KEY`（通过 `atlaz setup` 或你的环境配置）
 
 ## API 基础
 

@@ -1,7 +1,7 @@
 ---
 sidebar_position: 14
 title: "WeCom (Enterprise WeChat)"
-description: "Connect Hermes Agent to WeCom via the AI Bot WebSocket gateway"
+description: "Connect ATLAZ to WeCom via the AI Bot WebSocket gateway"
 ---
 
 # WeCom (Enterprise WeChat)
@@ -43,7 +43,7 @@ If scan-to-create is not available, the wizard falls back to manual input:
 2. Navigate to **Applications** → **Create Application** → **AI Bot**
 3. Configure the bot name and description
 4. Copy the **Bot ID** and **Secret** from the credentials page
-5. Run `hermes gateway setup`, select **WeCom**, and enter the credentials when prompted
+5. Run `atlaz gateway setup`, select **WeCom**, and enter the credentials when prompted
 
 :::warning
 Keep the Bot Secret private. Anyone with it can impersonate your bot.

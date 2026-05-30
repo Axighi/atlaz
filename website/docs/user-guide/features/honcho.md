@@ -199,11 +199,11 @@ When Honcho is active as the memory provider, five tools become available:
 
 ## CLI Commands
 
-The `hermes honcho` subcommand is **only registered when Honcho is the active memory provider** (`memory.provider: honcho` in `config.yaml`). Run `hermes memory setup` and pick Honcho first; the subcommand appears on the next invocation.
+The `atlaz honcho` subcommand is **only registered when Honcho is the active memory provider** (`memory.provider: honcho` in `config.yaml`). Run `atlaz memory setup` and pick Honcho first; the subcommand appears on the next invocation.
 
 ```bash
 hermes honcho status          # Connection status, config, and key settings
-hermes honcho setup           # Redirects to `hermes memory setup`
+hermes honcho setup           # Redirects to `atlaz memory setup`
 hermes honcho strategy        # Show or set session strategy (per-session/per-directory/per-repo/global)
 hermes honcho peer            # Show or update peer names + dialectic reasoning level
 hermes honcho mode            # Show or set recall mode (hybrid/context/tools)
@@ -218,15 +218,15 @@ hermes honcho disable         # Disable Honcho for the active profile
 hermes honcho migrate         # Step-by-step migration guide from openclaw-honcho
 ```
 
-## Migrating from `hermes honcho`
+## Migrating from `atlaz honcho`
 
-If you previously used the standalone `hermes honcho setup`:
+If you previously used the standalone `atlaz honcho setup`:
 
 1. Your existing configuration (`honcho.json` or `~/.honcho/config.json`) is preserved
 2. Your server-side data (memories, conclusions, user profiles) is intact
 3. Set `memory.provider: honcho` in config.yaml to reactivate
 
-No re-login or re-setup needed. Run `hermes memory setup` and select "honcho" — the wizard detects your existing config.
+No re-login or re-setup needed. Run `atlaz memory setup` and select "honcho" — the wizard detects your existing config.
 
 ## Full Documentation
 

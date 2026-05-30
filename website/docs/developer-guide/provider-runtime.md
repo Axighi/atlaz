@@ -36,7 +36,7 @@ At a high level, provider resolution uses:
 3. environment variables
 4. provider-specific defaults or auto resolution
 
-That ordering matters because Hermes treats the saved model/provider choice as the source of truth for normal runs. This prevents a stale shell export from silently overriding the endpoint a user last selected in `hermes model`.
+That ordering matters because Hermes treats the saved model/provider choice as the source of truth for normal runs. This prevents a stale shell export from silently overriding the endpoint a user last selected in `atlaz model`.
 
 ## Providers
 
@@ -86,7 +86,7 @@ The runtime resolver returns data such as:
 
 This resolver is the main reason Hermes can share auth/runtime logic between:
 
-- `hermes chat`
+- `atlaz chat`
 - gateway message handling
 - cron jobs running in fresh sessions
 - ACP editor sessions
@@ -153,7 +153,7 @@ can use their own provider/model routing rather than the main conversational mod
 When an auxiliary task is configured with provider `main`, Hermes resolves that through the same shared runtime path as normal chat. In practice that means:
 
 - env-driven custom endpoints still work
-- custom endpoints saved via `hermes model` / `config.yaml` also work
+- custom endpoints saved via `atlaz model` / `config.yaml` also work
 - auxiliary routing can tell the difference between a real saved custom endpoint and the OpenRouter fallback
 
 ## Fallback models

@@ -1,12 +1,12 @@
 ---
 sidebar_position: 3
 title: "Android / Termux"
-description: "Run Hermes Agent directly on an Android phone with Termux"
+description: "Run ATLAZ directly on an Android phone with Termux"
 ---
 
 # Hermes on Android with Termux
 
-This is the tested path for running Hermes Agent directly on an Android phone through [Termux](https://termux.dev/).
+This is the tested path for running ATLAZ directly on an Android phone through [Termux](https://termux.dev/).
 
 It gives you a working local CLI on the phone, plus the core extras that are currently known to install cleanly on Android.
 
@@ -53,7 +53,7 @@ On Termux, the installer automatically:
 - uses `pkg` for system packages
 - creates the venv with `python -m venv`
 - attempts the broad `.[termux-all]` extra first and falls back to the smaller `.[termux]` extra (then a base install) — the curl installer matches this order automatically
-- links `hermes` into `$PREFIX/bin` so it stays on your Termux PATH
+- links `atlaz` into `$PREFIX/bin` so it stays on your Termux PATH
 - skips the untested browser / WhatsApp bootstrap
 
 If you want the explicit commands or need to debug a failed install, use the manual path below.
@@ -80,7 +80,7 @@ Why these packages?
 ### 2. Clone Hermes
 
 ```bash
-git clone --recurse-submodules https://github.com/NousResearch/hermes-agent.git
+git clone --recurse-submodules https://github.com/Axighi/atlaz.git
 cd hermes-agent
 ```
 
@@ -113,13 +113,13 @@ If you only want the minimal core agent, this also works:
 python -m pip install -e '.' -c constraints-termux.txt
 ```
 
-### 5. Put `hermes` on your Termux PATH
+### 5. Put `atlaz` on your Termux PATH
 
 ```bash
 ln -sf "$PWD/venv/bin/hermes" "$PREFIX/bin/hermes"
 ```
 
-`$PREFIX/bin` is already on PATH in Termux, so this makes the `hermes` command persist across new shells without re-activating the venv every time.
+`$PREFIX/bin` is already on PATH in Termux, so this makes the `atlaz` command persist across new shells without re-activating the venv every time.
 
 ### 6. Verify the install
 
@@ -203,7 +203,7 @@ export ANDROID_API_LEVEL="$(getprop ro.build.version.sdk)"
 python -m pip install -e '.[termux]' -c constraints-termux.txt
 ```
 
-### `hermes doctor` says ripgrep or Node is missing
+### `atlaz doctor` says ripgrep or Node is missing
 
 Install them with Termux packages:
 
@@ -238,5 +238,5 @@ If you hit a new Android-specific issue, please open a GitHub issue with:
 - your Android version
 - `termux-info`
 - `python --version`
-- `hermes doctor`
+- `atlaz doctor`
 - the exact install command and full error output

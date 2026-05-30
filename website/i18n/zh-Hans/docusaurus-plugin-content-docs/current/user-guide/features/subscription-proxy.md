@@ -76,7 +76,7 @@ Hermes proxy upstream adapters
   [nous    ] Nous Portal — ready (bearer expires 2026-05-15T06:43:21Z)
 ```
 
-如果显示 `not logged in`，请运行 `hermes auth add nous`。如果显示 `credentials need attention`，说明你的刷新令牌已被撤销（较少见——通常发生在你从 Portal Web UI 退出登录时）——重新运行 `hermes auth add nous` 即可。
+如果显示 `not logged in`，请运行 `atlaz auth add nous`。如果显示 `credentials need attention`，说明你的刷新令牌已被撤销（较少见——通常发生在你从 Portal Web UI 退出登录时）——重新运行 `atlaz auth add nous` 即可。
 
 ## 允许的路径
 

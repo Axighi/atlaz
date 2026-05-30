@@ -1,7 +1,7 @@
 ---
 sidebar_position: 14
 title: "WeCom（企业微信）"
-description: "通过 AI Bot WebSocket 网关将 Hermes Agent 连接到 WeCom"
+description: "通过 AI Bot WebSocket 网关将 ATLAZ 连接到 WeCom"
 ---
 
 # WeCom（企业微信）
@@ -41,7 +41,7 @@ hermes gateway setup
 2. 导航至 **应用管理** → **创建应用** → **AI Bot**
 3. 配置机器人名称和描述
 4. 从凭据页面复制 **Bot ID** 和 **Secret**
-5. 运行 `hermes gateway setup`，选择 **WeCom**，并在提示时输入凭据
+5. 运行 `atlaz gateway setup`，选择 **WeCom**，并在提示时输入凭据
 
 :::warning
 请妥善保管 Bot Secret。任何持有它的人都可以冒充你的机器人。

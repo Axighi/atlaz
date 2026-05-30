@@ -17,7 +17,7 @@ description: "越狱 LLM：Parseltongue、GODMODE、ULTRAPLINIAN"
 | 来源 | 内置（默认安装） |
 | 路径 | `skills/red-teaming/godmode` |
 | 版本 | `1.0.0` |
-| 作者 | Hermes Agent + Teknium |
+| 作者 | ATLAZ + Teknium |
 | 许可证 | MIT |
 | 平台 | linux, macos, windows |
 | 标签 | `jailbreak`, `red-teaming`, `G0DM0D3`, `Parseltongue`, `GODMODE`, `uncensoring`, `safety-bypass`, `prompt-engineering`, `L1B3RT4S` |

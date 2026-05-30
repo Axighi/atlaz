@@ -1,12 +1,12 @@
 ---
 sidebar_position: 12
 title: "Pipe Script Output to Messaging Platforms"
-description: "Send text from any shell script, cron job, CI hook, or monitoring daemon to Telegram, Discord, Slack, Signal, and other platforms using `hermes send`."
+description: "Send text from any shell script, cron job, CI hook, or monitoring daemon to Telegram, Discord, Slack, Signal, and other platforms using `atlaz send`."
 ---
 
 # Pipe Script Output to Messaging Platforms
 
-`hermes send` is a small, scriptable CLI that pushes a message to any
+`atlaz send` is a small, scriptable CLI that pushes a message to any
 messaging platform Hermes is already configured for. Think of it as a
 cross-platform `curl` for notifications — you don't need a running
 gateway, you don't need an LLM, and you don't need to re-paste bot tokens
@@ -96,10 +96,10 @@ branch on them the same way they would on `curl` or `grep`.
 
 ## Message Body Resolution
 
-`hermes send` resolves the message body in this order:
+`atlaz send` resolves the message body in this order:
 
-1. **Positional argument** — `hermes send --to telegram "hi"`
-2. **`--file PATH`** — `hermes send --to telegram --file msg.txt`
+1. **Positional argument** — `atlaz send --to telegram "hi"`
+2. **`--file PATH`** — `atlaz send --to telegram --file msg.txt`
 3. **Piped stdin** — `echo hi | hermes send --to telegram`
 
 When stdin is a TTY (no pipe), Hermes does **not** wait for input — you'll
@@ -124,14 +124,14 @@ if [ "$ram_pct" -ge 85 ]; then
 fi
 ```
 
-Because `hermes send` reuses your Hermes config, the same script works on
+Because `atlaz send` reuses your Hermes config, the same script works on
 any host where Hermes is installed — no need to export bot tokens into
 each machine's environment manually.
 
 :::tip Don't alert the gateway about itself
 For watchdogs that might fire when the gateway itself is struggling (OOM
 alerts, disk-full alerts), keep using a minimal `curl` call instead of
-`hermes send`. If the Python interpreter can't load because the box is
+`atlaz send`. If the Python interpreter can't load because the box is
 thrashing, you still want that alert to go out.
 :::
 
@@ -181,10 +181,10 @@ msg_id=$(hermes send --to discord:#ops --json "build started" \
 
 ---
 
-## Does `hermes send` Need the Gateway Running?
+## Does `atlaz send` Need the Gateway Running?
 
 **Usually no.** For any bot-token platform — Telegram, Discord, Slack,
-Signal, SMS, WhatsApp Cloud API, and most others — `hermes send` calls
+Signal, SMS, WhatsApp Cloud API, and most others — `atlaz send` calls
 the platform's REST endpoint directly using credentials from
 `~/.hermes/.env` and `~/.hermes/config.yaml`. It's a standalone subprocess
 that exits as soon as the message is delivered.
@@ -192,7 +192,7 @@ that exits as soon as the message is delivered.
 A live gateway is only required for **plugin platforms** that rely on a
 persistent adapter connection (for example, a custom plugin that keeps
 a long-lived WebSocket open). In that case you'll get a clear error
-pointing at the gateway; start it with `hermes gateway start` and retry.
+pointing at the gateway; start it with `atlaz gateway start` and retry.
 
 ---
 
@@ -213,7 +213,7 @@ hermes send --list --json
 
 The listing is built from `~/.hermes/channel_directory.json`, which the
 gateway refreshes every few minutes while it's running. If you see
-"no channels discovered yet", start the gateway once (`hermes gateway
+"no channels discovered yet", start the gateway once (`atlaz gateway
 start`) so it can populate the cache.
 
 Human-friendly names (`discord:#ops`, `slack:#engineering`) are resolved
@@ -226,16 +226,16 @@ IDs.
 
 | Approach | Multi-platform | Reuses Hermes creds | Needs gateway | Best for |
 |----------|----------------|---------------------|---------------|----------|
-| `hermes send` | ✅ | ✅ | No (bot-token) | Everything below |
+| `atlaz send` | ✅ | ✅ | No (bot-token) | Everything below |
 | Raw `curl` to each platform | Each scripted separately | Manual | No | Critical watchdogs |
 | `cron` job with `--deliver` | ✅ | ✅ | No | Scheduled agent tasks |
 | `send_message` agent tool | ✅ | ✅ | No | Inside an agent loop |
 
-`hermes send` is intentionally the simplest possible surface. If you need
+`atlaz send` is intentionally the simplest possible surface. If you need
 an agent to decide what to say, use the `send_message` tool from within a
 chat or cron job. If you need a scheduled run with LLM-generated content,
 use `cronjob(action='create', prompt=...)` with `deliver='telegram:...'`.
-If you just need to pipe a raw string, reach for `hermes send`.
+If you just need to pipe a raw string, reach for `atlaz send`.
 
 ---
 
@@ -244,6 +244,6 @@ If you just need to pipe a raw string, reach for `hermes send`.
 - [Automate Anything with Cron](/guides/automate-with-cron) —
   scheduled jobs whose output auto-delivers to any platform.
 - [Gateway Internals](/developer-guide/gateway-internals) —
-  the delivery router that `hermes send` shares with cron delivery.
+  the delivery router that `atlaz send` shares with cron delivery.
 - [Messaging Platform Setup](/user-guide/messaging/) —
   one-time configuration for each platform.

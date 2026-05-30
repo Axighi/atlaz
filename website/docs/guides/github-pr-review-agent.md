@@ -15,7 +15,7 @@ description: "Build an automated AI code reviewer that monitors your repos, revi
 ```
 ┌───────────────────────────────────────────────────────────────────┐
 │                                                                   │
-│   Cron Timer  ──▶  Hermes Agent  ──▶  GitHub API  ──▶  Review     │
+│   Cron Timer  ──▶  ATLAZ  ──▶  GitHub API  ──▶  Review     │
 │   (every 2h)       + gh CLI           (PR diffs)       delivery   │
 │                    + skill                             (Telegram, │
 │                    + memory                            Discord,   │
@@ -34,7 +34,7 @@ If you have a public endpoint available, check out [Automated GitHub PR Comments
 
 ## Prerequisites
 
-- **Hermes Agent installed** — see the [Installation guide](/getting-started/installation)
+- **ATLAZ installed** — see the [Installation guide](/getting-started/installation)
 - **Gateway running** for cron jobs:
   ```bash
   hermes gateway install   # Install as a service
@@ -137,7 +137,7 @@ For each finding:
 - End with: APPROVE / REQUEST_CHANGES / COMMENT
 ```
 
-Verify it loaded — start `hermes` and you should see `code-review` in the skills list at startup.
+Verify it loaded — start `atlaz` and you should see `code-review` in the skills list at startup.
 
 ---
 
