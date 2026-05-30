@@ -57,7 +57,7 @@ deadlocks).
 | Child task READY but parents still RUNNING for >2× expected | Cascade slow, dependency miswired | Check the dependency graph. Inspect the parent: sometimes it completed but its handoff fields (summary, metadata) were empty so the child has nothing to consume. |
 | New tasks not appearing | Director is hung in decomposition | Inspect director task with `kanban show`. Often a malformed `kanban_create` call. |
 | Specialist tasks completing instantly | Decomposition created tasks without bodies | Director didn't pass enough context. Re-create with explicit body content. |
-| Tasks created but never picked up | Profile not running, or tenant mismatch, or dispatcher not running | Check `hermes profile list` (profile exists?), `hermes status` (gateway/dispatcher up?), and verify tenant. |
+| Tasks created but never picked up | Profile not running, or tenant mismatch, or dispatcher not running | Check `hermes profile list` (profile exists?), `atlaz status` (gateway/dispatcher up?), and verify tenant. |
 | Specific renderer task fails → review note → renderer redoes → fails again | Brief is asking for the impossible | Pivot the brief, not the renderer. |
 
 ## Intervention recipes

@@ -285,7 +285,7 @@ def _remove_xai_oauth_loopback_pkce(provider: str, removed) -> RemovalResult:
     if _clear_auth_store_provider(provider):
         result.cleaned.append(f"Cleared {provider} OAuth tokens from auth store")
     result.hints.append(
-        "Run `hermes model` → xAI Grok OAuth (SuperGrok / Premium+) to re-authenticate if needed."
+        "Run `atlaz model` → xAI Grok OAuth (SuperGrok / Premium+) to re-authenticate if needed."
     )
     return result
 

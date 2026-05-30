@@ -672,7 +672,7 @@ def _seed_from_singletons(provider: str, entries: List[PooledCredential]) -> Tup
         except ImportError:
             pass
 
-        # API-key vs OAuth is a user-visible choice at `hermes setup` ("Claude
+        # API-key vs OAuth is a user-visible choice at `atlaz setup` ("Claude
         # Pro/Max subscription" vs "Anthropic API key").  The signal that the
         # user picked the API-key path is: ANTHROPIC_API_KEY set in the env,
         # AND no OAuth env vars set — `save_anthropic_api_key()` writes the
@@ -687,7 +687,7 @@ def _seed_from_singletons(provider: str, entries: List[PooledCredential]) -> Tup
         # explicitly opted into the API-key path are explicitly opting OUT of
         # that masquerade.  Prefer ~/.hermes/.env over os.environ for the
         # same reason `_seed_from_env` does — that's the authoritative file
-        # that `hermes setup` writes.
+        # that `atlaz setup` writes.
         _env_file = load_env()
 
         def _env_val(key: str) -> str:
@@ -933,7 +933,7 @@ def _seed_from_singletons(provider: str, entries: List[PooledCredential]) -> Tup
             )
 
     elif provider == "xai-oauth":
-        # When the user logs in via ``hermes model`` -> xAI Grok OAuth,
+        # When the user logs in via ``atlaz model`` -> xAI Grok OAuth,
         # tokens are written to the auth.json singleton
         # (``providers["xai-oauth"]``).  Surface them in the pool too so
         # ``hermes auth list`` reflects the logged-in state and so the pool
